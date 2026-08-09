@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 0005: Native Flexbox & Layout Masterclass</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0005: Native Flexbox & Layout Masterclass</h1>
+    <div class="subtitle">How React Native styling differs from CSS & Angular layout frameworks</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. The 3 Fundamental Rules of Native Layout</h2>
+      <ol>
+        <li><strong>Default Direction is Column</strong>: On the web, <code>flex-direction</code> defaults to <code>row</code>. In React Native, every <code>View</code> defaults to <code>flexDirection: 'column'</code>.</li>
+        <li><strong>No Unit Dimensions</strong>: Dimensions are unitless density-independent pixels (dp). Writing <code>width: 100</code> means 100dp (not <code>100px</code> or <code>100rem</code>).</li>
+        <li><strong><code>flex: 1</code> Fills Available Space</strong>: Unlike web CSS where <code>flex: 1</code> means <code>flex-grow: 1</code>, in React Native <code>flex: 1</code> tells a component to expand to fill its parent container entirely.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>2. Web CSS vs. React Native Flexbox</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Web CSS Default</th>
+            <th>React Native Default</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>flexDirection</code></td>
+            <td><code>row</code></td>
+            <td><code>column</code></td>
+          </tr>
+          <tr>
+            <td><code>alignItems</code></td>
+            <td><code>stretch</code></td>
+            <td><code>stretch</code></td>
+          </tr>
+          <tr>
+            <td><code>justifyContent</code></td>
+            <td><code>flex-start</code></td>
+            <td><code>flex-start</code></td>
+          </tr>
+          <tr>
+            <td><code>position</code></td>
+            <td><code>static</code></td>
+            <td><code>relative</code> (Only <code>relative</code> or <code>absolute</code> exist)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>3. Code Example & StyleSheet Utility</h2>
+      <pre><code>import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+export default function LayoutDemo() {
+  return (
+    &lt;SafeAreaView style={styles.container}&gt;
+      &lt;View style={styles.card}&gt;
+        &lt;Text style={styles.title}&gt;Card Title&lt;/Text&gt;
+      &lt;/View&gt;
+    &lt;/SafeAreaView&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, // Fills entire device screen
+    backgroundColor: '#fff',
+    padding: 16,
+  },
+  card: {
+    flexDirection: 'row', // Horizontally align children
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+    borderRadius: 12,
+  },
+});</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0004-forms-and-inputs.html">&larr; Previous Lesson</a></p>
+  </footer>
+</body>
+</html>

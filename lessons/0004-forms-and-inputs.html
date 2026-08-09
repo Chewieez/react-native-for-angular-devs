@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 0004: Forms & Controlled Inputs in React Native</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0004: Forms & Controlled Inputs in React Native</h1>
+    <div class="subtitle">Connecting UI Inputs to State & Auth Handlers (Angular Reactive Forms vs. Controlled Components)</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. The Angular vs. React Native Form Comparison</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Pattern</th>
+            <th>React Native Controlled Component</th>
+            <th>Key Difference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>[(ngModel)]="email"</code></td>
+            <td><code>value={email} onChangeText={setEmail}</code></td>
+            <td>React uses explicit two-way binding props (<code>value</code> prop + <code>onChangeText</code> callback).</td>
+          </tr>
+          <tr>
+            <td><code>formControlName="email"</code></td>
+            <td>Local <code>useState</code> hooks (or form libraries like React Hook Form)</td>
+            <td>No built-in framework form module. Component state directly controls the input value.</td>
+          </tr>
+          <tr>
+            <td><code>(ngSubmit)="onLogin()"</code></td>
+            <td><code>&lt;TouchableOpacity onPress={handleLogin}&gt;</code></td>
+            <td>No HTML <code>&lt;form&gt;</code> element in Native. Buttons handle tap events directly via <code>onPress</code>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Dissecting your <code>LoginScreen</code> (`login.tsx`)</h2>
+      <p>Looking at your current <code>login.tsx</code>, the <code>&lt;TextInput&gt;</code> elements are un-controlled (unbound):</p>
+      
+      <div class="callout warning">
+        <strong>Unbound (Current):</strong>
+        <pre><code>&lt;TextInput placeholder='Email...' style={styles.input} /&gt;</code></pre>
+      </div>
+
+      <div class="callout tip">
+        <strong>Controlled (Connected):</strong>
+        <pre><code>const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const { signIn } = useAuth();
+
+&lt;TextInput 
+  value={email}
+  onChangeText={setEmail}
+  placeholder='Email...'
+  keyboardType="email-address"
+  autoCapitalize="none"
+/&gt;
+
+&lt;TouchableOpacity style={styles.button} onPress={() => signIn(email, password)}&gt;
+  &lt;Text style={styles.buttonText}&gt;Sign In&lt;/Text&gt;
+&lt;/TouchableOpacity&gt;</code></pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Props Reference for <code>TextInput</code></h2>
+      <ul>
+        <li><code>onChangeText={(text) => ...}</code>: Fires on every keystroke with the raw string parameter (no <code>$event.target.value</code> wrapping needed!).</li>
+        <li><code>secureTextEntry</code>: Boolean for password masking.</li>
+        <li><code>autoCapitalize="none"</code>: Prevents iOS from capitalizing initial letters of email/username inputs.</li>
+        <li><code>keyboardType="email-address"</code>: Displays mobile email keyboard layout with <code>@</code> and <code>.com</code>.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0003-what-is-a-hook.html">&larr; Previous Lesson</a></p>
+  </footer>
+</body>
+</html>
