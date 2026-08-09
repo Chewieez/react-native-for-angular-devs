@@ -10,14 +10,14 @@ Rather than starting from zero with basic programming concepts, this course tran
 
 ## 📚 Course Curriculum & Lessons
 
-| Lesson # | Module Title | Core Topics | Status | Live Link |
-| :--- | :--- | :--- | :--- | :--- |
-| **0001** | [**Angular Lead to React Native Mental Model**](./lessons/0001-angular-to-react-native-mental-model.html) | Concept translation matrix, `View`/`Text`/`Image` primitives, Expo Dev Menu (`Cmd+D`), Metro shortcuts, Chrome DevTools. | ✅ Complete | [View Live](https://chewieez.github.io/react-native-for-angular-devs/lessons/0001-angular-to-react-native-mental-model.html) |
-| **0002** | [**React Context vs. Angular Services**](./lessons/0002-react-context-vs-angular-services.html) | `createContext`, `<Provider>`, `useContext`, state re-rendering mechanics vs Zone.js/Signals, Expo Router route guarding. | ✅ Complete | [View Live](https://chewieez.github.io/react-native-for-angular-devs/lessons/0002-react-context-vs-angular-services.html) |
-| **0003** | [**What is a React Hook?**](./lessons/0003-what-is-a-hook.html) | Why hooks exist, `useState`, `useEffect`, `useContext`, `useRef`, custom hooks (`useAuth`), Golden Rules of Hooks. | ✅ Complete | [View Live](https://chewieez.github.io/react-native-for-angular-devs/lessons/0003-what-is-a-hook.html) |
-| **0004** | [**Forms & Controlled Inputs**](./lessons/0004-forms-and-inputs.html) | Controlled components vs. `[(ngModel)]`, `TextInput` props (`onChangeText`, `value`), keyboard handling. | ✅ Complete | [View Live](https://chewieez.github.io/react-native-for-angular-devs/lessons/0004-forms-and-inputs.html) |
-| **0005** | [**Native Flexbox & Layout Masterclass**](./lessons/0005-flexbox-native-layout.html) | `flexDirection: 'column'` default, unitless dp dimensions, `flex: 1` vs web CSS, `SafeAreaView`. | ✅ Complete | [View Live](https://chewieez.github.io/react-native-for-angular-devs/lessons/0005-flexbox-native-layout.html) |
-| **0006** | [**FlatList vs. ScrollView & Virtualization**](./lessons/0006-flatlist-vs-scrollview.html) | Memory management on mobile, list virtualization, `FlatList` vs `ScrollView`, key extractors. | ✅ Complete | [View Live](https://chewieez.github.io/react-native-for-angular-devs/lessons/0006-flatlist-vs-scrollview.html) |
+| Lesson # | Module Title | Core Topics | Status |
+| :--- | :--- | :--- | :--- |
+| **0001** | [**Angular Lead to React Native Mental Model**](./lessons/0001-angular-to-react-native-mental-model.html) | Concept translation matrix, `View`/`Text`/`Image` primitives, Expo Dev Menu (`Cmd+D`), Metro shortcuts, Chrome DevTools. | ✅ Active |
+| **0002** | [**React Context vs. Angular Services**](./lessons/0002-react-context-vs-angular-services.html) | `createContext`, `<Provider>`, `useContext`, state re-rendering mechanics vs Zone.js/Signals, Expo Router route guarding. | ✅ Active |
+| **0003** | [**What is a React Hook?**](./lessons/0003-what-is-a-hook.html) | Why hooks exist, `useState`, `useEffect`, `useContext`, `useRef`, custom hooks (`useAuth`), Golden Rules of Hooks. | ✅ Active |
+| **0004** | [**Forms & Controlled Inputs**](./lessons/0004-forms-and-inputs.html) | Controlled components vs. `[(ngModel)]`, `TextInput` props (`onChangeText`, `value`), keyboard handling. | ✅ Active |
+| **0005** | [**Native Flexbox & Layout Masterclass**](./lessons/0005-flexbox-native-layout.html) | `flexDirection: 'column'` default, unitless dp dimensions, `flex: 1` vs web CSS, `SafeAreaView`. | ✅ Active |
+| **0006** | [**FlatList vs. ScrollView & Virtualization**](./lessons/0006-flatlist-vs-scrollview.html) | Memory management on mobile, list virtualization, `FlatList` vs `ScrollView`, key extractors. | ✅ Active |
 
 ---
 
