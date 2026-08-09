@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 0003: What is a React Hook?</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0003: What is a React Hook?</h1>
+    <div class="subtitle">Demystifying hooks for Angular developers</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. The Simple Definition</h2>
+      <p>A <strong>Hook</strong> is a JavaScript function (always prefixed with <code>use</code>, like <code>useState</code> or <code>useAuth</code>) that lets functional components "hook into" React features like <strong>state</strong>, <strong>lifecycle effects</strong>, and <strong>context</strong>.</p>
+    </section>
+
+    <section>
+      <h2>2. Why Hooks Exist (The Angular Comparison)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Components (Classes)</th>
+            <th>React Components (Functions + Hooks)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Class instances preserve state in class properties (<code>this.userName = 'Alex'</code>).</td>
+            <td>React components are plain functions that re-execute from top to bottom on every render. <code>useState()</code> tells React to preserve value across renders.</td>
+          </tr>
+          <tr>
+            <td>Lifecycle interfaces (<code>ngOnInit</code>, <code>ngOnDestroy</code>) are class methods.</td>
+            <td><code>useEffect()</code> is a hook function called inside the component to run side effects after rendering.</td>
+          </tr>
+          <tr>
+            <td>Services are injected in constructor (<code>constructor(private auth: AuthService)</code>).</td>
+            <td><code>useContext(AuthContext)</code> / <code>useAuth()</code> is a hook called inside the component to consume Context.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>3. The 3 Rules of Hooks</h2>
+      <div class="callout warning">
+        <ol>
+          <li><strong>Only call hooks at the top level</strong>: Don't call hooks inside loops, conditions (<code>if</code>), or nested functions.</li>
+          <li><strong>Only call hooks from React function components or custom hooks</strong>: Don't call hooks from regular utility JS functions.</li>
+          <li><strong>Naming convention</strong>: Custom hooks MUST start with <code>use</code> (e.g. <code>useAuth()</code>, <code>useUserProfile()</code>).</li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Your <code>useAuth()</code> Custom Hook</h2>
+      <p>In your <code>AuthContext.tsx</code>, you defined a custom hook:</p>
+      <pre><code>export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
+};</code></pre>
+      <p>Now, any component in your app simply calls <code>const { user, signUp } = useAuth();</code> to access auth state and functions in one clean line!</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0002-react-context-vs-angular-services.html">&larr; Previous Lesson</a></p>
+  </footer>
+</body>
+</html>

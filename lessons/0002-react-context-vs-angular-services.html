@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 0002: React Context vs. Angular Services (Deep Dive into your AuthContext)</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0002: React Context vs. Angular Services</h1>
+    <div class="subtitle">Dissecting <code>AuthContext.tsx</code> and <code>_layout.tsx</code> from your BeReal codebase</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. The Direct Code Comparison</h2>
+      <p>Here is how your <code>AuthContext.tsx</code> matches what you would build in Angular:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Pattern</th>
+            <th>Your BeReal <code>AuthContext.tsx</code></th>
+            <th>What Happens Under the Hood</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>@Injectable({ providedIn: 'root' })</code></td>
+            <td><code>const AuthContext = createContext(...)</code></td>
+            <td>Creates a memory container for shared state across the component tree.</td>
+          </tr>
+          <tr>
+            <td><code>app.config.ts</code> providers</td>
+            <td><code>&lt;AuthProvider&gt;{children}&lt;/AuthProvider&gt;</code></td>
+            <td>Wraps root layout in <code>src/app/_layout.tsx</code> so all child routes can access auth data.</td>
+          </tr>
+          <tr>
+            <td><code>private user$ = new BehaviorSubject(null);</code></td>
+            <td><code>const [user, setUser] = useState&lt;User | null&gt;(null);</code></td>
+            <td>Component-level state hook holding the active profile object.</td>
+          </tr>
+          <tr>
+            <td><code>constructor(private auth: AuthService)</code> / <code>inject()</code></td>
+            <td><code>const { user, signUp } = useAuth();</code></td>
+            <td>Custom Hook that reads from the nearest <code>AuthContext.Provider</code> ancestor.</td>
+          </tr>
+          <tr>
+            <td><code>CanActivate</code> Route Guard</td>
+            <td><code>useEffect(() => { router.replace(...) }, [user])</code></td>
+            <td>Declarative route redirection based on reactive state changes.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Key Insight: React Re-rendering vs. Angular Zone/Signals</h2>
+      <p>In Angular, changing a <code>BehaviorSubject</code> notifies subscribers (or Signals trigger fine-grained DOM updates). In React:</p>
+      <ul>
+        <li>When <code>setUser(profile)</code> is called in <code>signUp()</code>, React marks <code>AuthProvider</code> as dirty.</li>
+        <li>React re-evaluates <code>AuthProvider</code> and passes the new <code>value={{ user, signUp, updateUser }}</code> object down.</li>
+        <li>Any component calling <code>useAuth()</code> receives the new <code>user</code> object and automatically re-renders with fresh data.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Debugging Auth State & Navigation</h2>
+      <div class="callout tip">
+        <strong>Quick Debug Technique:</strong> Add a temporary <code>useEffect</code> inside <code>AuthProvider</code> to log state changes:
+        <pre><code>useEffect(() => {
+  console.log("🔒 Auth state updated:", user?.email || "Logged out");
+}, [user]);</code></pre>
+        This logs instantly in your Metro terminal when Supabase completes login or signup.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../MISSION.md">View Mission</a> &bull; <a href="./0001-angular-to-react-native-mental-model.html">Previous Lesson</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 0001: Angular Lead to React Native & Expo Mental Model</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0001: Angular Lead &rarr; React Native & Expo Mental Model</h1>
+    <div class="subtitle">Translating Angular architecture concepts to React Native primitives, hooks, & Expo debugging workflows</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. The Paradigm Shift</h2>
+      <p>As an Angular Lead, you already master component architecture, state lifecycle, and dependency flow. React Native achieves the exact same architectural goals with a leaner, functional paradigm.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Concept</th>
+            <th>React Native & Expo Equivalent</th>
+            <th>Key Paradigm Difference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HTML Template</strong></td>
+            <td><strong>JSX (<code>View</code>, <code>Text</code>, <code>Image</code>)</strong></td>
+            <td>No browser <code>div</code> or <code>span</code> tags. Text MUST be wrapped in <code>&lt;Text&gt;</code>.</td>
+          </tr>
+          <tr>
+            <td><strong><code>@Input()</code></strong></td>
+            <td><strong>Props (<code>props</code>)</strong></td>
+            <td>Read-only attributes passed down from parent components.</td>
+          </tr>
+          <tr>
+            <td><strong><code>@Output() EventEmitter</code></strong></td>
+            <td><strong>Callback Props</strong></td>
+            <td>Child calls parent callback function passed via props (e.g., <code>onPress={handlePress}</code>).</td>
+          </tr>
+          <tr>
+            <td><strong>Service (<code>providedIn: 'root'</code>)</strong></td>
+            <td><strong>React Context + Custom Hooks</strong></td>
+            <td>Global state shared via <code>createContext()</code> and <code>useContext()</code> hook.</td>
+          </tr>
+          <tr>
+            <td><strong><code>BehaviorSubject</code> / State</strong></td>
+            <td><strong><code>useState</code> Hook</strong></td>
+            <td>Functional state. Calling <code>setState(val)</code> schedules a component re-render.</td>
+          </tr>
+          <tr>
+            <td><strong>Lifecycle Hooks</strong></td>
+            <td><strong><code>useEffect</code> Hook</strong></td>
+            <td>Replaces <code>ngOnInit</code>, <code>ngOnChanges</code>, and <code>ngOnDestroy</code> in a unified hook.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Fast & Easy Expo Debugging</h2>
+      <div class="callout tip">
+        <strong>Dev Menu (Simulator)</strong>: Press <code>Cmd + D</code> on macOS Simulator or shake device to open Expo Developer Menu.
+      </div>
+      <ul>
+        <li><strong>Open JS Debugger</strong>: Inspect console logs, network requests, and step-through breakpoints.</li>
+        <li><strong>Toggle Element Inspector</strong>: Tap elements on device to see margins, padding, and layout metrics live.</li>
+        <li><strong>Terminal Hotkeys</strong>: Press <code>r</code> in terminal to reload bundle, <code>m</code> to toggle menu.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0002-react-context-vs-angular-services.html">Next: Lesson 0002 &rarr;</a></p>
+  </footer>
+</body>
+</html>
