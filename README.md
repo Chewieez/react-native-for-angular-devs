@@ -1,4 +1,4 @@
-# Angular to React Native & Expo: Fast-Track Course for Senior Front-End Developers
+# React Native for Angular Devs: Fast-Track Course
 
 A tailored, high-density learning track designed specifically for **Angular engineers and leads** transitioning into **React Native & Expo** mobile development.
 
@@ -22,7 +22,7 @@ Rather than starting from zero with basic programming concepts, this course tran
 ## 🎯 Course Blueprint & Structure
 
 ```text
-react-native-learning/
+react-native-for-angular-devs/
 ├── README.md                 # Course homepage and lesson index
 ├── MISSION.md                # Overall mission & learning goals
 ├── RESOURCES.md              # Official docs, debugging guides, community links
