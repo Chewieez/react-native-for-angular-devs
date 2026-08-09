@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Native for Angular Devs: Fast-Track Course</title>
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>React Native for Angular Devs</h1>
+    <div class="subtitle">A tailored, high-density fast-track course for Angular engineers & leads transitioning to React Native & Expo</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>📚 Course Curriculum & Lessons</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Lesson #</th>
+            <th>Module Title</th>
+            <th>Core Topics</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>0001</strong></td>
+            <td><a href="./lessons/0001-angular-to-react-native-mental-model.html">Angular Lead to React Native Mental Model</a></td>
+            <td>Concept translation matrix, <code>View</code>/<code>Text</code>/<code>Image</code> primitives, Expo Dev Menu (<code>Cmd+D</code>), Metro shortcuts, Chrome DevTools.</td>
+            <td>✅ Active</td>
+          </tr>
+          <tr>
+            <td><strong>0002</strong></td>
+            <td><a href="./lessons/0002-react-context-vs-angular-services.html">React Context vs. Angular Services</a></td>
+            <td><code>createContext</code>, <code>&lt;Provider&gt;</code>, <code>useContext</code>, state re-rendering mechanics vs Zone.js/Signals, Expo Router route guarding.</td>
+            <td>✅ Active</td>
+          </tr>
+          <tr>
+            <td><strong>0003</strong></td>
+            <td><a href="./lessons/0003-what-is-a-hook.html">What is a React Hook?</a></td>
+            <td>Why hooks exist, <code>useState</code>, <code>useEffect</code>, <code>useContext</code>, <code>useRef</code>, custom hooks (<code>useAuth</code>), Golden Rules of Hooks.</td>
+            <td>✅ Active</td>
+          </tr>
+          <tr>
+            <td><strong>0004</strong></td>
+            <td><a href="./lessons/0004-forms-and-inputs.html">Forms & Controlled Inputs</a></td>
+            <td>Controlled components vs. <code>[(ngModel)]</code>, <code>TextInput</code> props (<code>onChangeText</code>, <code>value</code>), keyboard handling.</td>
+            <td>✅ Active</td>
+          </tr>
+          <tr>
+            <td><strong>0005</strong></td>
+            <td><a href="./lessons/0005-flexbox-native-layout.html">Native Flexbox & Layout Masterclass</a></td>
+            <td><code>flexDirection: 'column'</code> default, unitless dp dimensions, <code>flex: 1</code> vs web CSS, <code>SafeAreaView</code>.</td>
+            <td>✅ Active</td>
+          </tr>
+          <tr>
+            <td><strong>0006</strong></td>
+            <td><a href="./lessons/0006-flatlist-vs-scrollview.html">FlatList vs. ScrollView & Virtualization</a></td>
+            <td>Memory management on mobile, list virtualization, <code>FlatList</code> vs <code>ScrollView</code>, key extractors.</td>
+            <td>✅ Active</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>💡 Quick Concept Translation Summary</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Concept</th>
+            <th>React Native / Expo Equivalent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HTML Template (<code>div</code>, <code>span</code>)</strong></td>
+            <td><strong>JSX (<code>&lt;View&gt;</code>, <code>&lt;Text&gt;</code>)</strong></td>
+          </tr>
+          <tr>
+            <td><strong><code>@Input()</code></strong></td>
+            <td><strong><code>props</code></strong></td>
+          </tr>
+          <tr>
+            <td><strong><code>@Output() EventEmitter</code></strong></td>
+            <td><strong>Callback Props (<code>onPress={handlePress}</code>)</strong></td>
+          </tr>
+          <tr>
+            <td><strong><code>@Injectable()</code> Service</strong></td>
+            <td><strong>React Context (<code>createContext</code>) + Custom Hook</strong></td>
+          </tr>
+          <tr>
+            <td><strong><code>BehaviorSubject</code> / Signals</strong></td>
+            <td><strong><code>useState()</code> Hook</strong></td>
+          </tr>
+          <tr>
+            <td><strong><code>[(ngModel)]</code> / Reactive Forms</strong></td>
+            <td><strong>Controlled Components (<code>value</code> + <code>onChangeText</code>)</strong></td>
+          </tr>
+          <tr>
+            <td><strong><code>CanActivate</code> Guard</strong></td>
+            <td><strong><code>useEffect</code> + <code>router.replace()</code> in Expo Router</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native for Angular Devs &bull; <a href="https://github.com/Chewieez/react-native-for-angular-devs">GitHub Repository</a></p>
+  </footer>
+</body>
+</html>
