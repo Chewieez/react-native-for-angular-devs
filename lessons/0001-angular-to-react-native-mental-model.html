@@ -2,72 +2,186 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lesson 0001: Angular Lead to React Native & Expo Mental Model</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
   <header>
     <h1>Lesson 0001: Angular Lead &rarr; React Native & Expo Mental Model</h1>
-    <div class="subtitle">Translating Angular architecture concepts to React Native primitives, hooks, & Expo debugging workflows</div>
+    <div class="subtitle">Translating Angular architecture concepts to React Native primitives, JSX, & Expo debugging workflows</div>
   </header>
 
   <main>
     <section>
-      <h2>1. The Paradigm Shift</h2>
-      <p>As an Angular Lead, you already master component architecture, state lifecycle, and dependency flow. React Native achieves the exact same architectural goals with a leaner, functional paradigm.</p>
+      <h2>1. The Core Architectural Paradigm Shift</h2>
+      <p>As a senior Angular engineer or team lead, you already understand component trees, state management, and separation of concerns. The shift to React Native and Expo requires mapping your existing knowledge to React's functional paradigm and mobile native layout engine.</p>
 
       <table>
         <thead>
           <tr>
-            <th>Angular Concept</th>
+            <th>Angular Architecture</th>
             <th>React Native & Expo Equivalent</th>
-            <th>Key Paradigm Difference</th>
+            <th>Deep Architectural Paradigm Difference</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>HTML Template</strong></td>
-            <td><strong>JSX (<code>View</code>, <code>Text</code>, <code>Image</code>)</strong></td>
-            <td>No browser <code>div</code> or <code>span</code> tags. Text MUST be wrapped in <code>&lt;Text&gt;</code>.</td>
+            <td><strong>HTML Template + SCSS</strong></td>
+            <td><strong>Functional JSX + <code>StyleSheet.create</code></strong></td>
+            <td>No browser DOM (<code>div</code>, <code>span</code>, <code>p</code>). Components return native view nodes (<code>View</code>, <code>Text</code>, <code>Image</code>).</td>
           </tr>
           <tr>
-            <td><strong><code>@Input()</code></strong></td>
-            <td><strong>Props (<code>props</code>)</strong></td>
-            <td>Read-only attributes passed down from parent components.</td>
+            <td><strong><code>@Input()</code> Decorator</strong></td>
+            <td><strong>Component Props (<code>props</code>)</strong></td>
+            <td>Props are read-only, immutable JavaScript objects passed down top-to-bottom.</td>
           </tr>
           <tr>
             <td><strong><code>@Output() EventEmitter</code></strong></td>
-            <td><strong>Callback Props</strong></td>
-            <td>Child calls parent callback function passed via props (e.g., <code>onPress={handlePress}</code>).</td>
+            <td><strong>Callback Function Props</strong></td>
+            <td>Child components trigger parent actions by calling callback functions passed as props (e.g. <code>onPress={handlePress}</code>).</td>
           </tr>
           <tr>
             <td><strong>Service (<code>providedIn: 'root'</code>)</strong></td>
             <td><strong>React Context + Custom Hooks</strong></td>
-            <td>Global state shared via <code>createContext()</code> and <code>useContext()</code> hook.</td>
+            <td>Global dependency injection without a framework container; data flows via <code>createContext()</code> and <code>useContext()</code>.</td>
           </tr>
           <tr>
-            <td><strong><code>BehaviorSubject</code> / State</strong></td>
-            <td><strong><code>useState</code> Hook</strong></td>
-            <td>Functional state. Calling <code>setState(val)</code> schedules a component re-render.</td>
+            <td><strong><code>BehaviorSubject</code> / Signals</strong></td>
+            <td><strong><code>useState()</code> Hook</strong></td>
+            <td>State updates are synchronous setter calls (<code>setState(val)</code>) that schedule component re-evaluations.</td>
           </tr>
           <tr>
-            <td><strong>Lifecycle Hooks</strong></td>
-            <td><strong><code>useEffect</code> Hook</strong></td>
-            <td>Replaces <code>ngOnInit</code>, <code>ngOnChanges</code>, and <code>ngOnDestroy</code> in a unified hook.</td>
+            <td><strong>Lifecycle (<code>ngOnInit</code>, <code>ngOnDestroy</code>)</strong></td>
+            <td><strong><code>useEffect()</code> Hook</strong></td>
+            <td>Unified hook managing setup, dependency tracking, and cleanup returns.</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>2. Fast & Easy Expo Debugging</h2>
-      <div class="callout tip">
-        <strong>Dev Menu (Simulator)</strong>: Press <code>Cmd + D</code> on macOS Simulator or shake device to open Expo Developer Menu.
+      <h2>2. Side-by-Side Code Comparison: User Profile Card</h2>
+      
+      <h3>Angular Component (HTML + TypeScript)</h3>
+      <pre><code>// user-card.component.ts
+@Component({
+  selector: 'app-user-card',
+  template: `
+    &lt;div class="card"&gt;
+      &lt;img [src]="avatarUrl" alt="User avatar" class="avatar" /&gt;
+      &lt;div class="info"&gt;
+        &lt;h3&gt;{{ name }}&lt;/h3&gt;
+        &lt;button (click)="selected.emit(name)"&gt;Select&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `,
+  styleUrls: ['./user-card.component.scss']
+})
+export class UserCardComponent {
+  @Input() name: string = '';
+  @Input() avatarUrl: string = '';
+  @Output() selected = new EventEmitter&lt;string&gt;();
+}</code></pre>
+
+      <h3>React Native & Expo Component (TSX + StyleSheet)</h3>
+      <pre><code>// UserCard.tsx
+import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
+
+interface UserCardProps {
+  name: string;
+  avatarUrl: string;
+  onSelect: (name: string) => void;
+}
+
+export function UserCard({ name, avatarUrl, onSelect }: UserCardProps) {
+  return (
+    &lt;View style={styles.card}&gt;
+      &lt;Image source={{ uri: avatarUrl }} style={styles.avatar} /&gt;
+      &lt;View style={styles.info}&gt;
+        &lt;Text style={styles.nameText}&gt;{name}&lt;/Text&gt;
+        &lt;Pressable style={styles.button} onPress={() => onSelect(name)}&gt;
+          &lt;Text style={styles.buttonText}&gt;Select&lt;/Text&gt;
+        &lt;/Pressable&gt;
+      &lt;/View&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  card: {
+    flexDirection: 'row', // Default in React Native is 'column'!
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#ffffff',
+    borderRadius: 12,
+  },
+  avatar: {
+    width: 50,
+    height: 50, // Remote images MUST have explicit width & height
+    borderRadius: 25,
+  },
+  info: {
+    marginLeft: 12,
+    flex: 1,
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#111111',
+  },
+  button: {
+    marginTop: 8,
+    backgroundColor: '#007AFF',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontWeight: '600',
+  },
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Critical Mental Model Rules for React Native</h2>
+      <div class="callout warning">
+        <ol>
+          <li><strong>No HTML Elements</strong>: Web tags like <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;button&gt;</code>, and <code>&lt;p&gt;</code> do not exist on iOS or Android. Using them will crash your mobile app.</li>
+          <li><strong>Text Wrapping Rule</strong>: Every visible text string <strong>MUST</strong> be enclosed within a <code>&lt;Text&gt;</code> component. Raw strings directly inside <code>&lt;View&gt;</code> throw a runtime exception.</li>
+          <li><strong>Flexbox Defaults to Column</strong>: Unlike web CSS where <code>flex-direction</code> defaults to <code>row</code>, React Native components stack vertically (<code>column</code>) by default.</li>
+          <li><strong>No CSS File Imports</strong>: Styling is written using JavaScript objects via <code>StyleSheet.create()</code>, compiled natively via Yoga layout engine.</li>
+        </ol>
       </div>
+    </section>
+
+    <section>
+      <h2>4. Fast & Easy Expo Debugging Workflow</h2>
+      <p>Expo provides powerful devtools out-of-the-box when running <code>npx expo start</code>:</p>
+
+      <div class="callout tip">
+        <strong>Expo Developer Menu Shortcuts</strong>:
+        <ul>
+          <li><strong>iOS Simulator</strong>: Press <code>Cmd + D</code> (or <code>Cmd + R</code> to reload JS bundle).</li>
+          <li><strong>Android Emulator</strong>: Press <code>Cmd + M</code> (or press <code>r</code> twice in Metro terminal).</li>
+          <li><strong>Physical Device</strong>: Shake the device to open the Dev Menu.</li>
+        </ul>
+      </div>
+
       <ul>
-        <li><strong>Open JS Debugger</strong>: Inspect console logs, network requests, and step-through breakpoints.</li>
-        <li><strong>Toggle Element Inspector</strong>: Tap elements on device to see margins, padding, and layout metrics live.</li>
-        <li><strong>Terminal Hotkeys</strong>: Press <code>r</code> in terminal to reload bundle, <code>m</code> to toggle menu.</li>
+        <li><strong>Open JS Debugger / Chrome DevTools</strong>: Press <code>j</code> in the Metro terminal to attach Chrome DevTools or inspect console logs and network requests.</li>
+        <li><strong>Toggle Element Inspector</strong>: Select "Toggle Element Inspector" from the Dev Menu to inspect live element margins, padding, and layout dimensions on screen.</li>
+        <li><strong>Metro Terminal Controls</strong>: Press <code>r</code> to reload, <code>m</code> to open dev menu, <code>a</code> to launch Android emulator, <code>i</code> to launch iOS simulator.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation References (Context7 Verified)</h2>
+      <ul>
+        <li><a href="https://react.dev/learn/thinking-in-react">React Official Docs — Thinking in React</a>: Mental model for state ownership and component trees.</li>
+        <li><a href="https://reactnative.dev/docs/components-and-apis">React Native Core Components & APIs</a>: Official reference for <code>View</code>, <code>Text</code>, <code>Image</code>, <code>Pressable</code>, and <code>StyleSheet</code>.</li>
+        <li><a href="https://docs.expo.dev/workflow/debugging/">Expo Debugging Guide</a>: Official debugging practices for Metro bundler, Chrome DevTools, and Dev Menu.</li>
       </ul>
     </section>
   </main>

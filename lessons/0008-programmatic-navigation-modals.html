@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 0008: Programmatic Navigation & Modals</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0008: Programmatic Navigation & Modals</h1>
+    <div class="subtitle">Navigating screens with <code>useRouter()</code>, route parameters (<code>useLocalSearchParams</code>), and native modal presentations</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Angular Router Service vs. Expo `useRouter()` Hook</h2>
+      <p>In Angular, you inject the <code>Router</code> service (<code>private router: Router</code>) to navigate programmatically. In Expo Router, you call the <code>useRouter()</code> hook inside any functional component:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Method</th>
+            <th>Expo Router Hook Equivalent</th>
+            <th>Behavior & Stack Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>this.router.navigate(['/feed'])</code></td>
+            <td><code>router.push('/feed')</code></td>
+            <td>Pushes a new screen onto the navigation stack. Enables back button.</td>
+          </tr>
+          <tr>
+            <td><code>this.router.navigate(['/login'], { replaceUrl: true })</code></td>
+            <td><code>router.replace('/(auth)/login')</code></td>
+            <td>Replaces current screen in stack. Disables back navigation to previous screen (ideal for login/logout).</td>
+          </tr>
+          <tr>
+            <td><code>this.location.back()</code></td>
+            <td><code>router.back()</code></td>
+            <td>Pops top screen off stack and returns to previous route.</td>
+          </tr>
+          <tr>
+            <td><code>&lt;a [routerLink]="['/profile']"&gt;</code></td>
+            <td><code>&lt;Link href="/profile"&gt;</code></td>
+            <td>Declarative JSX navigation element.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Dynamic Route Parameters (<code>useLocalSearchParams</code>)</h2>
+      <p>In Angular, parameters are retrieved via <code>ActivatedRoute.snapshot.params</code>. In Expo Router, params match dynamic bracket filenames (e.g. <code>src/app/user/[id].tsx</code>) and are extracted with <code>useLocalSearchParams()</code>:</p>
+
+      <pre><code>// File: src/app/user/[id].tsx
+import { View, Text, StyleSheet } from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+
+export default function UserProfileScreen() {
+  // Extract route parameters cleanly with TypeScript types
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
+
+  return (
+    &lt;View style={styles.container}&gt;
+      &lt;Text style={styles.text}&gt;Viewing User Profile: {id}&lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  text: { fontSize: 18, fontWeight: 'bold' },
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Native Modal Presentations</h2>
+      <p>Unlike Angular web modals requiring custom overlay components, native iOS and Android provide bottom sheet / modal card transitions. In Expo Router, you declare a modal screen inside a `_layout.tsx` Stack:</p>
+
+      <pre><code>// src/app/_layout.tsx
+import { Stack } from 'expo-router';
+
+export default function RootLayout() {
+  return (
+    &lt;Stack&gt;
+      &lt;Stack.Screen name="(tabs)" options={{ headerShown: false }} /&gt;
+      
+      {/* Modal Screen Configuration */}
+      &lt;Stack.Screen 
+        name="create-post-modal" 
+        options={{ 
+          presentation: 'modal', 
+          headerTitle: 'Create New Post' 
+        }} 
+      /&gt;
+    &lt;/Stack&gt;
+  );
+}</code></pre>
+
+      <div class="callout tip">
+        <strong>Closing a Modal Programmatically:</strong>
+        Inside <code>create-post-modal.tsx</code>, simply call <code>router.back()</code> after saving data to dismiss the modal and slide it back down natively!
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0007-expo-router-architecture.html">&larr; Previous Lesson: Lesson 0007</a></p>
+  </footer>
+</body>
+</html>

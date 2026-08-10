@@ -2,70 +2,206 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lesson 0006: FlatList vs. ScrollView & Data Virtualization</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
   <header>
     <h1>Lesson 0006: FlatList vs. ScrollView & Data Virtualization</h1>
-    <div class="subtitle">Efficiently rendering lists on mobile devices</div>
+    <div class="subtitle">Efficiently rendering dynamic lists, virtualization, pagination, and performance optimization on mobile devices</div>
   </header>
 
   <main>
     <section>
       <h2>1. The Native List Rendering Dilemma</h2>
-      <p>Unlike web browsers that can render thousands of DOM nodes without immediate memory crash, mobile devices have strict memory and JS thread limitations. Rendering a <code>.map()</code> inside a simple container will instantiate all native views simultaneously, leading to memory spikes and frame drops.</p>
+      <p>Unlike web browsers that can render hundreds of HTML DOM nodes without crashing, mobile devices operate under strict RAM and UI thread memory limits. Rendering a dynamic list using <code>.map()</code> inside a standard <code>ScrollView</code> forces native iOS and Android engines to instantiate all child views in memory at once, causing memory spikes, dropped frames, and eventual Out-Of-Memory (OOM) app crashes.</p>
 
       <table>
         <thead>
           <tr>
-            <th>Component</th>
-            <th>How It Works</th>
+            <th>List Component</th>
+            <th>Rendering Mechanism Under the Hood</th>
             <th>When to Use</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>ScrollView</code></td>
-            <td>Renders <strong>all children at once</strong>. Good for small, static layouts (like settings pages or short forms).</td>
-            <td>Small, fixed content (&lt; 20 items).</td>
+            <td>Renders <strong>ALL children immediately</strong> upon mount. No native view recycling.</td>
+            <td>Small, fixed layouts (&lt; 20 items), such as settings forms or static detail screens.</td>
           </tr>
           <tr>
             <td><code>FlatList</code></td>
-            <td><strong>Virtualizes list items</strong>. Only renders visible items on screen + small buffer window. Unmounts off-screen items.</td>
-            <td>Feeds, user lists, dynamic data, endless scrolling.</td>
+            <td><strong>Virtualizes list items</strong>. Renders only items currently visible on screen plus a small buffer window. Recycles and unmounts off-screen native views.</td>
+            <td>Dynamic feeds, search results, chat messages, infinite scrolling lists.</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>2. FlatList Syntax & Key Props</h2>
-      <pre><code>import { FlatList, View, Text, StyleSheet } from 'react-native';
+      <h2>2. Angular vs. React Native List Virtualization</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Angular List Pattern</th>
+            <th>React Native Equivalent</th>
+            <th>Virtualization Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>*ngFor="let item of items; trackBy: trackById"</code></td>
+            <td><code>&lt;FlatList data={items} keyExtractor={item =&gt; item.id} /&gt;</code></td>
+            <td><code>keyExtractor</code> acts like Angular's <code>trackBy</code> function to uniquely identify list items across updates.</td>
+          </tr>
+          <tr>
+            <td><code>cdk-virtual-scroll-viewport</code></td>
+            <td><code>&lt;FlatList getItemLayout={...} /&gt;</code></td>
+            <td><code>getItemLayout</code> bypasses dynamic layout measurement calculations if item heights are fixed, boosting scroll performance.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-const DATA = [
-  { id: '1', title: 'First Post' },
-  { id: '2', title: 'Second Post' },
-];
+    <section>
+      <h2>3. Production Code Example: Virtualized Feed with Pagination & Pull-to-Refresh</h2>
 
-export default function FeedScreen() {
+      <pre><code>import React, { useState, useCallback } from 'react';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
+
+interface PostItem {
+  id: string;
+  title: string;
+  author: string;
+}
+
+const INITIAL_DATA: PostItem[] = Array.from({ length: 20 }, (_, i) => ({
+  id: `post-${i + 1}`,
+  title: `Post Title #${i + 1}`,
+  author: `User @author_${i + 1}`,
+}));
+
+export function FeedScreen() {
+  const [posts, setPosts] = useState<PostItem[]>(INITIAL_DATA);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+  // Pull-to-Refresh Handler
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    // Fetch latest data from API
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setPosts(INITIAL_DATA);
+    setIsRefreshing(false);
+  }, []);
+
+  // Infinite Scroll Pagination Handler
+  const handleEndReached = useCallback(async () => {
+    if (isLoadingMore) return;
+    setIsLoadingMore(true);
+
+    // Fetch next page of data
+    await new Promise(resolve => setTimeout(resolve, 800));
+    const nextBatch: PostItem[] = Array.from({ length: 10 }, (_, i) => ({
+      id: `post-${posts.length + i + 1}`,
+      title: `Post Title #${posts.length + i + 1}`,
+      author: `User @author_${posts.length + i + 1}`,
+    }));
+
+    setPosts(prev => [...prev, ...nextBatch]);
+    setIsLoadingMore(false);
+  }, [posts.length, isLoadingMore]);
+
+  // Render Item Callback (Keep pure or wrap in React.memo)
+  const renderPost = useCallback(({ item }: { item: PostItem }) => (
+    &lt;View style={styles.card}&gt;
+      &lt;Text style={styles.title}&gt;{item.title}&lt;/Text&gt;
+      &lt;Text style={styles.author}&gt;By {item.author}&lt;/Text&gt;
+    &lt;/View&gt;
+  ), []);
+
   return (
-    &lt;FlatList
-      data={DATA}
-      keyExtractor={(item) =&gt; item.id}
-      renderItem={({ item }) =&gt; (
-        &lt;View style={styles.item}&gt;
-          &lt;Text style={styles.title}&gt;{item.title}&lt;/Text&gt;
-        &lt;/View&gt;
-      )}
-    /&gt;
+    &lt;View style={styles.container}&gt;
+      &lt;FlatList
+        data={posts}
+        keyExtractor={item => item.id}
+        renderItem={renderPost}
+        contentContainerStyle={styles.listPadding}
+        
+        // Refresh & Pagination
+        refreshControl={
+          &lt;RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} /&gt;
+        }
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5} // Triggers when within 50% screen height of bottom
+        
+        // Footer Loader
+        ListFooterComponent={
+          isLoadingMore ? (
+            &lt;View style={styles.footerLoader}&gt;
+              &lt;ActivityIndicator size="small" color="#007AFF" /&gt;
+            &lt;/View&gt;
+          ) : null
+        }
+        
+        // Performance Optimizations
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        windowSize={5}
+        removeClippedSubviews={true}
+      /&gt;
+    &lt;/View&gt;
   );
-}</code></pre>
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#f8f9fa' },
+  listPadding: { padding: 16 },
+  card: {
+    backgroundColor: '#ffffff',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#e9ecef',
+  },
+  title: { fontSize: 16, fontWeight: 'bold', color: '#212529', marginBottom: 4 },
+  author: { fontSize: 14, color: '#6c757d' },
+  footerLoader: { paddingVertical: 16, alignItems: 'center' },
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>4. FlatList Performance Tuning Rules</h2>
+      <div class="callout warning">
+        <ol>
+          <li><strong>getItemLayout</strong>: If your list items have fixed height (e.g. 60dp), define <code>getItemLayout={(data, index) => ({ length: 60, offset: 60 * index, index })}</code>. This allows FlatList to bypass dynamic layout measurement entirely!</li>
+          <li><strong>Pure Component Items</strong>: Wrap item components in <code>React.memo()</code> or use stable <code>renderItem</code> callbacks to prevent re-rendering visible items during pagination.</li>
+          <li><strong>initialNumToRender</strong>: Set this to match the exact number of items visible on screen initially (e.g. 8–10 items) for fast initial mount times.</li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation References (Context7 Verified)</h2>
+      <ul>
+        <li><a href="https://reactnative.dev/docs/flatlist">React Native Official Docs — FlatList</a>: Complete API reference for FlatList.</li>
+        <li><a href="https://reactnative.dev/docs/optimizing-flatlist-configuration">React Native Official Docs — Optimizing FlatList Configuration</a>: Performance optimization guide for large lists.</li>
+      </ul>
     </section>
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0005-flexbox-native-layout.html">&larr; Previous Lesson</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0005-flexbox-native-layout.html">&larr; Previous Lesson</a> &bull; <a href="./0007-expo-router-architecture.html">Next: Lesson 0007 &rarr;</a></p>
   </footer>
 </body>
 </html>

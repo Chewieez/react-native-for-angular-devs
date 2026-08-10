@@ -2,22 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lesson 0005: Native Flexbox & Layout Masterclass</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
   <header>
     <h1>Lesson 0005: Native Flexbox & Layout Masterclass</h1>
-    <div class="subtitle">How React Native styling differs from CSS & Angular layout frameworks</div>
+    <div class="subtitle">How React Native Yoga layout engine differs from Web CSS, handling device safe areas & platform styles</div>
   </header>
 
   <main>
     <section>
       <h2>1. The 3 Fundamental Rules of Native Layout</h2>
       <ol>
-        <li><strong>Default Direction is Column</strong>: On the web, <code>flex-direction</code> defaults to <code>row</code>. In React Native, every <code>View</code> defaults to <code>flexDirection: 'column'</code>.</li>
-        <li><strong>No Unit Dimensions</strong>: Dimensions are unitless density-independent pixels (dp). Writing <code>width: 100</code> means 100dp (not <code>100px</code> or <code>100rem</code>).</li>
-        <li><strong><code>flex: 1</code> Fills Available Space</strong>: Unlike web CSS where <code>flex: 1</code> means <code>flex-grow: 1</code>, in React Native <code>flex: 1</code> tells a component to expand to fill its parent container entirely.</li>
+        <li><strong>Default Direction is Column</strong>: On the web, <code>flex-direction</code> defaults to <code>row</code>. In React Native, every <code>View</code> defaults to <code>flexDirection: 'column'</code> (vertical stacking).</li>
+        <li><strong>Unitless Dimensions</strong>: Dimensions are specified as unitless density-independent pixels (dp). Writing <code>width: 100</code> means 100dp (never write unit strings like <code>100px</code>, <code>100rem</code>, or <code>100%</code> unless as a percentage string <code>'100%'</code>).</li>
+        <li><strong><code>flex: 1</code> Expands to Fill Bounds</strong>: Unlike web CSS where <code>flex: 1</code> means <code>flex-grow: 1</code>, in React Native <code>flex: 1</code> instructs a component to stretch and fill all available space within its parent container.</li>
       </ol>
     </section>
 
@@ -28,7 +29,8 @@
           <tr>
             <th>Property</th>
             <th>Web CSS Default</th>
-            <th>React Native Default</th>
+            <th>React Native Yoga Default</th>
+            <th>Native Execution Detail</th>
           </tr>
         </thead>
         <tbody>
@@ -36,61 +38,154 @@
             <td><code>flexDirection</code></td>
             <td><code>row</code></td>
             <td><code>column</code></td>
+            <td>Children stack vertically by default. Use <code>'row'</code> to align side-by-side.</td>
           </tr>
           <tr>
             <td><code>alignItems</code></td>
             <td><code>stretch</code></td>
             <td><code>stretch</code></td>
+            <td>Cross-axis alignment. Set to <code>'center'</code> or <code>'flex-start'</code> as needed.</td>
           </tr>
           <tr>
             <td><code>justifyContent</code></td>
             <td><code>flex-start</code></td>
             <td><code>flex-start</code></td>
+            <td>Primary-axis alignment (<code>'center'</code>, <code>'space-between'</code>, <code>'space-around'</code>).</td>
           </tr>
           <tr>
             <td><code>position</code></td>
             <td><code>static</code></td>
-            <td><code>relative</code> (Only <code>relative</code> or <code>absolute</code> exist)</td>
+            <td><code>relative</code></td>
+            <td>Only <code>'relative'</code> or <code>'absolute'</code> exist. Native absolute elements align to their direct parent.</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>3. Code Example & StyleSheet Utility</h2>
-      <pre><code>import { View, Text, StyleSheet } from 'react-native';
+      <h2>3. Code Example: Screen Layout with SafeAreaView & Cards</h2>
+
+      <pre><code>import React from 'react';
+import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function LayoutDemo() {
+export function DashboardScreen() {
   return (
-    &lt;SafeAreaView style={styles.container}&gt;
-      &lt;View style={styles.card}&gt;
-        &lt;Text style={styles.title}&gt;Card Title&lt;/Text&gt;
+    &lt;SafeAreaView style={styles.safeArea}&gt;
+      &lt;StatusBar barStyle="dark-content" /&gt;
+      
+      &lt;View style={styles.header}&gt;
+        &lt;Text style={styles.headerTitle}&gt;Dashboard&lt;/Text&gt;
+        &lt;View style={styles.badge}&gt;
+          &lt;Text style={styles.badgeText}&gt;PRO&lt;/Text&gt;
+        &lt;/View&gt;
+      &lt;/View&gt;
+
+      &lt;View style={styles.cardContainer}&gt;
+        &lt;View style={styles.card}&gt;
+          &lt;Text style={styles.cardTitle}&gt;Total Sales&lt;/Text&gt;
+          &lt;Text style={styles.cardValue}&gt;$24,500&lt;/Text&gt;
+        &lt;/View&gt;
+
+        &lt;View style={styles.card}&gt;
+          &lt;Text style={styles.cardTitle}&gt;Active Users&lt;/Text&gt;
+          &lt;Text style={styles.cardValue}&gt;1,240&lt;/Text&gt;
+        &lt;/View&gt;
       &lt;/View&gt;
     &lt;/SafeAreaView&gt;
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1, // Fills entire device screen
-    backgroundColor: '#fff',
-    padding: 16,
+    backgroundColor: '#f8f9fa',
+    paddingHorizontal: 16,
   },
-  card: {
-    flexDirection: 'row', // Horizontally align children
+  header: {
+    flexDirection: 'row', // Horizontal alignment
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e9ecef',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#111111',
+  },
+  badge: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     borderRadius: 12,
   },
+  badgeText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    gap: 12, // Native gap property supported in modern RN
+    marginTop: 20,
+  },
+  card: {
+    flex: 1, // Each card expands equally to fill 50% width
+    backgroundColor: '#ffffff',
+    padding: 16,
+    borderRadius: 12,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3, // Android native shadow elevation
+      },
+    }),
+  },
+  cardTitle: {
+    fontSize: 14,
+    color: '#6c757d',
+    marginBottom: 6,
+  },
+  cardValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#212529',
+  },
 });</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Platform-Specific Styling & File Conventions</h2>
+      <p>Mobile platforms have distinct visual standards (iOS shadows vs. Android elevation, iOS notch insets vs. Android status bars):</p>
+      
+      <div class="callout tip">
+        <ul>
+          <li><strong>Platform.OS</strong>: Evaluate code branches using <code>Platform.OS === 'ios'</code> or <code>Platform.OS === 'android'</code>.</li>
+          <li><strong>Platform.select</strong>: Inline style selection via <code>Platform.select({ ios: { ... }, android: { ... } })</code>.</li>
+          <li><strong>Platform Extensions</strong>: Create platform-specific files like <code>Button.ios.tsx</code> and <code>Button.android.tsx</code>. React Native automatically resolves the correct file for the target build.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation References (Context7 Verified)</h2>
+      <ul>
+        <li><a href="https://reactnative.dev/docs/flexbox">React Native Official Docs — Layout with Flexbox</a>: Complete guide to Flexbox properties.</li>
+        <li><a href="https://reactnative.dev/docs/layout-props">React Native Official Docs — Layout Props</a>: Reference for `flexDirection`, `justifyContent`, `alignItems`, and `gap`.</li>
+        <li><a href="https://reactnative.dev/docs/platform-specific-code">React Native Official Docs — Platform Specific Code</a>: Platform module and filename extension guide.</li>
+      </ul>
     </section>
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0004-forms-and-inputs.html">&larr; Previous Lesson</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0004-forms-and-inputs.html">&larr; Previous Lesson</a> &bull; <a href="./0006-flatlist-vs-scrollview.html">Next: Lesson 0006 &rarr;</a></p>
   </footer>
 </body>
 </html>

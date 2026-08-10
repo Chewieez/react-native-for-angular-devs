@@ -18,8 +18,8 @@ Rather than starting from zero with basic programming concepts, this course tran
 | **0004** | [**Forms & Controlled Inputs**](./lessons/0004-forms-and-inputs.html) | Controlled components vs. `[(ngModel)]`, `TextInput` props (`onChangeText`, `value`), keyboard handling. | ✅ Active |
 | **0005** | [**Native Flexbox & Layout Masterclass**](./lessons/0005-flexbox-native-layout.html) | `flexDirection: 'column'` default, unitless dp dimensions, `flex: 1` vs web CSS, `SafeAreaView`. | ✅ Active |
 | **0006** | [**FlatList vs. ScrollView & Virtualization**](./lessons/0006-flatlist-vs-scrollview.html) | Memory management on mobile, list virtualization, `FlatList` vs `ScrollView`, key extractors. | ✅ Active |
-| **0007** | **Expo Router Architecture & File-Based Routing** | File-based routing, `(tabs)`, `(auth)`, `Stack`, `Slot`, & `_layout.tsx` vs Angular `RouterModule`. | ⏳ Pending |
-| **0008** | **Programmatic Navigation & Modals** | `router.push`, `router.replace`, `router.back`, modal presentation, route parameters. | ⏳ Pending |
+| **0007** | [**Expo Router Architecture & File-Based Routing**](./lessons/0007-expo-router-architecture.html) | File-based routing, `(tabs)`, `(auth)`, `Stack`, `Slot`, & `_layout.tsx` vs Angular `RouterModule`. | ✅ Active |
+| **0008** | [**Programmatic Navigation & Modals**](./lessons/0008-programmatic-navigation-modals.html) | `router.push`, `router.replace`, `router.back`, modal presentation, route parameters. | ✅ Active |
 | **0009** | **Async Data Fetching & Loading States** | `async/await`, `ActivityIndicator`, Error Boundaries vs Angular `HttpClient`/RxJS. | ⏳ Pending |
 | **0010** | **Backend Integration & Persistent Storage** | Supabase/Firebase integration, local storage with `AsyncStorage` / `MMKV` key-value persistence. | ⏳ Pending |
 | **0011** | **Native Camera & Image Picker** | Camera access (`expo-camera`), photo library picker (`expo-image-picker`), device permissions. | ⏳ Pending |

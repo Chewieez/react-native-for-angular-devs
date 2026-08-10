@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson 0007: Expo Router Architecture & File-Based Routing</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0007: Expo Router Architecture & File-Based Routing</h1>
+    <div class="subtitle">Translating Angular <code>RouterModule</code> & Route Guards to Expo Router Managed File-Based Architecture</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Angular RouterModule vs. Expo Router</h2>
+      <p>In Angular, routes are registered via JavaScript configuration arrays in <code>app.routes.ts</code>. Expo Router uses <strong>file-based routing</strong> where directory paths inside <code>src/app/</code> map directly to application routes, powered by React Navigation under the hood.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Concept</th>
+            <th>Expo Router Equivalent</th>
+            <th>Key Architecture Nuance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Routes</code> Array Config</td>
+            <td>File System Structure (<code>src/app/</code>)</td>
+            <td>File paths define routes (e.g. <code>app/login.tsx</code> &rarr; <code>/login</code>).</td>
+          </tr>
+          <tr>
+            <td><code>&lt;router-outlet&gt;</code></td>
+            <td><code>&lt;Stack /&gt;</code>, <code>&lt;Tabs /&gt;</code>, or <code>&lt;Slot /&gt;</code></td>
+            <td>Layout components define where and how nested child screens are rendered.</td>
+          </tr>
+          <tr>
+            <td>Parent Layout Component</td>
+            <td><code>_layout.tsx</code></td>
+            <td>Special layout file that wraps all sibling route components and child directories.</td>
+          </tr>
+          <tr>
+            <td>Group / Feature Module</td>
+            <td>Group Segment Folders <code>(group)</code></td>
+            <td>Folders wrapped in parentheses (e.g. <code>(auth)</code>, <code>(tabs)</code>) group routes without adding extra segments to the URL path.</td>
+          </tr>
+          <tr>
+            <td>Route Parameter <code>:id</code></td>
+            <td>Dynamic File <code>[id].tsx</code></td>
+            <td>Bracketed filenames capture URL parameters, accessible via <code>useLocalSearchParams()</code>.</td>
+          </tr>
+          <tr>
+            <td><code>CanActivate</code> Route Guard</td>
+            <td><code>useEffect</code> + <code>router.replace()</code></td>
+            <td>Declarative redirection executed inside Root Layout or custom Auth Hook.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. The Layout Tree & Root Layout (<code>_layout.tsx</code>)</h2>
+      <p>Just like an Angular App Component containing <code>&lt;router-outlet&gt;</code> and root Providers, <code>src/app/_layout.tsx</code> acts as the entry shell for your React Native app:</p>
+
+      <pre><code>// src/app/_layout.tsx
+import { Stack } from 'expo-router';
+import { AuthProvider } from '../context/AuthContext';
+
+export default function RootLayout() {
+  return (
+    &lt;AuthProvider&gt;
+      &lt;Stack screenOptions={{ headerShown: false }}&gt;
+        &lt;Stack.Screen name="(tabs)" options={{ headerShown: false }} /&gt;
+        &lt;Stack.Screen name="(auth)" options={{ headerShown: false }} /&gt;
+        &lt;Stack.Screen name="modal" options={{ presentation: 'modal' }} /&gt;
+      &lt;/Stack&gt;
+    &lt;/AuthProvider&gt;
+  );
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Declarative Route Guarding (Angular <code>CanActivate</code> vs. Expo Router)</h2>
+      <p>In Angular, a <code>CanActivate</code> guard blocks route activation before rendering. In React Native, route guarding is declarative: we watch authentication state in <code>_layout.tsx</code> or custom hooks, redirecting unauthorized users automatically:</p>
+
+      <pre><code>// Inside AuthContext or Root Layout Guard
+import { useEffect } from 'react';
+import { useRouter, useSegments } from 'expo-router';
+
+export function useProtectedRoute(user: User | null, isLoading: boolean) {
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (isLoading) return;
+
+    const inAuthGroup = segments[0] === '(auth)';
+
+    if (!user && !inAuthGroup) {
+      // Unauthenticated: Redirect to login
+      router.replace('/(auth)/login');
+    } else if (user && inAuthGroup) {
+      // Authenticated: Redirect to main tabs
+      router.replace('/(tabs)');
+    }
+  }, [user, segments, isLoading]);
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Key Advantages for Angular Developers</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>No manual route declarations</strong>: Adding a new screen is as simple as creating <code>src/app/settings.tsx</code>.</li>
+          <li><strong>Native Native Transitions</strong>: Using <code>&lt;Stack&gt;</code> gives you native iOS card slide transitions and Android fade/slide transitions out-of-the-box.</li>
+          <li><strong>Deep Linking Built-In</strong>: Every file route in Expo Router is automatically deep-linkable across web and mobile schemes.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0006-flatlist-vs-scrollview.html">&larr; Previous Lesson</a> &bull; <a href="./0008-programmatic-navigation-modals.html">Next: Lesson 0008 &rarr;</a></p>
+  </footer>
+</body>
+</html>

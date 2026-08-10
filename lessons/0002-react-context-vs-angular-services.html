@@ -2,48 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lesson 0002: React Context vs. Angular Services (Deep Dive into your AuthContext)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0002: React Context vs. Angular Services</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
   <header>
     <h1>Lesson 0002: React Context vs. Angular Services</h1>
-    <div class="subtitle">Dissecting <code>AuthContext.tsx</code> and <code>_layout.tsx</code> from your BeReal codebase</div>
+    <div class="subtitle">Architecting global state, custom hooks, and route guarding in React Native & Expo Router</div>
   </header>
 
   <main>
     <section>
-      <h2>1. The Direct Code Comparison</h2>
-      <p>Here is how your <code>AuthContext.tsx</code> matches what you would build in Angular:</p>
+      <h2>1. The Dependency Injection & State Translation</h2>
+      <p>In Angular, singleton services decorated with <code>@Injectable({ providedIn: 'root' })</code> hold shared state (often using <code>BehaviorSubject</code> or Signals) and inject dependencies across the app via constructor or <code>inject()</code>. React achieves the exact same architectural capability using <strong>React Context</strong> and <strong>Custom Hooks</strong>.</p>
 
       <table>
         <thead>
           <tr>
             <th>Angular Pattern</th>
-            <th>Your BeReal <code>AuthContext.tsx</code></th>
-            <th>What Happens Under the Hood</th>
+            <th>React Native & Expo Equivalent</th>
+            <th>Execution & Architecture Under the Hood</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>@Injectable({ providedIn: 'root' })</code></td>
             <td><code>const AuthContext = createContext(...)</code></td>
-            <td>Creates a memory container for shared state across the component tree.</td>
+            <td>Creates a memory container for shared state accessible across component sub-trees.</td>
           </tr>
           <tr>
-            <td><code>app.config.ts</code> providers</td>
+            <td><code>app.config.ts</code> root providers</td>
             <td><code>&lt;AuthProvider&gt;{children}&lt;/AuthProvider&gt;</code></td>
-            <td>Wraps root layout in <code>src/app/_layout.tsx</code> so all child routes can access auth data.</td>
+            <td>Wraps the root layout in <code>src/app/_layout.tsx</code> so all child screens inherit auth state.</td>
           </tr>
           <tr>
             <td><code>private user$ = new BehaviorSubject(null);</code></td>
             <td><code>const [user, setUser] = useState&lt;User | null&gt;(null);</code></td>
-            <td>Component-level state hook holding the active profile object.</td>
+            <td>State hook inside Provider holding the current user profile object.</td>
           </tr>
           <tr>
-            <td><code>constructor(private auth: AuthService)</code> / <code>inject()</code></td>
-            <td><code>const { user, signUp } = useAuth();</code></td>
-            <td>Custom Hook that reads from the nearest <code>AuthContext.Provider</code> ancestor.</td>
+            <td><code>constructor(private auth: AuthService)</code></td>
+            <td><code>const { user, login } = useAuth();</code></td>
+            <td>Custom Hook consuming Context via <code>useContext(AuthContext)</code>.</td>
           </tr>
           <tr>
             <td><code>CanActivate</code> Route Guard</td>
@@ -55,29 +56,117 @@
     </section>
 
     <section>
-      <h2>2. Key Insight: React Re-rendering vs. Angular Zone/Signals</h2>
-      <p>In Angular, changing a <code>BehaviorSubject</code> notifies subscribers (or Signals trigger fine-grained DOM updates). In React:</p>
-      <ul>
-        <li>When <code>setUser(profile)</code> is called in <code>signUp()</code>, React marks <code>AuthProvider</code> as dirty.</li>
-        <li>React re-evaluates <code>AuthProvider</code> and passes the new <code>value={{ user, signUp, updateUser }}</code> object down.</li>
-        <li>Any component calling <code>useAuth()</code> receives the new <code>user</code> object and automatically re-renders with fresh data.</li>
-      </ul>
+      <h2>2. Side-by-Side Code Comparison: Authentication System</h2>
+
+      <h3>Angular Service (`auth.service.ts`)</h3>
+      <pre><code>// auth.service.ts
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+export interface User { id: string; email: string; }
+
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private userSubject = new BehaviorSubject&lt;User | null&gt;(null);
+  user$ = this.userSubject.asObservable();
+
+  async login(email: string): Promise&lt;void&gt; {
+    const user = { id: '123', email };
+    this.userSubject.next(user);
+  }
+
+  logout(): void {
+    this.userSubject.next(null);
+  }
+}</code></pre>
+
+      <h3>React Native Context + Custom Hook (`AuthContext.tsx`)</h3>
+      <pre><code>// src/context/AuthContext.tsx
+import React, { createContext, useContext, useState } from 'react';
+
+export interface User { id: string; email: string; }
+
+interface AuthContextType {
+  user: User | null;
+  login: (email: string) => Promise&lt;void&gt;;
+  logout: () => void;
+}
+
+const AuthContext = createContext&lt;AuthContextType | undefined&gt;(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState&lt;User | null&gt;(null);
+
+  const login = async (email: string) => {
+    const fetchedUser = { id: '123', email };
+    setUser(fetchedUser);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  return (
+    &lt;AuthContext.Provider value={{ user, login, logout }}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+}
+
+// Custom Hook (Equivalent to injecting AuthService in Angular)
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}</code></pre>
     </section>
 
     <section>
-      <h2>3. Debugging Auth State & Navigation</h2>
-      <div class="callout tip">
-        <strong>Quick Debug Technique:</strong> Add a temporary <code>useEffect</code> inside <code>AuthProvider</code> to log state changes:
-        <pre><code>useEffect(() => {
-  console.log("🔒 Auth state updated:", user?.email || "Logged out");
-}, [user]);</code></pre>
-        This logs instantly in your Metro terminal when Supabase completes login or signup.
+      <h2>3. Root Application Wrapping in Expo Router (`src/app/_layout.tsx`)</h2>
+      <p>To make the Context available everywhere, wrap your root `<Stack>` inside `app/_layout.tsx`:</p>
+
+      <pre><code>// src/app/_layout.tsx
+import { Stack } from 'expo-router';
+import { AuthProvider } from '../context/AuthContext';
+
+export default function RootLayout() {
+  return (
+    &lt;AuthProvider&gt;
+      &lt;Stack screenOptions={{ headerShown: false }}&gt;
+        &lt;Stack.Screen name="(tabs)" /&gt;
+        &lt;Stack.Screen name="(auth)" /&gt;
+      &lt;/Stack&gt;
+    &lt;/AuthProvider&gt;
+  );
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Re-rendering Mechanics: React Context vs. Angular Zone.js & Signals</h2>
+      <p>Understanding how updates propagate is critical for senior front-end leads:</p>
+      
+      <div class="callout warning">
+        <strong>Context Re-render Rule</strong>:
+        When <code>setUser(user)</code> is called inside <code>AuthProvider</code>, React marks <code>AuthProvider</code> as dirty. React evaluates <code>AuthProvider</code> and passes the new <code>value={{ user, login, logout }}</code> reference down.
+        <br/><br/>
+        Every component calling <code>useAuth()</code> will re-render automatically. To prevent unnecessary re-renders in large applications, separate rapidly changing state (e.g. active form input text) from global state (e.g. user authentication object).
       </div>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation References (Context7 Verified)</h2>
+      <ul>
+        <li><a href="https://react.dev/reference/react/createContext">React Official Docs — createContext</a>: Full API reference and provider scoping rules.</li>
+        <li><a href="https://react.dev/reference/react/useContext">React Official Docs — useContext</a>: How custom hooks read context values.</li>
+        <li><a href="https://docs.expo.dev/router/layouts/">Expo Router Layouts Documentation</a>: Setting up root layouts and global state providers in Expo.</li>
+      </ul>
     </section>
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../MISSION.md">View Mission</a> &bull; <a href="./0001-angular-to-react-native-mental-model.html">Previous Lesson</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0001-angular-to-react-native-mental-model.html">&larr; Previous Lesson</a> &bull; <a href="./0003-what-is-a-hook.html">Next: Lesson 0003 &rarr;</a></p>
   </footer>
 </body>
 </html>

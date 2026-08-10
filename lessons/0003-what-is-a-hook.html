@@ -2,74 +2,158 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lesson 0003: What is a React Hook?</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
   <header>
     <h1>Lesson 0003: What is a React Hook?</h1>
-    <div class="subtitle">Demystifying hooks for Angular developers</div>
+    <div class="subtitle">Demystifying hooks, state, lifecycle synchronization, and custom hook abstractions for Angular developers</div>
   </header>
 
   <main>
     <section>
-      <h2>1. The Simple Definition</h2>
-      <p>A <strong>Hook</strong> is a JavaScript function (always prefixed with <code>use</code>, like <code>useState</code> or <code>useAuth</code>) that lets functional components "hook into" React features like <strong>state</strong>, <strong>lifecycle effects</strong>, and <strong>context</strong>.</p>
-    </section>
+      <h2>1. What Exactly is a React Hook?</h2>
+      <p>A <strong>Hook</strong> is a plain JavaScript function (always prefixed with <code>use</code>, such as <code>useState</code> or <code>useEffect</code>) that lets functional components attach to React engine capabilities like state memory, lifecycle synchronization, context subscription, and memoization.</p>
 
-    <section>
-      <h2>2. Why Hooks Exist (The Angular Comparison)</h2>
       <table>
         <thead>
           <tr>
-            <th>Angular Components (Classes)</th>
-            <th>React Components (Functions + Hooks)</th>
+            <th>Angular Concept (Class Component)</th>
+            <th>React Built-in Hook Equivalent</th>
+            <th>Functionality & Use Case</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Class instances preserve state in class properties (<code>this.userName = 'Alex'</code>).</td>
-            <td>React components are plain functions that re-execute from top to bottom on every render. <code>useState()</code> tells React to preserve value across renders.</td>
+            <td>Class property (<code>this.count = 0</code>)</td>
+            <td><code>const [count, setCount] = useState(0)</code></td>
+            <td>Local component state. Setter schedules component re-evaluation.</td>
           </tr>
           <tr>
-            <td>Lifecycle interfaces (<code>ngOnInit</code>, <code>ngOnDestroy</code>) are class methods.</td>
-            <td><code>useEffect()</code> is a hook function called inside the component to run side effects after rendering.</td>
+            <td><code>ngOnInit</code> + <code>ngOnDestroy</code></td>
+            <td><code>useEffect(() => { ... return () => cleanup; }, [])</code></td>
+            <td>External side-effects (timers, subscriptions, API calls).</td>
           </tr>
           <tr>
-            <td>Services are injected in constructor (<code>constructor(private auth: AuthService)</code>).</td>
-            <td><code>useContext(AuthContext)</code> / <code>useAuth()</code> is a hook called inside the component to consume Context.</td>
+            <td><code>constructor(private svc: Svc)</code></td>
+            <td><code>useContext(MyContext)</code></td>
+            <td>Reads Context values provided by parent component tree.</td>
+          </tr>
+          <tr>
+            <td>Instance property / DOM ElementRef</td>
+            <td><code>useRef(initialValue)</code></td>
+            <td>Holds persistent mutable value across renders without triggering a re-render.</td>
+          </tr>
+          <tr>
+            <td>Angular Pipe / Getter memoization</td>
+            <td><code>useMemo(() => compute(), [deps])</code></td>
+            <td>Caches expensive calculations across renders.</td>
+          </tr>
+          <tr>
+            <td>Cached event listener method</td>
+            <td><code>useCallback(() => {}, [deps])</code></td>
+            <td>Caches function instance reference to optimize child component re-renders.</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>3. The 3 Rules of Hooks</h2>
+      <h2>2. Side-by-Side Lifecycle Comparison: Subscribing to Data</h2>
+
+      <h3>Angular Component (`ngOnInit` & `ngOnDestroy`)</h3>
+      <pre><code>export class DataFeedComponent implements OnInit, OnDestroy {
+  private subscription!: Subscription;
+  data: DataItem[] = [];
+
+  ngOnInit() {
+    this.subscription = this.dataService.streamData().subscribe(items => {
+      this.data = items;
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe(); // Manual cleanup required
+    }
+  }
+}</code></pre>
+
+      <h3>React Component (`useEffect` with Cleanup Return)</h3>
+      <pre><code>import { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+
+export function DataFeedScreen() {
+  const [data, setData] = useState<DataItem[]>([]);
+
+  useEffect(() => {
+    // 1. Setup Phase (Runs after mount)
+    const subscription = dataService.streamData((items) => {
+      setData(items);
+    });
+
+    // 2. Cleanup Return Function (Runs before unmount or next effect)
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []); // Empty array [] means run setup once on mount & cleanup on unmount
+
+  return (
+    &lt;View&gt;
+      &lt;Text&gt;Items count: {data.length}&lt;/Text&gt;
+    &lt;/View&gt;
+  );
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. The 3 Golden Rules of Hooks</h2>
       <div class="callout warning">
         <ol>
-          <li><strong>Only call hooks at the top level</strong>: Don't call hooks inside loops, conditions (<code>if</code>), or nested functions.</li>
-          <li><strong>Only call hooks from React function components or custom hooks</strong>: Don't call hooks from regular utility JS functions.</li>
-          <li><strong>Naming convention</strong>: Custom hooks MUST start with <code>use</code> (e.g. <code>useAuth()</code>, <code>useUserProfile()</code>).</li>
+          <li><strong>Only Call Hooks at the Top Level</strong>: Never call hooks inside loops, conditional statements (<code>if</code>), or nested functions. React relies on the call order of hooks to match state across re-renders.</li>
+          <li><strong>Only Call Hooks from React Functions</strong>: Call hooks only from React functional components or custom hooks. Do not call them from standard JS helper utilities.</li>
+          <li><strong>Strict Naming Convention</strong>: Custom hook names <strong>MUST</strong> start with <code>use</code> (e.g. <code>useAuth</code>, <code>useDebounce</code>, <code>useFetch</code>). This allows ESLint to enforce rules of hooks automatically.</li>
         </ol>
       </div>
     </section>
 
     <section>
-      <h2>4. Your <code>useAuth()</code> Custom Hook</h2>
-      <p>In your <code>AuthContext.tsx</code>, you defined a custom hook:</p>
-      <pre><code>export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within AuthProvider");
-  }
-  return context;
-};</code></pre>
-      <p>Now, any component in your app simply calls <code>const { user, signUp } = useAuth();</code> to access auth state and functions in one clean line!</p>
+      <h2>4. Creating Production Custom Hooks</h2>
+      <p>Custom hooks let you extract reusable component logic into modular functions. Here is a custom <code>useDebounce</code> hook:</p>
+
+      <pre><code>import { useState, useEffect } from 'react';
+
+export function useDebounce<T>(value: T, delayMs: number = 300): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delayMs);
+
+    return () => {
+      clearTimeout(timer); // Cancel previous timer on value change
+    };
+  }, [value, delayMs]);
+
+  return debouncedValue;
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation References (Context7 Verified)</h2>
+      <ul>
+        <li><a href="https://react.dev/reference/react/hooks">React Official Docs — Built-in React Hooks</a>: Complete catalog of all 16 built-in React hooks.</li>
+        <li><a href="https://react.dev/learn/reusing-logic-with-custom-hooks">React Official Docs — Reusing Logic with Custom Hooks</a>: Best practices for abstracting custom hooks.</li>
+        <li><a href="https://react.dev/reference/rules/rules-of-hooks">React Official Docs — Rules of Hooks</a>: Official specifications for hook call order and ESLint enforcement.</li>
+      </ul>
     </section>
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0002-react-context-vs-angular-services.html">&larr; Previous Lesson</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../README.md">Course Homepage</a> &bull; <a href="./0002-react-context-vs-angular-services.html">&larr; Previous Lesson</a> &bull; <a href="./0004-forms-and-inputs.html">Next: Lesson 0004 &rarr;</a></p>
   </footer>
 </body>
 </html>
