@@ -85,26 +85,31 @@ export default function RootLayout() {
       <p>In Angular, a <code>CanActivate</code> guard blocks route activation before rendering. In React Native, route guarding is declarative: we watch authentication state in <code>_layout.tsx</code> or custom hooks, redirecting unauthorized users automatically:</p>
 
       <pre><code>// Inside AuthContext or Root Layout Guard
-import { useEffect } from 'react';
-import { useRouter, useSegments } from 'expo-router';
+import { useRouter, useSegments, useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 
 export function useProtectedRoute(user: User | null, isLoading: boolean) {
   const segments = useSegments();
   const router = useRouter();
 
-  useEffect(() => {
-    if (isLoading) return;
+  // useFocusEffect fires every time this screen gains focus,
+  // not just on mount — important for tab switches and back navigation.
+  // For one-time mount-only checks, useEffect with [] also works.
+  useFocusEffect(
+    useCallback(() => {
+      if (isLoading) return;
 
-    const inAuthGroup = segments[0] === '(auth)';
+      const inAuthGroup = segments[0] === '(auth)';
 
-    if (!user && !inAuthGroup) {
-      // Unauthenticated: Redirect to login
-      router.replace('/(auth)/login');
-    } else if (user && inAuthGroup) {
-      // Authenticated: Redirect to main tabs
-      router.replace('/(tabs)');
-    }
-  }, [user, segments, isLoading]);
+      if (!user && !inAuthGroup) {
+        // Unauthenticated: Redirect to login
+        router.replace('/(auth)/login');
+      } else if (user && inAuthGroup) {
+        // Authenticated: Redirect to main tabs
+        router.replace('/(tabs)');
+      }
+    }, [user, segments, isLoading])
+  );
 }</code></pre>
     </section>
 
@@ -113,7 +118,7 @@ export function useProtectedRoute(user: User | null, isLoading: boolean) {
       <div class="callout tip">
         <ul>
           <li><strong>No manual route declarations</strong>: Adding a new screen is as simple as creating <code>src/app/settings.tsx</code>.</li>
-          <li><strong>Native Native Transitions</strong>: Using <code>&lt;Stack&gt;</code> gives you native iOS card slide transitions and Android fade/slide transitions out-of-the-box.</li>
+          <li><strong>Native Transitions</strong>: Using <code>&lt;Stack&gt;</code> gives you native iOS card slide transitions and Android fade/slide transitions out-of-the-box.</li>
           <li><strong>Deep Linking Built-In</strong>: Every file route in Expo Router is automatically deep-linkable across web and mobile schemes.</li>
         </ul>
       </div>

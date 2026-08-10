@@ -49,7 +49,7 @@
           <tr>
             <td><strong><code>BehaviorSubject</code> / Signals</strong></td>
             <td><strong><code>useState()</code> Hook</strong></td>
-            <td>State updates are synchronous setter calls (<code>setState(val)</code>) that schedule component re-evaluations.</td>
+            <td>Setter calls (<code>setState(val)</code>) queue a batched re-render — they are <em>requests</em>, not immediate synchronous updates.</td>
           </tr>
           <tr>
             <td><strong>Lifecycle (<code>ngOnInit</code>, <code>ngOnDestroy</code>)</strong></td>

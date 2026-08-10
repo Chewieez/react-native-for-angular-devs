@@ -56,7 +56,13 @@
             <td><code>position</code></td>
             <td><code>static</code></td>
             <td><code>relative</code></td>
-            <td>Only <code>'relative'</code> or <code>'absolute'</code> exist. Native absolute elements align to their direct parent.</td>
+            <td><code>'relative'</code> (default), <code>'absolute'</code>, and <code>'static'</code> (added in RN 0.70+). No <code>fixed</code> or <code>sticky</code>.</td>
+          </tr>
+          <tr>
+            <td><code>flexShrink</code></td>
+            <td><code>1</code></td>
+            <td><code>0</code></td>
+            <td>Elements won't shrink below their content size by default; overflow may occur instead of shrinking.</td>
           </tr>
         </tbody>
       </table>

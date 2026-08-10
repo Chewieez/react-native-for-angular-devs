@@ -29,7 +29,7 @@
           <tr>
             <td>Class property (<code>this.count = 0</code>)</td>
             <td><code>const [count, setCount] = useState(0)</code></td>
-            <td>Local component state. Setter schedules component re-evaluation.</td>
+            <td>Local component state. Setter queues a batched re-render (not immediate).</td>
           </tr>
           <tr>
             <td><code>ngOnInit</code> + <code>ngOnDestroy</code></td>
