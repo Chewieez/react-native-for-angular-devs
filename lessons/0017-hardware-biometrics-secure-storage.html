@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0017: Hardware Biometrics & Encrypted Storage</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0017: Hardware Biometrics & Encrypted Storage</h1>
+    <div class="subtitle">iOS Keychain & Android KeyStore (<code>expo-secure-store</code>), FaceID / Fingerprint unlocks (<code>expo-local-authentication</code>), and mobile security defense</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Web Security vs. Native Hardware Enclaves</h2>
+      <p>In Angular web applications, tokens are often placed in <code>localStorage</code> or <code>httpOnly</code> cookies. On mobile devices, sensitive secrets (refresh tokens, encryption keys, biometric credentials) belong in hardware-backed secure storage:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Security Layer</th>
+            <th>Web / Angular</th>
+            <th>React Native / Expo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Storage Target</strong></td>
+            <td><code>localStorage</code> / <code>sessionStorage</code></td>
+            <td><strong>iOS Keychain</strong> & <strong>Android KeyStore</strong> (Hardware Enclave)</td>
+          </tr>
+          <tr>
+            <td><strong>Encryption</strong></td>
+            <td>Unencrypted plain-text files on disk</td>
+            <td>AES-256 GCM encrypted with device master keys</td>
+          </tr>
+          <tr>
+            <td><strong>Biometric Unlocking</strong></td>
+            <td>WebAuthn (browser-dependent)</td>
+            <td><strong>FaceID / TouchID / Fingerprint</strong> via <code>expo-local-authentication</code></td>
+          </tr>
+          <tr>
+            <td><strong>Persistence Across Reinstalls</strong></td>
+            <td>Cleared on site data reset</td>
+            <td>iOS Keychain persists across app uninstall/reinstall (optional)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Encrypted Token Storage with `expo-secure-store`</h2>
+      <p>Store private API keys and user refresh tokens securely:</p>
+
+      <pre><code>// src/utils/secureStorage.ts
+import * as SecureStore from 'expo-secure-store';
+import { Platform } from 'react-native';
+
+const REFRESH_TOKEN_KEY = 'user_refresh_token';
+
+export async function saveSecureToken(token: string): Promise&lt;void&gt; {
+  if (Platform.OS === 'web') {
+    // Fallback for web preview
+    sessionStorage.setItem(REFRESH_TOKEN_KEY, token);
+    return;
+  }
+
+  await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, token, {
+    keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK, // iOS: Accessible after first unlock
+  });
+}
+
+export async function getSecureToken(): Promise&lt;string | null&gt; {
+  if (Platform.OS === 'web') {
+    return sessionStorage.getItem(REFRESH_TOKEN_KEY);
+  }
+
+  return await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
+}
+
+export async function deleteSecureToken(): Promise&lt;void&gt; {
+  if (Platform.OS === 'web') {
+    sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+    return;
+  }
+
+  await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. FaceID & Biometric Authentication (`expo-local-authentication`)</h2>
+      <p>Prompt the user for biometric verification before unlocking private screens or performing sensitive actions:</p>
+
+      <pre><code>// src/utils/biometrics.ts
+import * as LocalAuthentication from 'expo-local-authentication';
+
+export async function authenticateWithBiometrics(promptMessage = 'Unlock BeReal Account'): Promise&lt;boolean&gt; {
+  // 1. Check if hardware supports biometrics (FaceID / Fingerprint)
+  const hasHardware = await LocalAuthentication.hasHardwareAsync();
+  if (!hasHardware) return false;
+
+  // 2. Verify if user has enrolled fingerprints/FaceID on their device
+  const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+  if (!isEnrolled) return false;
+
+  // 3. Trigger native OS biometric prompt
+  const result = await LocalAuthentication.authenticateAsync({
+    promptMessage,
+    fallbackLabel: 'Use Device Passcode',
+    disableDeviceFallback: false,
+  });
+
+  return result.success;
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Key Insights for Angular Leads</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>Never Store JWTs in AsyncStorage in Production</strong>: Always store sensitive session refresh tokens in <code>SecureStore</code> to protect against physical device extraction or jailbreak exploits.</li>
+          <li><strong>2KB Storage Limit</strong>: <code>expo-secure-store</code> is optimized for small secrets (keys, passwords, tokens). For large encrypted data sets, use an encrypted SQLite database.</li>
+          <li><strong>Graceful Fallbacks</strong>: Always check <code>hasHardwareAsync()</code> and provide a PIN/passcode fallback so users without biometrics can still access your app.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0016-fluid-gestures-reanimated.html">&larr; Previous Lesson: Lesson 0016</a> &bull; <a href="./0018-offline-sync-optimistic-ui.html">Next: Lesson 0018 &rarr;</a></p>
+  </footer>
+</body>
+</html>

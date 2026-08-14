@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0016: 60/120 FPS Native Gestures & Animations</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0016: 60/120 FPS Native Gestures & Animations</h1>
+    <div class="subtitle">UI-thread Worklets, declarative gestures (<code>react-native-gesture-handler</code>), and fluid physics springs (<code>react-native-reanimated</code>)</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Angular Animations vs. React Native UI-Thread Worklets</h2>
+      <p>In Angular web applications, animations rely on <code>@angular/animations</code> or CSS transitions running on the browser main thread. In React Native, running animations through the JavaScript thread can cause frame drops whenever heavy JS tasks run. <code>react-native-reanimated</code> solves this by executing JavaScript functions directly on the <strong>UI Thread (Worklets)</strong>:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular / Web Animations</th>
+            <th>React Native Reanimated</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Execution Location</strong></td>
+            <td>Browser main thread</td>
+            <td>Native UI Thread (Worklet C++ runtime)</td>
+          </tr>
+          <tr>
+            <td><strong>Frame Rate Guarantee</strong></td>
+            <td>Drops when JS event loop is busy</td>
+            <td>Guaranteed 60 / 120 Hz regardless of JS workload</td>
+          </tr>
+          <tr>
+            <td><strong>State Drivers</strong></td>
+            <td>Angular state / CSS classes</td>
+            <td>Shared Values (<code>useSharedValue</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Physics & Easing</strong></td>
+            <td>CSS cubic-bezier curves</td>
+            <td>Native physics springs (<code>withSpring</code>, <code>withTiming</code>)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Core Building Blocks of Reanimated 3</h2>
+      <p>Reanimated uses <strong>Shared Values</strong> and <strong>Animated Styles</strong>:</p>
+
+      <pre><code>import React from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import Animated, { 
+  useSharedValue, 
+  useAnimatedStyle, 
+  withSpring, 
+  withTiming 
+} from 'react-native-reanimated';
+
+export function PulseHeartButton() {
+  // 1. Shared Value (Stored on the UI thread)
+  const scale = useSharedValue(1);
+
+  // 2. Animated Style (Calculated at 60/120 FPS on the UI thread)
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ scale: scale.value }],
+    };
+  });
+
+  const handlePress = () => {
+    // 3. Spring physics animation
+    scale.value = withSpring(1.4, { damping: 3, stiffness: 200 }, () => {
+      scale.value = withSpring(1);
+    });
+  };
+
+  return (
+    &lt;TouchableOpacity onPress={handlePress} activeOpacity={0.8}&gt;
+      &lt;Animated.View style={[styles.heart, animatedStyle]}&gt;
+        &lt;Text style={styles.heartText}&gt;❤️&lt;/Text&gt;
+      &lt;/Animated.View&gt;
+    &lt;/TouchableOpacity&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  heart: { width: 60, height: 60, justifyContent: 'center', alignItems: 'center' },
+  heartText: { fontSize: 32 }
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Interactive Gestures with `GestureDetector`</h2>
+      <p>Combine <code>GestureDetector</code> from <code>react-native-gesture-handler</code> with Reanimated for gestures like <strong>Pinch-to-Zoom</strong> on photos (e.g. BeReal camera view):</p>
+
+      <pre><code>import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+
+export function PinchableImage({ imageUri }: { imageUri: string }) {
+  const scale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
+
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      scale.value = savedScale.value * e.scale;
+    })
+    .onEnd(() => {
+      // Snap back to 1x scale when released
+      scale.value = withSpring(1);
+      savedScale.value = 1;
+    });
+
+  const imageAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  return (
+    &lt;GestureDetector gesture={pinchGesture}&gt;
+      &lt;Animated.Image
+        source={{ uri: imageUri }}
+        style={[styles.image, imageAnimatedStyle]}
+      /&gt;
+    &lt;/GestureDetector&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  image: { width: 320, height: 400, borderRadius: 16 }
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Key Insights for Angular Leads</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>Never Use <code>useState</code> for 60 FPS Animations</strong>: React <code>useState</code> causes full component re-renders across the bridge. Always use <code>useSharedValue</code> for animation state.</li>
+          <li><strong>Worklets</strong>: Any JavaScript function marked with <code>'worklet';</code> is compiled to run directly on the UI thread without bridge overhead.</li>
+          <li><strong>Layout Animations</strong>: Reanimated includes built-in layout transitions: <code>&lt;Animated.View entering={FadeInDown} exiting={FadeOutUp} /&gt;</code> for zero-boilerplate entrance/exit effects.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0015-push-notifications-deep-linking.html">&larr; Previous Lesson: Lesson 0015</a> &bull; <a href="./0017-hardware-biometrics-secure-storage.html">Next: Lesson 0017 &rarr;</a></p>
+  </footer>
+</body>
+</html>

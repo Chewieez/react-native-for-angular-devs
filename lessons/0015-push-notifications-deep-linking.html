@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0015: Push Notifications & Deep Linking Architecture</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0015: Push Notifications & Deep Linking Architecture</h1>
+    <div class="subtitle">APNs/FCM push tokens (<code>expo-notifications</code>), notification handling in background/foreground, and auto-routing with Expo Router deep links</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Web Push API vs. Native Push Architecture (APNs / FCM)</h2>
+      <p>In Angular web applications, push notifications rely on browser Service Workers and the Web Push API. In mobile development, notifications must route through Apple Push Notification service (APNs) and Firebase Cloud Messaging (FCM):</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular / Web</th>
+            <th>React Native / Expo</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Gateway</strong></td>
+            <td>Browser Push Service (VAPID)</td>
+            <td>Apple APNs (iOS) & Google FCM (Android) via Expo Push Service</td>
+          </tr>
+          <tr>
+            <td><strong>Token Registration</strong></td>
+            <td><code>serviceWorker.pushManager.subscribe()</code></td>
+            <td><code>Notifications.getExpoPushTokenAsync()</code></td>
+          </tr>
+          <tr>
+            <td><strong>Handling When App is Closed</strong></td>
+            <td>Service Worker background event</td>
+            <td>Native OS tray handling + response listener on app launch</td>
+          </tr>
+          <tr>
+            <td><strong>Deep Linking</strong></td>
+            <td>Manual route parsing (e.g. <code>/app/feed</code>)</td>
+            <td>Universal URL schemes automatically mapped to file routes in <strong>Expo Router</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Registering for Push Notifications & Getting Push Tokens</h2>
+      <p>Mobile platforms strictly require physical device testing for APNs/FCM tokens:</p>
+
+      <pre><code>// src/utils/notifications.ts
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+import { Platform } from 'react-native';
+
+// Configure foreground notification presentation behavior
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
+export async function registerForPushNotificationsAsync(): Promise&lt;string | null&gt; {
+  if (!Device.isDevice) {
+    console.log('Must use a physical device for push notifications');
+    return null;
+  }
+
+  // 1. Check existing permission
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+
+  // 2. Prompt if not yet granted
+  if (existingStatus !== 'granted') {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+
+  if (finalStatus !== 'granted') {
+    alert('Failed to get push token for push notification!');
+    return null;
+  }
+
+  // 3. Obtain Expo Push Token (e.g. ExponentPushToken[xxxxxxxxxxxx])
+  const token = (await Notifications.getExpoPushTokenAsync({
+    projectId: 'your-expo-project-id',
+  })).data;
+
+  // Android specific channel setup
+  if (Platform.OS === 'android') {
+    Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+    });
+  }
+
+  return token;
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Responding to Notification Taps with Expo Router Deep Linking</h2>
+      <p>When a user taps a notification (e.g. <em>"⚠️ Time to BeReal ⚠️"</em> or a new friend comment), navigate directly to that specific screen using <code>router.push()</code>:</p>
+
+      <pre><code>// src/hooks/useNotificationObserver.ts
+import { useEffect, useRef } from 'react';
+import * as Notifications from 'expo-notifications';
+import { useRouter } from 'expo-router';
+
+export function useNotificationObserver() {
+  const router = useRouter();
+  const notificationListener = useRef&lt;Notifications.Subscription&gt;();
+  const responseListener = useRef&lt;Notifications.Subscription&gt;();
+
+  useEffect(() => {
+    // 1. Triggered when notification arrives while app is in foreground
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Foreground notification:', notification);
+    });
+
+    // 2. Triggered when user TAPS on the notification
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      const data = response.notification.request.content.data;
+      
+      // Auto-navigate to dynamic route if route param is present
+      if (data?.postId) {
+        router.push(`/post/${data.postId}`);
+      } else if (data?.screen) {
+        router.push(data.screen);
+      }
+    });
+
+    return () => {
+      notificationListener.current && Notifications.removeNotificationSubscription(notificationListener.current);
+      responseListener.current && Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, [router]);
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Key Insights for Angular Leads</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>Universal Deep Linking</strong>: Expo Router makes every file in <code>src/app/</code> deep-linkable. A notification payload of <code>{ screen: "/(tabs)/profile" }</code> routes directly without manual path parsing.</li>
+          <li><strong>Physical Device Requirement</strong>: iOS Simulators cannot receive standard APNs remote pushes; always test push tokens on physical hardware.</li>
+          <li><strong>Expo Push Service</strong>: You can send pushes from your backend (Supabase Edge Functions / Node.js) with a simple POST to <code>https://exp.host/--/api/v2/push/send</code>.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0014-production-builds-eas-pipeline.html">&larr; Previous Lesson: Lesson 0014</a> &bull; <a href="./0016-fluid-gestures-reanimated.html">Next: Lesson 0016 &rarr;</a></p>
+  </footer>
+</body>
+</html>

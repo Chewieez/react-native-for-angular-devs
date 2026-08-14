@@ -26,6 +26,10 @@ Rather than starting from zero with basic programming concepts, this course tran
 | **0012** | [**Native Haptics, Alerts & Device Features**](./lessons/0012-native-haptics-alerts-device-features.html) | `expo-haptics` feedback, `Alert.alert` dialogs, toast notifications, platform-specific code (`Platform.OS`). | ✅ Active |
 | **0013** | [**Advanced Debugging & Performance Profiling**](./lessons/0013-advanced-debugging-performance-profiling.html) | React DevTools, Flipper, network tab profiling, memory leak detection, JS thread performance. | ✅ Active |
 | **0014** | [**Production Builds & EAS Pipeline**](./lessons/0014-production-builds-eas-pipeline.html) | Expo Managed vs Prebuild, `eas build`, App Store / TestFlight readiness, release channels. | ✅ Active |
+| **0015** | [**Push Notifications & Deep Linking Architecture**](./lessons/0015-push-notifications-deep-linking.html) | APNs/FCM push tokens (`expo-notifications`), notification handling, auto-routing via Expo Router deep links. | ✅ Active |
+| **0016** | [**60/120 FPS Native Gestures & Animations**](./lessons/0016-fluid-gestures-reanimated.html) | UI-thread Worklets (`react-native-reanimated`), pinch/pan gestures (`react-native-gesture-handler`), spring physics. | ✅ Active |
+| **0017** | [**Hardware Biometrics & Encrypted Storage**](./lessons/0017-hardware-biometrics-secure-storage.html) | iOS Keychain & Android KeyStore (`expo-secure-store`), FaceID / TouchID (`expo-local-authentication`). | ✅ Active |
+| **0018** | [**Offline-First Architecture & Optimistic UI**](./lessons/0018-offline-sync-optimistic-ui.html) | TanStack Query caching, fast disk persistence (`MMKV`), instant 0ms optimistic mutations. | ✅ Active |
 
 ---
 

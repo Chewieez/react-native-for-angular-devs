@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0018: Offline-First Architecture & Optimistic UI</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0018: Offline-First Architecture & Optimistic UI</h1>
+    <div class="subtitle">TanStack React Query caching, local persistence with <code>react-native-mmkv</code>, and instant optimistic cache mutations</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Web Caching vs. Mobile Offline-First Expectations</h2>
+      <p>In Angular web applications, users expect a loading spinner if their connection drops. On mobile devices, users expect instant feeds from disk, smooth scrolling in subway tunnels, and zero-latency button responses with automatic background synchronization:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular / Web</th>
+            <th>React Native Offline Architecture</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Cache Engine</strong></td>
+            <td>HTTP Cache / RxJS <code>shareReplay()</code></td>
+            <td><strong>TanStack Query</strong> + <strong>MMKV</strong> disk persistence</td>
+          </tr>
+          <tr>
+            <td><strong>Instant Feedback</strong></td>
+            <td>Wait for API response before updating UI</td>
+            <td><strong>Optimistic Updates</strong> (update cache first, roll back on failure)</td>
+          </tr>
+          <tr>
+            <td><strong>Network Transitions</strong></td>
+            <td>Manual <code>navigator.onLine</code> listeners</td>
+            <td><code>@react-native-community/netinfo</code> auto-retry queue</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Optimistic UI Mutations with TanStack Query</h2>
+      <p>When a user taps "Like" or submits a comment on a BeReal post, update the screen in <strong>0ms</strong> and send the network request in the background:</p>
+
+      <pre><code>import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '../lib/supabase/client';
+
+export function useLikePost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ postId, userId }: { postId: string; userId: string }) => {
+      const { error } = await supabase
+        .from('likes')
+        .insert([{ post_id: postId, user_id: userId }]);
+      if (error) throw error;
+    },
+
+    // 1. When mutation is triggered:
+    onMutate: async ({ postId }) => {
+      // Cancel outgoing refetches so they don't overwrite optimistic update
+      await queryClient.cancelQueries({ queryKey: ['posts'] });
+
+      // Snapshot previous feed state for rollback
+      const previousPosts = queryClient.getQueryData(['posts']);
+
+      // Optimistically update the cache immediately!
+      queryClient.setQueryData(['posts'], (old: any[] = []) =>
+        old.map((post) =>
+          post.id === postId
+            ? { ...post, isLiked: true, likesCount: post.likesCount + 1 }
+            : post
+        )
+      );
+
+      return { previousPosts };
+    },
+
+    // 2. If the backend fails (e.g. timeout / offline error):
+    onError: (err, variables, context) => {
+      if (context?.previousPosts) {
+        // Roll back to previous state seamlessly
+        queryClient.setQueryData(['posts'], context.previousPosts);
+      }
+    },
+
+    // 3. Always refetch after error or success to synchronize with server:
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    },
+  });
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Fast Disk Persistence with MMKV</h2>
+      <p>Persist your query cache to lightning-fast local storage so the feed renders on app launch without waiting for network:</p>
+
+      <pre><code>import { MMKV } from 'react-native-mmkv';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+
+export const storage = new MMKV();
+
+// Sync storage persister adapter for TanStack Query
+export const clientPersister = createSyncStoragePersister({
+  storage: {
+    setItem: (key, value) => storage.set(key, value),
+    getItem: (key) => storage.getString(key) ?? null,
+    removeItem: (key) => storage.delete(key),
+  },
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Key Insights for Angular Leads</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>Zero Latency Feel</strong>: Optimistic updates make mobile applications feel 10x faster because the UI never waits on HTTP round-trips for user actions.</li>
+          <li><strong>Network Detection</strong>: Use <code>NetInfo.addEventListener</code> to pause outgoing mutations and auto-retry them as soon as LTE/Wi-Fi is re-established.</li>
+          <li><strong>Mastery Complete</strong>: You now possess end-to-end expertise spanning Core Components, State Architecture, Expo Router, Hardware APIs, Reanimated Physics, Native Security, and Offline Caching!</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0017-hardware-biometrics-secure-storage.html">&larr; Previous Lesson: Lesson 0017</a> &bull; <strong>Mastery Track Complete 🚀</strong></p>
+  </footer>
+</body>
+</html>
