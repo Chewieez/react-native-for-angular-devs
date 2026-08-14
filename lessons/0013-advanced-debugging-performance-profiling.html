@@ -9,115 +9,160 @@
 <body>
   <header>
     <h1>Lesson 0013: Advanced Debugging & Performance Profiling</h1>
-    <div class="subtitle">Threading models (JS Thread vs UI Thread), React DevTools, eliminating re-renders, and memory profiling</div>
+    <div class="subtitle">Translating Angular Change Detection, Zone.js, and DevTools profiling into React Native threading, React DevTools, and memoization</div>
   </header>
 
   <main>
     <section>
-      <h2>1. The Mobile Threading Architecture (JS Thread vs. UI Thread)</h2>
-      <p>In Angular web applications, all JavaScript, DOM updates, and style calculations run on the single browser main thread. React Native splits work across two primary threads:</p>
+      <h2>1. Angular Debugging & Profiling vs. React Native Toolkit</h2>
+      <p>In Angular, performance optimization revolves around Zone.js change detection ticks, `ChangeDetectionStrategy.OnPush`, and Angular DevTools. In React Native, profiling focuses on the interaction between the <strong>JavaScript Thread</strong> and the <strong>Native UI Thread</strong>:</p>
 
       <table>
         <thead>
           <tr>
-            <th>Thread</th>
-            <th>Responsibilities</th>
-            <th>What Happens if Blocked?</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>JavaScript Thread</strong></td>
-            <td>Business logic, React rendering, API calls, state updates.</td>
-            <td>Touch events lag, async data is delayed, but animations can still run smoothly on UI thread.</td>
+            <td><strong>Profiling & Flamegraphs</strong></td>
+            <td>Angular DevTools Profiler</td>
+            <td><strong>React DevTools Profiler</strong></td>
           </tr>
           <tr>
-            <td><strong>UI (Native) Thread</strong></td>
-            <td>Native layout, rendering pixels, gesture handling, native drivers.</td>
-            <td>App stutters, drops frames below 60 FPS, feels "frozen".</td>
+            <td><strong>Async Tracking</strong></td>
+            <td>Zone.js Microtasks</td>
+            <td><strong>JS Thread Event Loop & Metro</strong></td>
+          </tr>
+          <tr>
+            <td><strong>Off-Main-Thread Execution</strong></td>
+            <td><code>ngZone.runOutsideAngular()</code></td>
+            <td><strong>UI Thread Worklets (Reanimated)</strong></td>
+          </tr>
+          <tr>
+            <td><strong>List Identity Preservation</strong></td>
+            <td><code>trackBy: item.id</code></td>
+            <td><strong><code>keyExtractor={(item) => item.id}</code></strong></td>
+          </tr>
+          <tr>
+            <td><strong>Subtree Render Skipping</strong></td>
+            <td><code>ChangeDetectionStrategy.OnPush</code></td>
+            <td><strong><code>React.memo()</code> + <code>useCallback()</code></strong></td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>2. Essential Debugging Toolkit for React Native</h2>
-      <p>Moving beyond standard <code>console.log()</code>:</p>
+      <h2>2. Mobile Thread Architecture vs. Browser Main Thread</h2>
+      <p>Angular web applications run inside a single browser main thread (DOM + styles + JS). React Native architecture separates execution across two primary threads:</p>
 
-      <ul>
-        <li><strong>Expo Dev Menu (<kbd>Cmd</kbd>+<kbd>D</kbd> on iOS / <kbd>Cmd</kbd>+<kbd>M</kbd> on Android)</strong>: Fast reload, toggle element inspector, toggle performance monitor (FPS counter).</li>
-        <li><strong>Metro Bundler Terminal</strong>: Real-time bundle errors, compile-time warnings, stack traces with sourcemaps.</li>
-        <li><strong>React DevTools Profiler</strong>: Visualize component render durations and inspect flame graphs to spot components rendering unnecessarily.</li>
-        <li><strong>Chrome DevTools MCP / Remote Debugger</strong>: Inspect network requests, memory heap snapshots, and break on exceptions.</li>
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular / Browser Equivalent</th>
+            <th>React Native Execution Layer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Application Logic</strong></td>
+            <td>Browser JS Engine / Main Thread (Blocks touch/fetch if busy)</td>
+            <td><strong>JavaScript Thread</strong> (Hermes engine)</td>
+          </tr>
+          <tr>
+            <td><strong>Rendering & Gestures</strong></td>
+            <td>Browser Compositor & GPU Thread</td>
+            <td><strong>UI (Native) Thread</strong> (Maintains 60/120 FPS layout & gestures)</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <section>
-      <h2>3. Eliminating Re-renders (`React.memo`, `useCallback`, `useMemo`)</h2>
-      <p>In Angular, <code>ChangeDetectionStrategy.OnPush</code> prevents re-checking unmodified components. In React Native, combine <code>React.memo</code> with memoized callback handlers:</p>
+      <h2>3. Code Comparison: Angular `OnPush` vs. React Native `React.memo`</h2>
+      <p>Let's look at how both frameworks prevent unnecessary re-renders of list items (e.g. BeReal feed items):</p>
 
-      <pre><code>import React, { memo, useCallback, useState, useMemo } from 'react';
+      <div class="code-comparison">
+        <div>
+          <h3>Angular: OnPush Component with `trackBy`</h3>
+          <pre><code>// post-card.component.ts
+@Component({
+  selector: 'app-post-card',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    &lt;div class="card"&gt;
+      &lt;h3&gt;{{ post.title }}&lt;/h3&gt;
+      &lt;button (click)="liked.emit(post.id)"&gt;❤️ Like&lt;/button&gt;
+    &lt;/div&gt;
+  `
+})
+export class PostCardComponent {
+  @Input() post!: Post;
+  @Output() liked = new EventEmitter&lt;string&gt;();
+}
+
+// In parent template:
+// &lt;app-post-card *ngFor="let item of posts; trackBy: trackById" [post]="item" (liked)="handleLike($event)"&gt;</code></pre>
+        </div>
+
+        <div>
+          <h3>React Native: `React.memo` + `useCallback` + `keyExtractor`</h3>
+          <pre><code>// PostCard.tsx
+import React, { memo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-// 1. Memoized child component (Equivalent to Angular OnPush)
-const PostCard = memo(function PostCard({
+export const PostCard = memo(function PostCard({
   post,
   onLike,
 }: {
   post: { id: string; title: string };
   onLike: (id: string) => void;
 }) {
-  console.log('Rendering PostCard:', post.id);
   return (
     &lt;View style={styles.card}&gt;
       &lt;Text style={styles.title}&gt;{post.title}&lt;/Text&gt;
       &lt;TouchableOpacity onPress={() => onLike(post.id)}&gt;
-        &lt;Text style={styles.like}&gt;❤️ Like&lt;/Text&gt;
+        &lt;Text&gt;❤️ Like&lt;/Text&gt;
       &lt;/TouchableOpacity&gt;
     &lt;/View&gt;
   );
 });
 
-export default function FeedContainer({ initialPosts }: { initialPosts: any[] }) {
-  const [posts, setPosts] = useState(initialPosts);
-
-  // 2. Stable callback reference (prevents re-rendering PostCard children)
-  const handleLike = useCallback((id: string) => {
-    setPosts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, likes: (p.likes || 0) + 1 } : p))
-    );
-  }, []);
-
-  return (
-    &lt;View style={styles.container}&gt;
-      {posts.map((post) => (
-        &lt;PostCard key={post.id} post={post} onLike={handleLike} /&gt;
-      ))}
-    &lt;/View&gt;
-  );
-}
-
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16 },
-  card: { padding: 12, backgroundColor: '#fff', marginBottom: 8, borderRadius: 8 },
-  title: { fontSize: 16, fontWeight: 'bold' },
-  like: { color: '#FF2D55', marginTop: 8 }
-});</code></pre>
+// Parent FlatList with useCallback:
+// const handleLike = useCallback((id: string) => { ... }, []);
+// &lt;FlatList data={posts} keyExtractor={(item) => item.id} renderItem={...} /&gt;</code></pre>
+        </div>
+      </div>
     </section>
 
     <section>
-      <h2>4. FlatList Performance Tuning</h2>
-      <p>For feeds with hundreds of images (like BeReal), tune these key props:</p>
+      <h2>4. FlatList Virtualization Tuning for High-Density Feeds</h2>
+      <p>Similar to Angular CDK Virtual Scrolling (<code>cdk-virtual-scroll-viewport</code>), React Native's <code>FlatList</code> virtualizes offscreen rows to conserve mobile RAM:</p>
 
       <pre><code>&lt;FlatList
   data={posts}
   keyExtractor={(item) => item.id}
   renderItem={renderItem}
-  initialNumToRender={5}     // Render only enough items to fill initial screen
-  maxToRenderPerBatch={5}    // Control batch size per scroll increment
-  windowSize={5}             // Reduce offscreen render buffer to conserve RAM
-  removeClippedSubviews={true} // Unmount views outside current viewport
+  initialNumToRender={5}       // Render only enough items to fill initial screen viewport
+  maxToRenderPerBatch={5}      // Control batch size per scroll increment
+  windowSize={5}               // Reduce offscreen buffer to save RAM on photo feeds
+  removeClippedSubviews={true} // Unmount native views outside current viewport
 /&gt;</code></pre>
+    </section>
+
+    <section>
+      <h2>5. Key Insights for Angular Leads</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>Identify Reference Equality Bugs</strong>: In React, passing inline arrow functions (<code>onPress={() => doSomething()}</code>) or inline objects (<code>style={{ margin: 10 }}</code>) breaks <code>React.memo</code> because a new memory reference is created every render. Always wrap handlers with <code>useCallback</code> and styles in <code>StyleSheet.create</code>.</li>
+          <li><strong>Expo Dev Menu (<kbd>Cmd</kbd>+<kbd>D</kbd> / <kbd>Cmd</kbd>+<kbd>M</kbd>)</strong>: Toggle the <strong>Performance Monitor</strong> to see live JS FPS and UI FPS counters while scrolling feeds.</li>
+          <li><strong>No Global Zone.js Overhead</strong>: React does not monkey-patch global browser APIs like Zone.js; component renders are strictly initiated by state setters (<code>useState</code>, <code>useReducer</code>, or Context value changes).</li>
+        </ul>
+      </div>
     </section>
   </main>
 

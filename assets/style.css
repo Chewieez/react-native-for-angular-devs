@@ -151,6 +151,20 @@ pre code {
   background-color: #fff3e0;
 }
 
+/* --- Code Comparisons --- */
+.code-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+@media (max-width: 768px) {
+  .code-comparison {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* --- Footer --- */
 footer {
   margin-top: 48px;

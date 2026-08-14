@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0018: Offline-First Architecture & Optimistic UI</h1>
-    <div class="subtitle">TanStack React Query caching, local persistence with <code>react-native-mmkv</code>, and instant optimistic cache mutations</div>
+    <div class="subtitle">TanStack React Query caching, local persistence with <code>react-native-mmkv</code>, and Angular PWA vs. Native offline comparisons</div>
   </header>
 
   <main>
@@ -21,8 +21,8 @@
         <thead>
           <tr>
             <th>Concept</th>
-            <th>Angular / Web</th>
-            <th>React Native Offline Architecture</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +34,7 @@
           <tr>
             <td><strong>Instant Feedback</strong></td>
             <td>Wait for API response before updating UI</td>
-            <td><strong>Optimistic Updates</strong> (update cache first, roll back on failure)</td>
+            <td><strong>Optimistic Updates</strong> (0ms instant UI update with rollback)</td>
           </tr>
           <tr>
             <td><strong>Network Transitions</strong></td>
@@ -46,7 +46,44 @@
     </section>
 
     <section>
-      <h2>2. Optimistic UI Mutations with TanStack Query</h2>
+      <h2>2. Angular PWAs (`@angular/pwa`) vs. Native Offline-First</h2>
+      <p>Angular developers often build offline capabilities using Progressive Web Apps (PWAs) and the Angular Service Worker. Here is how mobile native offline architecture compares and surpasses PWAs:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular PWA (`@angular/pwa`)</th>
+            <th>React Native (Native Mobile)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>App Shell Caching</strong></td>
+            <td>Service Worker cache (<code>ngsw-config.json</code>)</td>
+            <td><strong>Compiled Native Binary</strong> (<code>.ipa</code> / <code>.aab</code>) with instant cold boot</td>
+          </tr>
+          <tr>
+            <td><strong>Data Storage</strong></td>
+            <td><code>IndexedDB</code> (Subject to 7-day iOS eviction)</td>
+            <td><strong>MMKV & Embedded SQLite</strong> (Permanent, non-evictable, 30x faster)</td>
+          </tr>
+          <tr>
+            <td><strong>Cache Policies</strong></td>
+            <td><code>freshness</code> vs. <code>performance</code> strategies</td>
+            <td><strong>TanStack Query Cache + Persister</strong> (Fine-grained <code>staleTime</code> & <code>gcTime</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Background Sync</strong></td>
+            <td>Web <code>SyncManager</code> (Poor iOS Safari support)</td>
+            <td><strong>Native NetInfo + Background Tasks</strong> (Reliable cross-platform OS queue)</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>3. Optimistic UI Mutations with TanStack Query</h2>
       <p>When a user taps "Like" or submits a comment on a BeReal post, update the screen in <strong>0ms</strong> and send the network request in the background:</p>
 
       <pre><code>import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -100,7 +137,7 @@ export function useLikePost() {
     </section>
 
     <section>
-      <h2>3. Fast Disk Persistence with MMKV</h2>
+      <h2>4. Fast Disk Persistence with MMKV</h2>
       <p>Persist your query cache to lightning-fast local storage so the feed renders on app launch without waiting for network:</p>
 
       <pre><code>import { MMKV } from 'react-native-mmkv';
@@ -119,10 +156,11 @@ export const clientPersister = createSyncStoragePersister({
     </section>
 
     <section>
-      <h2>4. Key Insights for Angular Leads</h2>
+      <h2>5. Key Insights for Angular Leads</h2>
       <div class="callout tip">
         <ul>
           <li><strong>Zero Latency Feel</strong>: Optimistic updates make mobile applications feel 10x faster because the UI never waits on HTTP round-trips for user actions.</li>
+          <li><strong>Immunity to Browser Cache Eviction</strong>: Unlike PWA <code>IndexedDB</code> caches that iOS WebKit periodically clears, native <code>MMKV</code> data stays on disk until the app is deleted.</li>
           <li><strong>Network Detection</strong>: Use <code>NetInfo.addEventListener</code> to pause outgoing mutations and auto-retry them as soon as LTE/Wi-Fi is re-established.</li>
           <li><strong>Mastery Complete</strong>: You now possess end-to-end expertise spanning Core Components, State Architecture, Expo Router, Hardware APIs, Reanimated Physics, Native Security, and Offline Caching!</li>
         </ul>
