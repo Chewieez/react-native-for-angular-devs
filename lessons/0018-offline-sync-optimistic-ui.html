@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0018: Offline-First Architecture & Optimistic UI</h1>
-    <div class="subtitle">TanStack React Query caching, local persistence with <code>react-native-mmkv</code>, and Angular PWA vs. Native offline comparisons</div>
+    <div class="subtitle"><a href="https://www.npmjs.com/package/@tanstack/react-query">TanStack React Query</a> caching, local persistence with <a href="https://www.npmjs.com/package/react-native-mmkv"><code>react-native-mmkv</code></a>, and Angular PWA vs. Native offline comparisons</div>
   </header>
 
   <main>
@@ -29,7 +29,7 @@
           <tr>
             <td><strong>Cache Engine</strong></td>
             <td>HTTP Cache / RxJS <code>shareReplay()</code></td>
-            <td><strong>TanStack Query</strong> + <strong>MMKV</strong> disk persistence</td>
+            <td><strong><a href="https://www.npmjs.com/package/@tanstack/react-query">TanStack Query</a></strong> + <strong><a href="https://www.npmjs.com/package/react-native-mmkv">MMKV</a></strong> disk persistence</td>
           </tr>
           <tr>
             <td><strong>Instant Feedback</strong></td>
@@ -39,7 +39,7 @@
           <tr>
             <td><strong>Network Transitions</strong></td>
             <td>Manual <code>navigator.onLine</code> listeners</td>
-            <td><code>@react-native-community/netinfo</code> auto-retry queue</td>
+            <td><a href="https://www.npmjs.com/package/@react-native-community/netinfo"><code>@react-native-community/netinfo</code></a> auto-retry queue</td>
           </tr>
         </tbody>
       </table>
@@ -66,24 +66,24 @@
           <tr>
             <td><strong>Data Storage</strong></td>
             <td><code>IndexedDB</code> (Subject to 7-day iOS eviction)</td>
-            <td><strong>MMKV & Embedded SQLite</strong> (Permanent, non-evictable, 30x faster)</td>
+            <td><strong><a href="https://www.npmjs.com/package/react-native-mmkv">MMKV</a> & Embedded SQLite</strong> (Permanent, non-evictable, 30x faster)</td>
           </tr>
           <tr>
             <td><strong>Cache Policies</strong></td>
             <td><code>freshness</code> vs. <code>performance</code> strategies</td>
-            <td><strong>TanStack Query Cache + Persister</strong> (Fine-grained <code>staleTime</code> & <code>gcTime</code>)</td>
+            <td><strong><a href="https://www.npmjs.com/package/@tanstack/react-query">TanStack Query Cache</a> + <a href="https://www.npmjs.com/package/@tanstack/query-sync-storage-persister">Persister</a></strong> (Fine-grained <code>staleTime</code> & <code>gcTime</code>)</td>
           </tr>
           <tr>
             <td><strong>Background Sync</strong></td>
             <td>Web <code>SyncManager</code> (Poor iOS Safari support)</td>
-            <td><strong>Native NetInfo + Background Tasks</strong> (Reliable cross-platform OS queue)</td>
+            <td><strong>Native <a href="https://www.npmjs.com/package/@react-native-community/netinfo">NetInfo</a> + Background Tasks</strong> (Reliable cross-platform OS queue)</td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>3. Optimistic UI Mutations with TanStack Query</h2>
+      <h2>3. Optimistic UI Mutations with <a href="https://www.npmjs.com/package/@tanstack/react-query">TanStack Query</a></h2>
       <p>When a user taps "Like" or submits a comment on a BeReal post, update the screen in <strong>0ms</strong> and send the network request in the background:</p>
 
       <pre><code>import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -137,7 +137,7 @@ export function useLikePost() {
     </section>
 
     <section>
-      <h2>4. Fast Disk Persistence with MMKV</h2>
+      <h2>4. Fast Disk Persistence with <a href="https://www.npmjs.com/package/react-native-mmkv">MMKV</a></h2>
       <p>Persist your query cache to lightning-fast local storage so the feed renders on app launch without waiting for network:</p>
 
       <pre><code>import { MMKV } from 'react-native-mmkv';
@@ -165,6 +165,17 @@ export const clientPersister = createSyncStoragePersister({
           <li><strong>Mastery Complete</strong>: You now possess end-to-end expertise spanning Core Components, State Architecture, Expo Router, Hardware APIs, Reanimated Physics, Native Security, and Offline Caching!</li>
         </ul>
       </div>
+    </section>
+
+    <section>
+      <h2>6. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://tanstack.com/query/latest/docs/framework/react/overview">TanStack Query Documentation</a>: Asynchronous state caching and optimistic mutations.</li>
+        <li><a href="https://www.npmjs.com/package/@tanstack/react-query">npm: @tanstack/react-query</a>: React Query core async state management.</li>
+        <li><a href="https://www.npmjs.com/package/@tanstack/query-sync-storage-persister">npm: @tanstack/query-sync-storage-persister</a>: Synchronous storage persister adapter for React Query.</li>
+        <li><a href="https://www.npmjs.com/package/react-native-mmkv">npm: react-native-mmkv</a>: Blazing fast key-value storage engine powered by MMKV C++ core.</li>
+        <li><a href="https://www.npmjs.com/package/@react-native-community/netinfo">npm: @react-native-community/netinfo</a>: Network connectivity detection API for iOS and Android.</li>
+      </ul>
     </section>
   </main>
 

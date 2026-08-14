@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0011: Native Camera & Image Picker</h1>
-    <div class="subtitle">Hardware permissions, viewfinder camera views (<code>expo-camera</code>), photo library selection (<code>expo-image-picker</code>), and mobile binary uploads</div>
+    <div class="subtitle">Hardware permissions, viewfinder camera views (<a href="https://www.npmjs.com/package/expo-camera"><code>expo-camera</code></a>), photo library selection (<a href="https://www.npmjs.com/package/expo-image-picker"><code>expo-image-picker</code></a>), and mobile binary uploads</div>
   </header>
 
   <main>
@@ -36,7 +36,7 @@
           <tr>
             <td><strong>Camera Viewfinder</strong></td>
             <td><code>&lt;video&gt;</code> + WebRTC streams</td>
-            <td><code>&lt;CameraView /&gt;</code> from <code>expo-camera</code></td>
+            <td><code>&lt;CameraView /&gt;</code> from <a href="https://www.npmjs.com/package/expo-camera"><code>expo-camera</code></a></td>
             <td>Direct native AVFoundation (iOS) / CameraX (Android) hardware bindings.</td>
           </tr>
           <tr>
@@ -50,7 +50,7 @@
     </section>
 
     <section>
-      <h2>2. Photo Library Picker (<code>expo-image-picker</code>)</h2>
+      <h2>2. Photo Library Picker (<a href="https://www.npmjs.com/package/expo-image-picker"><code>expo-image-picker</code></a>)</h2>
       <p>The standard way to select an existing photo or prompt the user for an avatar or post upload:</p>
 
       <pre><code>// src/utils/imagePicker.ts
@@ -81,7 +81,7 @@ export async function pickImage(): Promise&lt;string | null&gt; {
     </section>
 
     <section>
-      <h2>3. Native Viewfinder with `expo-camera` (Modern `CameraView`)</h2>
+      <h2>3. Native Viewfinder with <a href="https://www.npmjs.com/package/expo-camera"><code>expo-camera</code></a> (Modern <code>CameraView</code>)</h2>
       <p>For custom in-app camera viewfinders (like BeReal or Instagram Stories), use <code>CameraView</code> with the <code>useCameraPermissions()</code> hook:</p>
 
       <pre><code>// src/components/NativeCameraView.tsx
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 
     <section>
       <h2>4. Uploading Local Native URIs to Backend Storage</h2>
-      <p>On mobile, selected files exist as local device paths (e.g. <code>file:///var/mobile/.../temp.jpg</code>). To upload to Supabase or Firebase, fetch the file URI as an <code>ArrayBuffer</code> or FormData:</p>
+      <p>On mobile, selected files exist as local device paths (e.g. <code>file:///var/mobile/.../temp.jpg</code>). To upload to <a href="https://www.npmjs.com/package/@supabase/supabase-js">Supabase</a> or Firebase, fetch the file URI using <a href="https://www.npmjs.com/package/expo-file-system"><code>expo-file-system</code></a> and decode it via <a href="https://www.npmjs.com/package/base64-arraybuffer"><code>base64-arraybuffer</code></a> as an <code>ArrayBuffer</code>:</p>
 
       <pre><code>// src/lib/supabase/storage.ts
 import { supabase } from './client';
@@ -171,6 +171,17 @@ export async function uploadPostImage(localUri: string, userId: string): Promise
   const { data } = supabase.storage.from('posts').getPublicUrl(filePath);
   return data.publicUrl;
 }</code></pre>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://www.npmjs.com/package/expo-camera">npm: expo-camera</a>: Native camera viewfinder component and barcode scanner.</li>
+        <li><a href="https://www.npmjs.com/package/expo-image-picker">npm: expo-image-picker</a>: System photo library and native image picker dialog.</li>
+        <li><a href="https://www.npmjs.com/package/expo-file-system">npm: expo-file-system</a>: Access to local file system for binary reads and caching.</li>
+        <li><a href="https://www.npmjs.com/package/base64-arraybuffer">npm: base64-arraybuffer</a>: Base64 to ArrayBuffer encoder and decoder for binary network uploads.</li>
+        <li><a href="https://www.npmjs.com/package/@supabase/supabase-js">npm: @supabase/supabase-js</a>: Supabase storage and database client.</li>
+      </ul>
     </section>
   </main>
 

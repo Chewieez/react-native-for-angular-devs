@@ -29,7 +29,7 @@
           <tr>
             <td><strong>Profiling & Flamegraphs</strong></td>
             <td>Angular DevTools Profiler</td>
-            <td><strong>React DevTools Profiler</strong></td>
+            <td><strong><a href="https://www.npmjs.com/package/react-devtools">React DevTools Profiler</a></strong></td>
           </tr>
           <tr>
             <td><strong>Async Tracking</strong></td>
@@ -39,7 +39,7 @@
           <tr>
             <td><strong>Off-Main-Thread Execution</strong></td>
             <td><code>ngZone.runOutsideAngular()</code></td>
-            <td><strong>UI Thread Worklets (Reanimated)</strong></td>
+            <td><strong>UI Thread Worklets (<a href="https://www.npmjs.com/package/react-native-reanimated">Reanimated</a>)</strong></td>
           </tr>
           <tr>
             <td><strong>List Identity Preservation</strong></td>
@@ -163,6 +163,15 @@ export const PostCard = memo(function PostCard({
           <li><strong>No Global Zone.js Overhead</strong>: React does not monkey-patch global browser APIs like Zone.js; component renders are strictly initiated by state setters (<code>useState</code>, <code>useReducer</code>, or Context value changes).</li>
         </ul>
       </div>
+    </section>
+
+    <section>
+      <h2>6. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://reactnative.dev/docs/debugging">React Native Official Docs — Debugging</a>: Official React Native debugging tools.</li>
+        <li><a href="https://www.npmjs.com/package/react-devtools">npm: react-devtools</a>: Standalone React DevTools profiler for React Native applications.</li>
+        <li><a href="https://www.npmjs.com/package/react-native-reanimated">npm: react-native-reanimated</a>: UI-thread Worklet animation runtime for 60/120 FPS performance.</li>
+      </ul>
     </section>
   </main>
 

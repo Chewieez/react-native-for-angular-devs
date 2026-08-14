@@ -14,13 +14,13 @@
   <main>
     <section>
       <h2>1. Angular Router Service vs. Expo `useRouter()` Hook</h2>
-      <p>In Angular, you inject the <code>Router</code> service (<code>private router: Router</code>) to navigate programmatically. In Expo Router, you call the <code>useRouter()</code> hook inside any functional component:</p>
+      <p>In Angular, you inject the <code>Router</code> service (<code>private router: Router</code>) to navigate programmatically. In <a href="https://www.npmjs.com/package/expo-router">Expo Router</a>, you call the <code>useRouter()</code> hook inside any functional component:</p>
 
       <table>
         <thead>
           <tr>
             <th>Angular Method</th>
-            <th>Expo Router Hook Equivalent</th>
+            <th><a href="https://www.npmjs.com/package/expo-router">Expo Router</a> Hook Equivalent</th>
             <th>Behavior & Stack Impact</th>
           </tr>
         </thead>
@@ -51,7 +51,7 @@
 
     <section>
       <h2>2. Dynamic Route Parameters (<code>useLocalSearchParams</code>)</h2>
-      <p>In Angular, parameters are retrieved via <code>ActivatedRoute.snapshot.params</code>. In Expo Router, params match dynamic bracket filenames (e.g. <code>src/app/user/[id].tsx</code>) and are extracted with <code>useLocalSearchParams()</code>:</p>
+      <p>In Angular, parameters are retrieved via <code>ActivatedRoute.snapshot.params</code>. In <a href="https://www.npmjs.com/package/expo-router">Expo Router</a>, params match dynamic bracket filenames (e.g. <code>src/app/user/[id].tsx</code>) and are extracted with <code>useLocalSearchParams()</code>:</p>
 
       <pre><code>// File: src/app/user/[id].tsx
 import { View, Text, StyleSheet } from 'react-native';
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 
     <section>
       <h2>3. Native Modal Presentations</h2>
-      <p>Unlike Angular web modals requiring custom overlay components, native iOS and Android provide bottom sheet / modal card transitions. In Expo Router, you declare a modal screen inside a `_layout.tsx` Stack:</p>
+      <p>Unlike Angular web modals requiring custom overlay components, native iOS and Android provide bottom sheet / modal card transitions. In <a href="https://www.npmjs.com/package/expo-router">Expo Router</a>, you declare a modal screen inside a `_layout.tsx` Stack:</p>
 
       <pre><code>// src/app/_layout.tsx
 import { Stack } from 'expo-router';
@@ -103,6 +103,14 @@ export default function RootLayout() {
         <strong>Closing a Modal Programmatically:</strong>
         Inside <code>create-post-modal.tsx</code>, simply call <code>router.back()</code> after saving data to dismiss the modal and slide it back down natively!
       </div>
+    </section>
+
+    <section>
+      <h2>4. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://docs.expo.dev/router/navigating-pages/">Expo Router: Navigating Pages</a>: Programmatic navigation with `useRouter` and `Link`.</li>
+        <li><a href="https://www.npmjs.com/package/expo-router">npm: expo-router</a>: Expo Router package details and installation.</li>
+      </ul>
     </section>
   </main>
 

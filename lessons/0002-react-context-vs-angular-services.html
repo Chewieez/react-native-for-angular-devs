@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0002: React Context vs. Angular Services</h1>
-    <div class="subtitle">Architecting global state, custom hooks, and route guarding in React Native & Expo Router</div>
+    <div class="subtitle">Architecting global state, custom hooks, and route guarding in React Native & <a href="https://www.npmjs.com/package/expo-router">Expo Router</a></div>
   </header>
 
   <main>
@@ -124,7 +124,7 @@ export function useAuth() {
     </section>
 
     <section>
-      <h2>3. Root Application Wrapping in Expo Router (`src/app/_layout.tsx`)</h2>
+      <h2>3. Root Application Wrapping in <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> (`src/app/_layout.tsx`)</h2>
       <p>To make the Context available everywhere, wrap your root `<Stack>` inside `app/_layout.tsx`:</p>
 
       <pre><code>// src/app/_layout.tsx
@@ -161,6 +161,7 @@ export default function RootLayout() {
         <li><a href="https://react.dev/reference/react/createContext">React Official Docs — createContext</a>: Full API reference and provider scoping rules.</li>
         <li><a href="https://react.dev/reference/react/useContext">React Official Docs — useContext</a>: How custom hooks read context values.</li>
         <li><a href="https://docs.expo.dev/router/layouts/">Expo Router Layouts Documentation</a>: Setting up root layouts and global state providers in Expo.</li>
+        <li><a href="https://www.npmjs.com/package/expo-router">npm: expo-router</a>: File-based routing library for Expo and React Native applications.</li>
       </ul>
     </section>
   </main>

@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0012: Native Haptics, Alerts & Device Features</h1>
-    <div class="subtitle">Platform-specific code (<code>Platform.OS</code> / <code>Platform.select</code>), native tactile feedback (<code>expo-haptics</code>), and system dialogs (<code>Alert.alert</code>)</div>
+    <div class="subtitle">Platform-specific code (<code>Platform.OS</code> / <code>Platform.select</code>), native tactile feedback (<a href="https://www.npmjs.com/package/expo-haptics"><code>expo-haptics</code></a>), and system dialogs (<code>Alert.alert</code>)</div>
   </header>
 
   <main>
@@ -36,7 +36,7 @@
           <tr>
             <td><strong>Tactile Feedback</strong></td>
             <td><code>navigator.vibrate()</code> (poor support)</td>
-            <td><code>expo-haptics</code></td>
+            <td><a href="https://www.npmjs.com/package/expo-haptics"><code>expo-haptics</code></a></td>
             <td>Direct access to Apple Taptic Engine & Android Haptic Motors.</td>
           </tr>
           <tr>
@@ -76,7 +76,7 @@ export function confirmDeletePost(postId: string, onDelete: (id: string) => void
     </section>
 
     <section>
-      <h2>3. Adding Tactile Feedback with `expo-haptics`</h2>
+      <h2>3. Adding Tactile Feedback with <a href="https://www.npmjs.com/package/expo-haptics"><code>expo-haptics</code></a></h2>
       <p>Tactile haptic feedback is one of the clearest differentiators between a web wrapper and a true native mobile app:</p>
 
       <pre><code>import * as Haptics from 'expo-haptics';
@@ -139,6 +139,15 @@ const styles = StyleSheet.create({
 // Platform-specific file extensions:
 // Button.ios.tsx   <- Loaded automatically on iOS
 // Button.android.tsx <- Loaded automatically on Android</code></pre>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://reactnative.dev/docs/alert">React Native Official Docs — Alert</a>: Native alert dialog reference.</li>
+        <li><a href="https://docs.expo.dev/versions/latest/sdk/haptics/">Expo Haptics Guide</a>: Using tactile vibration feedback in Expo.</li>
+        <li><a href="https://www.npmjs.com/package/expo-haptics">npm: expo-haptics</a>: Taptic engine and haptic feedback module for Expo.</li>
+      </ul>
     </section>
   </main>
 

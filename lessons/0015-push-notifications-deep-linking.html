@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0015: Push Notifications & Deep Linking Architecture</h1>
-    <div class="subtitle">APNs/FCM push tokens (<code>expo-notifications</code>), notification handling in background/foreground, and auto-routing with Expo Router deep links</div>
+    <div class="subtitle">APNs/FCM push tokens (<a href="https://www.npmjs.com/package/expo-notifications"><code>expo-notifications</code></a>), notification handling in background/foreground, and auto-routing with <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> deep links</div>
   </header>
 
   <main>
@@ -44,14 +44,14 @@
           <tr>
             <td><strong>Deep Linking</strong></td>
             <td>Manual route parsing (e.g. <code>/app/feed</code>)</td>
-            <td>Universal URL schemes automatically mapped to file routes in <strong>Expo Router</strong></td>
+            <td>Universal URL schemes automatically mapped to file routes in <a href="https://www.npmjs.com/package/expo-router"><strong>Expo Router</strong></a></td>
           </tr>
         </tbody>
       </table>
     </section>
 
     <section>
-      <h2>2. Registering for Push Notifications & Getting Push Tokens</h2>
+      <h2>2. Registering for Push Notifications & Getting Push Tokens (<a href="https://www.npmjs.com/package/expo-notifications"><code>expo-notifications</code></a> & <a href="https://www.npmjs.com/package/expo-device"><code>expo-device</code></a>)</h2>
       <p>Mobile platforms strictly require physical device testing for APNs/FCM tokens:</p>
 
       <pre><code>// src/utils/notifications.ts
@@ -108,7 +108,7 @@ export async function registerForPushNotificationsAsync(): Promise&lt;string | n
     </section>
 
     <section>
-      <h2>3. Responding to Notification Taps with Expo Router Deep Linking</h2>
+      <h2>3. Responding to Notification Taps with <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> Deep Linking</h2>
       <p>When a user taps a notification (e.g. <em>"⚠️ Time to BeReal ⚠️"</em> or a new friend comment), navigate directly to that specific screen using <code>router.push()</code>:</p>
 
       <pre><code>// src/hooks/useNotificationObserver.ts
@@ -151,11 +151,21 @@ export function useNotificationObserver() {
       <h2>4. Key Insights for Angular Leads</h2>
       <div class="callout tip">
         <ul>
-          <li><strong>Universal Deep Linking</strong>: Expo Router makes every file in <code>src/app/</code> deep-linkable. A notification payload of <code>{ screen: "/(tabs)/profile" }</code> routes directly without manual path parsing.</li>
+          <li><strong>Universal Deep Linking</strong>: <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> makes every file in <code>src/app/</code> deep-linkable. A notification payload of <code>{ screen: "/(tabs)/profile" }</code> routes directly without manual path parsing.</li>
           <li><strong>Physical Device Requirement</strong>: iOS Simulators cannot receive standard APNs remote pushes; always test push tokens on physical hardware.</li>
           <li><strong>Expo Push Service</strong>: You can send pushes from your backend (Supabase Edge Functions / Node.js) with a simple POST to <code>https://exp.host/--/api/v2/push/send</code>.</li>
         </ul>
       </div>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://docs.expo.dev/versions/latest/sdk/notifications/">Expo Notifications Guide</a>: Setup and push notification handlers.</li>
+        <li><a href="https://www.npmjs.com/package/expo-notifications">npm: expo-notifications</a>: Push and local notification management for Expo.</li>
+        <li><a href="https://www.npmjs.com/package/expo-device">npm: expo-device</a>: Device and hardware information API for mobile platforms.</li>
+        <li><a href="https://www.npmjs.com/package/expo-router">npm: expo-router</a>: File-based routing and deep linking engine.</li>
+      </ul>
     </section>
   </main>
 

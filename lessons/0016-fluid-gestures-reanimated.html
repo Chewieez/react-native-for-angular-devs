@@ -9,20 +9,20 @@
 <body>
   <header>
     <h1>Lesson 0016: 60/120 FPS Native Gestures & Animations</h1>
-    <div class="subtitle">UI-thread Worklets, declarative gestures (<code>react-native-gesture-handler</code>), and fluid physics springs (<code>react-native-reanimated</code>)</div>
+    <div class="subtitle">UI-thread Worklets, declarative gestures (<a href="https://www.npmjs.com/package/react-native-gesture-handler"><code>react-native-gesture-handler</code></a>), and fluid physics springs (<a href="https://www.npmjs.com/package/react-native-reanimated"><code>react-native-reanimated</code></a>)</div>
   </header>
 
   <main>
     <section>
       <h2>1. Angular Animations vs. React Native UI-Thread Worklets</h2>
-      <p>In Angular web applications, animations rely on <code>@angular/animations</code> or CSS transitions running on the browser main thread. In React Native, running animations through the JavaScript thread can cause frame drops whenever heavy JS tasks run. <code>react-native-reanimated</code> solves this by executing JavaScript functions directly on the <strong>UI Thread (Worklets)</strong>:</p>
+      <p>In Angular web applications, animations rely on <code>@angular/animations</code> or CSS transitions running on the browser main thread. In React Native, running animations through the JavaScript thread can cause frame drops whenever heavy JS tasks run. <a href="https://www.npmjs.com/package/react-native-reanimated"><code>react-native-reanimated</code></a> solves this by executing JavaScript functions directly on the <strong>UI Thread (Worklets)</strong>:</p>
 
       <table>
         <thead>
           <tr>
             <th>Concept</th>
             <th>Angular / Web Animations</th>
-            <th>React Native Reanimated</th>
+            <th><a href="https://www.npmjs.com/package/react-native-reanimated">React Native Reanimated</a></th>
           </tr>
         </thead>
         <tbody>
@@ -51,8 +51,8 @@
     </section>
 
     <section>
-      <h2>2. Core Building Blocks of Reanimated 3</h2>
-      <p>Reanimated uses <strong>Shared Values</strong> and <strong>Animated Styles</strong>:</p>
+      <h2>2. Core Building Blocks of <a href="https://www.npmjs.com/package/react-native-reanimated">Reanimated 3</a></h2>
+      <p><a href="https://www.npmjs.com/package/react-native-reanimated">Reanimated</a> uses <strong>Shared Values</strong> and <strong>Animated Styles</strong>:</p>
 
       <pre><code>import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
     </section>
 
     <section>
-      <h2>3. Interactive Gestures with `GestureDetector`</h2>
-      <p>Combine <code>GestureDetector</code> from <code>react-native-gesture-handler</code> with Reanimated for gestures like <strong>Pinch-to-Zoom</strong> on photos (e.g. BeReal camera view):</p>
+      <h2>3. Interactive Gestures with <a href="https://www.npmjs.com/package/react-native-gesture-handler"><code>GestureDetector</code></a></h2>
+      <p>Combine <code>GestureDetector</code> from <a href="https://www.npmjs.com/package/react-native-gesture-handler"><code>react-native-gesture-handler</code></a> with <a href="https://www.npmjs.com/package/react-native-reanimated">Reanimated</a> for gestures like <strong>Pinch-to-Zoom</strong> on photos (e.g. BeReal camera view):</p>
 
       <pre><code>import React from 'react';
 import { StyleSheet } from 'react-native';
@@ -147,6 +147,16 @@ const styles = StyleSheet.create({
           <li><strong>Layout Animations</strong>: Reanimated includes built-in layout transitions: <code>&lt;Animated.View entering={FadeInDown} exiting={FadeOutUp} /&gt;</code> for zero-boilerplate entrance/exit effects.</li>
         </ul>
       </div>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://docs.swmansion.com/react-native-reanimated/">React Native Reanimated Docs</a>: Worklets, shared values, and physics animations.</li>
+        <li><a href="https://www.npmjs.com/package/react-native-reanimated">npm: react-native-reanimated</a>: React Native animation library with UI thread execution.</li>
+        <li><a href="https://docs.swmansion.com/react-native-gesture-handler/">React Native Gesture Handler Docs</a>: Declarative native gesture system.</li>
+        <li><a href="https://www.npmjs.com/package/react-native-gesture-handler">npm: react-native-gesture-handler</a>: Native touch and gesture handling library.</li>
+      </ul>
     </section>
   </main>
 

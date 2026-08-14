@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0017: Hardware Biometrics & Encrypted Storage</h1>
-    <div class="subtitle">iOS Keychain & Android KeyStore (<code>expo-secure-store</code>), FaceID / Fingerprint unlocks (<code>expo-local-authentication</code>), and mobile security defense</div>
+    <div class="subtitle">iOS Keychain & Android KeyStore (<a href="https://www.npmjs.com/package/expo-secure-store"><code>expo-secure-store</code></a>), FaceID / Fingerprint unlocks (<a href="https://www.npmjs.com/package/expo-local-authentication"><code>expo-local-authentication</code></a>), and mobile security defense</div>
   </header>
 
   <main>
@@ -39,7 +39,7 @@
           <tr>
             <td><strong>Biometric Unlocking</strong></td>
             <td>WebAuthn (browser-dependent)</td>
-            <td><strong>FaceID / TouchID / Fingerprint</strong> via <code>expo-local-authentication</code></td>
+            <td><strong>FaceID / TouchID / Fingerprint</strong> via <a href="https://www.npmjs.com/package/expo-local-authentication"><code>expo-local-authentication</code></a></td>
           </tr>
           <tr>
             <td><strong>Persistence Across Reinstalls</strong></td>
@@ -51,7 +51,7 @@
     </section>
 
     <section>
-      <h2>2. Encrypted Token Storage with `expo-secure-store`</h2>
+      <h2>2. Encrypted Token Storage with <a href="https://www.npmjs.com/package/expo-secure-store"><code>expo-secure-store</code></a></h2>
       <p>Store private API keys and user refresh tokens securely:</p>
 
       <pre><code>// src/utils/secureStorage.ts
@@ -91,7 +91,7 @@ export async function deleteSecureToken(): Promise&lt;void&gt; {
     </section>
 
     <section>
-      <h2>3. FaceID & Biometric Authentication (`expo-local-authentication`)</h2>
+      <h2>3. FaceID & Biometric Authentication (<a href="https://www.npmjs.com/package/expo-local-authentication"><code>expo-local-authentication</code></a>)</h2>
       <p>Prompt the user for biometric verification before unlocking private screens or performing sensitive actions:</p>
 
       <pre><code>// src/utils/biometrics.ts
@@ -126,6 +126,16 @@ export async function authenticateWithBiometrics(promptMessage = 'Unlock BeReal 
           <li><strong>Graceful Fallbacks</strong>: Always check <code>hasHardwareAsync()</code> and provide a PIN/passcode fallback so users without biometrics can still access your app.</li>
         </ul>
       </div>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://docs.expo.dev/versions/latest/sdk/securestore/">Expo SecureStore Documentation</a>: Key-value encrypted device storage.</li>
+        <li><a href="https://www.npmjs.com/package/expo-secure-store">npm: expo-secure-store</a>: Encrypted hardware storage on iOS Keychain & Android KeyStore.</li>
+        <li><a href="https://docs.expo.dev/versions/latest/sdk/local-authentication/">Expo LocalAuthentication Documentation</a>: FaceID and fingerprint biometric prompts.</li>
+        <li><a href="https://www.npmjs.com/package/expo-local-authentication">npm: expo-local-authentication</a>: Biometric authentication library for Expo.</li>
+      </ul>
     </section>
   </main>
 

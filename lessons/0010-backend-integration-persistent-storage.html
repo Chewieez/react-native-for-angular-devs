@@ -9,7 +9,7 @@
 <body>
   <header>
     <h1>Lesson 0010: Backend Integration & Persistent Storage</h1>
-    <div class="subtitle">Supabase integration, local storage mechanics (<code>AsyncStorage</code> vs <code>MMKV</code>), and session hydration vs Angular <code>HttpInterceptor</code></div>
+    <div class="subtitle"><a href="https://www.npmjs.com/package/@supabase/supabase-js">Supabase</a> integration, local storage mechanics (<code><a href="https://www.npmjs.com/package/@react-native-async-storage/async-storage">AsyncStorage</a></code> vs <code><a href="https://www.npmjs.com/package/react-native-mmkv">MMKV</a></code>), and session hydration vs Angular <code>HttpInterceptor</code></div>
   </header>
 
   <main>
@@ -22,8 +22,8 @@
           <tr>
             <th>Feature</th>
             <th>Web <code>localStorage</code></th>
-            <th>React Native <code>AsyncStorage</code></th>
-            <th><code>react-native-mmkv</code> (Modern)</th>
+            <th>React Native <code><a href="https://www.npmjs.com/package/@react-native-async-storage/async-storage">AsyncStorage</a></code></th>
+            <th><code><a href="https://www.npmjs.com/package/react-native-mmkv">react-native-mmkv</a></code> (Modern)</th>
           </tr>
         </thead>
         <tbody>
@@ -56,8 +56,8 @@
     </section>
 
     <section>
-      <h2>2. Configuring the Supabase Mobile Client</h2>
-      <p>In Angular, attaching auth tokens across requests typically requires an <code>HttpInterceptor</code>. With the Supabase JS client in React Native, you provide a storage adapter so auth sessions are automatically persisted, restored, and refreshed:</p>
+      <h2>2. Configuring the <a href="https://www.npmjs.com/package/@supabase/supabase-js">Supabase</a> Mobile Client</h2>
+      <p>In Angular, attaching auth tokens across requests typically requires an <code>HttpInterceptor</code>. With the <a href="https://www.npmjs.com/package/@supabase/supabase-js">Supabase JS client</a> in React Native, you provide a storage adapter (<a href="https://www.npmjs.com/package/@react-native-async-storage/async-storage"><code>@react-native-async-storage/async-storage</code></a> and <a href="https://www.npmjs.com/package/react-native-url-polyfill"><code>react-native-url-polyfill</code></a>) so auth sessions are automatically persisted, restored, and refreshed:</p>
 
       <pre><code>// src/lib/supabase/client.ts
 import 'react-native-url-polyfill/auto';
@@ -145,6 +145,16 @@ export const useAuth = () => useContext(AuthContext);</code></pre>
           <li><strong>Async Storage is Promise-based</strong>: Whenever reading or writing directly with <code>AsyncStorage.getItem()</code> / <code>setItem()</code>, always use <code>await</code> or Promise chains.</li>
         </ul>
       </div>
+    </section>
+
+    <section>
+      <h2>5. Official Documentation & Package References</h2>
+      <ul>
+        <li><a href="https://www.npmjs.com/package/@supabase/supabase-js">npm: @supabase/supabase-js</a>: Official Supabase isomorphic client library.</li>
+        <li><a href="https://www.npmjs.com/package/@react-native-async-storage/async-storage">npm: @react-native-async-storage/async-storage</a>: Asynchronous, persistent key-value storage for React Native.</li>
+        <li><a href="https://www.npmjs.com/package/react-native-url-polyfill">npm: react-native-url-polyfill</a>: Lightweight URL polyfill for React Native environments.</li>
+        <li><a href="https://www.npmjs.com/package/react-native-mmkv">npm: react-native-mmkv</a>: Ultra-fast synchronous key-value storage engine powered by C++ JSI.</li>
+      </ul>
     </section>
   </main>
 
