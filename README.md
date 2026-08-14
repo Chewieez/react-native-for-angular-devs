@@ -20,12 +20,12 @@ Rather than starting from zero with basic programming concepts, this course tran
 | **0006** | [**FlatList vs. ScrollView & Virtualization**](./lessons/0006-flatlist-vs-scrollview.html) | Memory management on mobile, list virtualization, `FlatList` vs `ScrollView`, key extractors. | ✅ Active |
 | **0007** | [**Expo Router Architecture & File-Based Routing**](./lessons/0007-expo-router-architecture.html) | File-based routing, `(tabs)`, `(auth)`, `Stack`, `Slot`, & `_layout.tsx` vs Angular `RouterModule`. | ✅ Active |
 | **0008** | [**Programmatic Navigation & Modals**](./lessons/0008-programmatic-navigation-modals.html) | `router.push`, `router.replace`, `router.back`, modal presentation, route parameters. | ✅ Active |
-| **0009** | **Async Data Fetching & Loading States** | `async/await`, `ActivityIndicator`, Error Boundaries vs Angular `HttpClient`/RxJS. | ⏳ Pending |
-| **0010** | **Backend Integration & Persistent Storage** | Supabase/Firebase integration, local storage with `AsyncStorage` / `MMKV` key-value persistence. | ⏳ Pending |
-| **0011** | **Native Camera & Image Picker** | Camera access (`expo-camera`), photo library picker (`expo-image-picker`), device permissions. | ⏳ Pending |
-| **0012** | **Native Haptics, Alerts & Device Features** | `expo-haptics` feedback, `Alert.alert` dialogs, toast notifications, platform-specific code (`Platform.OS`). | ⏳ Pending |
-| **0013** | **Advanced Debugging & Performance Profiling** | React DevTools, Flipper, network tab profiling, memory leak detection, JS thread performance. | ⏳ Pending |
-| **0014** | **Production Builds & EAS Pipeline** | Expo Managed vs Prebuild, `eas build`, App Store / TestFlight readiness, release channels. | ⏳ Pending |
+| **0009** | [**Async Data Fetching & Loading States**](./lessons/0009-async-data-fetching.html) | `async/await`, `ActivityIndicator`, Error Boundaries vs Angular `HttpClient`/RxJS. | ✅ Active |
+| **0010** | [**Backend Integration & Persistent Storage**](./lessons/0010-backend-integration-persistent-storage.html) | Supabase/Firebase integration, local storage with `AsyncStorage` / `MMKV` key-value persistence. | ✅ Active |
+| **0011** | [**Native Camera & Image Picker**](./lessons/0011-native-camera-image-picker.html) | Camera access (`expo-camera`), photo library picker (`expo-image-picker`), device permissions. | ✅ Active |
+| **0012** | [**Native Haptics, Alerts & Device Features**](./lessons/0012-native-haptics-alerts-device-features.html) | `expo-haptics` feedback, `Alert.alert` dialogs, toast notifications, platform-specific code (`Platform.OS`). | ✅ Active |
+| **0013** | [**Advanced Debugging & Performance Profiling**](./lessons/0013-advanced-debugging-performance-profiling.html) | React DevTools, Flipper, network tab profiling, memory leak detection, JS thread performance. | ✅ Active |
+| **0014** | [**Production Builds & EAS Pipeline**](./lessons/0014-production-builds-eas-pipeline.html) | Expo Managed vs Prebuild, `eas build`, App Store / TestFlight readiness, release channels. | ✅ Active |
 
 ---
 

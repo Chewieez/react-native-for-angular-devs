@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0009: Async Data Fetching & Loading States</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0009: Async Data Fetching & Loading States</h1>
+    <div class="subtitle">Translating Angular <code>HttpClient</code> & RxJS Observables to React Native <code>async/await</code>, Custom Hooks, and Native <code>ActivityIndicator</code></div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Angular <code>HttpClient</code> / RxJS vs. React Native <code>async/await</code> & Hooks</h2>
+      <p>In Angular, HTTP requests are handled by <code>HttpClient</code> returning cold RxJS <code>Observable</code> instances, often unwrapped in templates using the <code>async</code> pipe (<code>items$ | async</code>). In React Native, data fetching relies on standard <code>fetch()</code> or <code>axios</code> wrapped inside a custom hook or <code>useEffect()</code> with local state flags (<code>data</code>, <code>loading</code>, <code>error</code>):</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Angular Pattern (RxJS)</th>
+            <th>React Native Pattern (Hooks)</th>
+            <th>Conceptual Difference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>this.http.get&lt;Post[]&gt;(url)</code></td>
+            <td><code>const res = await fetch(url); await res.json();</code></td>
+            <td>RxJS Observables streams vs. Promise-based <code>async/await</code>.</td>
+          </tr>
+          <tr>
+            <td><code>&lt;div *ngIf="loading$ | async"&gt;</code></td>
+            <td><code>{loading && &lt;ActivityIndicator /&gt;}</code></td>
+            <td>Template async pipe vs. JavaScript conditional JSX short-circuiting.</td>
+          </tr>
+          <tr>
+            <td><code>catchError(err => of(fallback))</code></td>
+            <td><code>try { ... } catch (err) { setError(err.message); }</code></td>
+            <td>RxJS operator error pipe vs. standard JavaScript <code>try/catch</code> blocks.</td>
+          </tr>
+          <tr>
+            <td><code>shareReplay(1)</code> / Signals</td>
+            <td>Custom Hook (e.g. <code>useFeedData()</code>) or TanStack Query</td>
+            <td>Manual RxJS caching vs. React state encapsulation or query cache hooks.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Native Loading Indicators (<code>ActivityIndicator</code>)</h2>
+      <p>Unlike web development where spinners are custom CSS keyframe animations, React Native provides a platform-native loading indicator component: <code>ActivityIndicator</code>. It renders as an iOS activity indicator on Apple devices and a Material Design circular progress indicator on Android:</p>
+
+      <pre><code>import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+
+export default function LoadingExample({ isLoading, data }: { isLoading: boolean; data: string[] }) {
+  if (isLoading) {
+    return (
+      &lt;View style={styles.centerContainer}&gt;
+        &lt;ActivityIndicator size="large" color="#007AFF" /&gt;
+        &lt;Text style={styles.loadingText}&gt;Fetching feed...&lt;/Text&gt;
+      &lt;/View&gt;
+    );
+  }
+
+  return (
+    &lt;View style={styles.container}&gt;
+      {/* Render fetched list */}
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingText: { marginTop: 12, fontSize: 14, color: '#666' },
+  container: { flex: 1, padding: 16 }
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Building a Custom Data Fetching Hook (The "Angular Service" Pattern)</h2>
+      <p>In Angular, data fetching logic belongs inside a service class (e.g. <code>FeedService</code>). In React, the best practice is to encapsulate stateful fetching logic inside a custom hook (e.g. <code>useFeed()</code>):</p>
+
+      <pre><code>// src/hooks/useFeedData.ts
+import { useState, useEffect, useCallback } from 'react';
+
+export interface Post {
+  id: string;
+  caption: string;
+  imageUrl: string;
+}
+
+export function useFeedData() {
+  const [posts, setPosts] = useState&lt;Post[]&gt;([]);
+  const [loading, setLoading] = useState&lt;boolean&gt;(true);
+  const [error, setError] = useState&lt;string | null&gt;(null);
+
+  const fetchFeed = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('https://api.example.com/posts');
+      if (!response.ok) throw new Error('Failed to load posts');
+      const data = await response.json();
+      setPosts(data);
+    } catch (err: any) {
+      setError(err.message || 'An unknown error occurred');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchFeed();
+  }, [fetchFeed]);
+
+  return { posts, loading, error, refetch: fetchFeed };
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Consuming the Custom Hook in a Component</h2>
+      <p>Consuming the custom hook inside an Expo Router screen component gives you clean separation of concerns, complete with pull-to-refresh and error fallbacks:</p>
+
+      <pre><code>// src/app/(tabs)/index.tsx
+import { View, Text, FlatList, ActivityIndicator, StyleSheet, RefreshControl } from 'react-native';
+import { useFeedData } from '../../hooks/useFeedData';
+
+export default function FeedScreen() {
+  const { posts, loading, error, refetch } = useFeedData();
+
+  if (loading && posts.length === 0) {
+    return (
+      &lt;View style={styles.centered}&gt;
+        &lt;ActivityIndicator size="large" color="#007AFF" /&gt;
+      &lt;/View&gt;
+    );
+  }
+
+  if (error) {
+    return (
+      &lt;View style={styles.centered}&gt;
+        &lt;Text style={styles.errorText}&gt;Error: {error}&lt;/Text&gt;
+      &lt;/View&gt;
+    );
+  }
+
+  return (
+    &lt;FlatList
+      data={posts}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        &lt;View style={styles.card}&gt;
+          &lt;Text style={styles.caption}&gt;{item.caption}&lt;/Text&gt;
+        &lt;/View&gt;
+      )}
+      refreshControl={
+        &lt;RefreshControl refreshing={loading} onRefresh={refetch} colors={['#007AFF']} /&gt;
+      }
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { color: '#FF3B30', fontSize: 16, fontWeight: '600' },
+  card: { padding: 16, borderBottomWidth: 1, borderColor: '#eee' },
+  caption: { fontSize: 16 }
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>5. Key Insights for Angular Engineers</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>No RxJS Subscriptions to Unsubscribe</strong>: React hooks clean up automatically when components unmount if cleanup functions are returned from <code>useEffect</code>.</li>
+          <li><strong>Declarative Pull-to-Refresh</strong>: React Native's <code>RefreshControl</code> plugs directly into <code>FlatList</code> or <code>ScrollView</code> with simple <code>refreshing</code> and <code>onRefresh</code> props.</li>
+          <li><strong>Production Apps</strong>: For complex caching, background revalidation, and optimistic updates, use <strong>TanStack React Query</strong> (the React ecosystem equivalent to RxJS state stores).</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0008-programmatic-navigation-modals.html">&larr; Previous Lesson: Lesson 0008</a> &bull; <a href="./0010-backend-integration-persistent-storage.html">Next: Lesson 0010 &rarr;</a></p>
+  </footer>
+</body>
+</html>

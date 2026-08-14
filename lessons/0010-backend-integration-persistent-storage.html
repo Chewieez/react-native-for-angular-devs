@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0010: Backend Integration & Persistent Storage</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0010: Backend Integration & Persistent Storage</h1>
+    <div class="subtitle">Supabase integration, local storage mechanics (<code>AsyncStorage</code> vs <code>MMKV</code>), and session hydration vs Angular <code>HttpInterceptor</code></div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Web `localStorage` vs. Mobile Persistent Storage</h2>
+      <p>In Angular web applications, developers frequently use browser <code>localStorage</code> (synchronous, strings only, ~5MB limit). In mobile development, filesystem access must run off the JavaScript thread to prevent UI freezing:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Web <code>localStorage</code></th>
+            <th>React Native <code>AsyncStorage</code></th>
+            <th><code>react-native-mmkv</code> (Modern)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>API Type</strong></td>
+            <td>Synchronous</td>
+            <td>Asynchronous (Promise-based)</td>
+            <td>Synchronous (via C++ JSI)</td>
+          </tr>
+          <tr>
+            <td><strong>Performance</strong></td>
+            <td>Fast on web</td>
+            <td>Bridge-serialized, medium</td>
+            <td>Extremely fast (~30x AsyncStorage)</td>
+          </tr>
+          <tr>
+            <td><strong>Underlying Engine</strong></td>
+            <td>Browser storage</td>
+            <td>SQLite (Android) / Files (iOS)</td>
+            <td>Memory-mapped binary files (MMKV)</td>
+          </tr>
+          <tr>
+            <td><strong>Use Case</strong></td>
+            <td>Web app tokens & preferences</td>
+            <td>Universal standard, Supabase storage</td>
+            <td>High-throughput caching, offline state</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Configuring the Supabase Mobile Client</h2>
+      <p>In Angular, attaching auth tokens across requests typically requires an <code>HttpInterceptor</code>. With the Supabase JS client in React Native, you provide a storage adapter so auth sessions are automatically persisted, restored, and refreshed:</p>
+
+      <pre><code>// src/lib/supabase/client.ts
+import 'react-native-url-polyfill/auto';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || 'https://xyz.supabase.co';
+const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || 'public-anon-key';
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    storage: AsyncStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false, // Disabled for native mobile environments
+  },
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Session Hydration & Bootstrapping in `AuthContext`</h2>
+      <p>Because native storage is asynchronous, mobile apps require a <strong>Session Hydration</strong> phase during app launch before executing route guards:</p>
+
+      <pre><code>// src/context/AuthContext.tsx
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Session, User } from '@supabase/supabase-js';
+import { supabase } from '../lib/supabase/client';
+
+interface AuthContextType {
+  user: User | null;
+  session: Session | null;
+  isLoading: boolean;
+  signOut: () => Promise&lt;void&gt;;
+}
+
+const AuthContext = createContext&lt;AuthContextType&gt;({
+  user: null,
+  session: null,
+  isLoading: true,
+  signOut: async () => {},
+});
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [session, setSession] = useState&lt;Session | null&gt;(null);
+  const [isLoading, setIsLoading] = useState&lt;boolean&gt;(true);
+
+  useEffect(() => {
+    // 1. Initial Session Hydration from AsyncStorage
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setIsLoading(false);
+    });
+
+    // 2. Listen for Auth State Changes (Login, Logout, Token Refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setIsLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+  };
+
+  return (
+    &lt;AuthContext.Provider value={{ user: session?.user ?? null, session, isLoading, signOut }}&gt;
+      {children}
+    &lt;/AuthContext.Provider&gt;
+  );
+}
+
+export const useAuth = () => useContext(AuthContext);</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Key Takeaways for Angular Leads</h2>
+      <div class="callout tip">
+        <ul>
+          <li><strong>No Manual Interceptors</strong>: Supabase handles token rotation, authorization header attachment, and refresh triggers under the hood through the configured <code>storage</code> engine.</li>
+          <li><strong>Always Guard Against Unhydrated State</strong>: Ensure root routing layouts (e.g. <code>src/app/_layout.tsx</code>) check <code>isLoading</code> before redirecting unauthenticated users to avoid flashing the login screen on app boot.</li>
+          <li><strong>Async Storage is Promise-based</strong>: Whenever reading or writing directly with <code>AsyncStorage.getItem()</code> / <code>setItem()</code>, always use <code>await</code> or Promise chains.</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0009-async-data-fetching.html">&larr; Previous Lesson: Lesson 0009</a> &bull; <a href="./0011-native-camera-image-picker.html">Next: Lesson 0011 &rarr;</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0014: Production Builds & EAS Pipeline</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0014: Production Builds & EAS Pipeline</h1>
+    <div class="subtitle">Expo Application Services (EAS), <code>app.json</code> configuration, native app compilation, and Over-The-Air (OTA) live updates</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Web Deployment vs. Mobile App Compilation</h2>
+      <p>In Angular, production deployment involves bundling HTML/CSS/JS with Webpack/Vite and serving it from a CDN (S3, Cloudflare). In mobile development, native code (Swift/Objective-C/Kotlin/Java) must be compiled into cryptographic binary packages (<code>.ipa</code> for iOS, <code>.aab</code> for Android):</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular / Web</th>
+            <th>Expo / React Native (EAS)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Build Output</strong></td>
+            <td>Static assets directory (<code>dist/</code>)</td>
+            <td>Signed Native Binary (<code>.ipa</code> / <code>.aab</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>CI/CD Build System</strong></td>
+            <td>GitHub Actions / Cloudflare Pages</td>
+            <td><strong>EAS Build</strong> (cloud macOS & Linux builders)</td>
+          </tr>
+          <tr>
+            <td><strong>App Updates</strong></td>
+            <td>Instant reload on web refresh</td>
+            <td>App Store review cycle OR <strong>EAS Update</strong> (OTA)</td>
+          </tr>
+          <tr>
+            <td><strong>Distribution</strong></td>
+            <td>Public URL</td>
+            <td>Apple TestFlight / Google Play Console</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Configuring `app.json` (The Mobile App Manifest)</h2>
+      <p>The <code>app.json</code> file configures app icons, splash screens, bundle identifiers, and native permissions:</p>
+
+      <pre><code>{
+  "expo": {
+    "name": "BeReal Clone",
+    "slug": "berealclone",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.yourname.berealclone",
+      "infoPlist": {
+        "NSCameraUsageDescription": "BeReal Clone needs camera access to take daily dual photos.",
+        "NSPhotoLibraryUsageDescription": "BeReal Clone needs photo access to choose profile avatars."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#000000"
+      },
+      "package": "com.yourname.berealclone",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow BeReal Clone to access your camera."
+        }
+      ]
+    ]
+  }
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. The `eas.json` Multi-Environment Pipeline</h2>
+      <p>Similar to Angular's <code>angular.json</code> configurations (<code>development</code>, <code>staging</code>, <code>production</code>), EAS uses <code>eas.json</code>:</p>
+
+      <pre><code>{
+  "cli": {
+    "version": ">= 12.0.0"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal"
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Key EAS Commands for Engineers</h2>
+      <ul>
+        <li><code>eas login</code> &mdash; Authenticate your CLI with your Expo cloud workspace.</li>
+        <li><code>eas build --profile development --platform ios</code> &mdash; Build a custom dev client containing native modules.</li>
+        <li><code>eas build --profile preview --platform all</code> &mdash; Generate internal test builds installable via QR code / link.</li>
+        <li><code>eas build --profile production --platform all</code> &mdash; Create App Store & Google Play production binaries.</li>
+        <li><code>eas update --branch production --message "Fix auth redirect bug"</code> &mdash; Deploy instant Over-The-Air bug fixes to users without going through App Store review.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>5. 🎉 Congratulations: Curriculum Complete!</h2>
+      <div class="callout tip">
+        <p>You have mastered the complete architectural translation from an <strong>Angular Lead</strong> to a <strong>Production-Ready React Native & Expo Engineer</strong>!</p>
+        <p>You have the core foundations: Component Primitives, React Context vs Services, Hooks, Native Flexbox, FlatList Virtualization, Expo Router, Async Pipelines, Backend Hydration, Hardware APIs, Debugging, and Cloud Deployment Pipelines.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0013-advanced-debugging-performance-profiling.html">&larr; Previous Lesson: Lesson 0013</a> &bull; <strong>Curriculum Complete 🚀</strong></p>
+  </footer>
+</body>
+</html>

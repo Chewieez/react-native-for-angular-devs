@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0011: Native Camera & Image Picker</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0011: Native Camera & Image Picker</h1>
+    <div class="subtitle">Hardware permissions, viewfinder camera views (<code>expo-camera</code>), photo library selection (<code>expo-image-picker</code>), and mobile binary uploads</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Web File Uploads vs. Mobile Hardware Access</h2>
+      <p>In Angular web applications, image selection is done via <code>&lt;input type="file"&gt;</code> or WebRTC <code>navigator.mediaDevices.getUserMedia()</code>. On mobile devices, operating systems require strict runtime permission prompts and native hardware bridges:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular / Web</th>
+            <th>Expo / React Native</th>
+            <th>Native Mobile Reality</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Photo Library</strong></td>
+            <td><code>&lt;input type="file" accept="image/*"&gt;</code></td>
+            <td><code>ImagePicker.launchImageLibraryAsync()</code></td>
+            <td>Launches iOS UIImagePickerController / Android Photo Picker.</td>
+          </tr>
+          <tr>
+            <td><strong>Camera Viewfinder</strong></td>
+            <td><code>&lt;video&gt;</code> + WebRTC streams</td>
+            <td><code>&lt;CameraView /&gt;</code> from <code>expo-camera</code></td>
+            <td>Direct native AVFoundation (iOS) / CameraX (Android) hardware bindings.</td>
+          </tr>
+          <tr>
+            <td><strong>Permissions</strong></td>
+            <td>Browser popup on call</td>
+            <td><code>useCameraPermissions()</code> hook</td>
+            <td>Explicit iOS Info.plist / Android Manifest permission declarations + runtime hooks.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Photo Library Picker (<code>expo-image-picker</code>)</h2>
+      <p>The standard way to select an existing photo or prompt the user for an avatar or post upload:</p>
+
+      <pre><code>// src/utils/imagePicker.ts
+import * as ImagePicker from 'expo-image-picker';
+
+export async function pickImage(): Promise&lt;string | null&gt; {
+  // 1. Request library permissions
+  const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  if (status !== 'granted') {
+    alert('Permission to access photos is required!');
+    return null;
+  }
+
+  // 2. Launch native image picker
+  const result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    aspect: [1, 1], // Square crop (e.g. BeReal avatar)
+    quality: 0.8,   // Compress image to save mobile bandwidth
+  });
+
+  if (!result.canceled && result.assets && result.assets.length > 0) {
+    return result.assets[0].uri; // Local file URI (e.g. file:///data/.../photo.jpg)
+  }
+
+  return null;
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Native Viewfinder with `expo-camera` (Modern `CameraView`)</h2>
+      <p>For custom in-app camera viewfinders (like BeReal or Instagram Stories), use <code>CameraView</code> with the <code>useCameraPermissions()</code> hook:</p>
+
+      <pre><code>// src/components/NativeCameraView.tsx
+import React, { useRef, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { CameraView, useCameraPermissions, CameraType } from 'expo-camera';
+
+export default function NativeCameraView({ onPhotoCaptured }: { onPhotoCaptured: (uri: string) => void }) {
+  const [facing, setFacing] = useState&lt;CameraType&gt;('back');
+  const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef&lt;CameraView&gt;(null);
+
+  if (!permission) {
+    // Permissions are still loading
+    return &lt;View /&gt;;
+  }
+
+  if (!permission.granted) {
+    return (
+      &lt;View style={styles.container}&gt;
+        &lt;Text style={styles.text}&gt;We need camera permission to take your daily post&lt;/Text&gt;
+        &lt;TouchableOpacity style={styles.button} onPress={requestPermission}&gt;
+          &lt;Text style={styles.buttonText}&gt;Grant Permission&lt;/Text&gt;
+        &lt;/TouchableOpacity&gt;
+      &lt;/View&gt;
+    );
+  }
+
+  const takePicture = async () => {
+    if (cameraRef.current) {
+      const photo = await cameraRef.current.takePictureAsync({ quality: 0.8 });
+      if (photo?.uri) {
+        onPhotoCaptured(photo.uri);
+      }
+    }
+  };
+
+  return (
+    &lt;View style={styles.container}&gt;
+      &lt;CameraView style={styles.camera} facing={facing} ref={cameraRef}&gt;
+        &lt;View style={styles.overlay}&gt;
+          &lt;TouchableOpacity style={styles.captureBtn} onPress={takePicture}&gt;
+            &lt;View style={styles.innerCircle} /&gt;
+          &lt;/TouchableOpacity&gt;
+        &lt;/View&gt;
+      &lt;/CameraView&gt;
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#000' },
+  camera: { flex: 1 },
+  overlay: { flex: 1, justifyContent: 'flex-end', alignItems: 'center', marginBottom: 40 },
+  captureBtn: { width: 74, height: 74, borderRadius: 37, borderWidth: 4, borderColor: '#fff', justifyContent: 'center', alignItems: 'center' },
+  innerCircle: { width: 58, height: 58, borderRadius: 29, backgroundColor: '#fff' },
+  text: { color: '#fff', textAlign: 'center', marginBottom: 20 },
+  button: { backgroundColor: '#007AFF', padding: 12, borderRadius: 8, alignSelf: 'center' },
+  buttonText: { color: '#fff', fontWeight: 'bold' }
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Uploading Local Native URIs to Backend Storage</h2>
+      <p>On mobile, selected files exist as local device paths (e.g. <code>file:///var/mobile/.../temp.jpg</code>). To upload to Supabase or Firebase, fetch the file URI as an <code>ArrayBuffer</code> or FormData:</p>
+
+      <pre><code>// src/lib/supabase/storage.ts
+import { supabase } from './client';
+import * as FileSystem from 'expo-file-system';
+import { decode } from 'base64-arraybuffer';
+
+export async function uploadPostImage(localUri: string, userId: string): Promise&lt;string&gt; {
+  // Read local file as base64 string
+  const base64 = await FileSystem.readAsStringAsync(localUri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  const filePath = `${userId}/${Date.now()}.jpg`;
+  const contentType = 'image/jpeg';
+
+  const { error } = await supabase.storage
+    .from('posts')
+    .upload(filePath, decode(base64), { contentType });
+
+  if (error) throw error;
+
+  const { data } = supabase.storage.from('posts').getPublicUrl(filePath);
+  return data.publicUrl;
+}</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0010-backend-integration-persistent-storage.html">&larr; Previous Lesson: Lesson 0010</a> &bull; <a href="./0012-native-haptics-alerts-device-features.html">Next: Lesson 0012 &rarr;</a></p>
+  </footer>
+</body>
+</html>

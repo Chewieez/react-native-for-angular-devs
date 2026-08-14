@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0013: Advanced Debugging & Performance Profiling</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0013: Advanced Debugging & Performance Profiling</h1>
+    <div class="subtitle">Threading models (JS Thread vs UI Thread), React DevTools, eliminating re-renders, and memory profiling</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. The Mobile Threading Architecture (JS Thread vs. UI Thread)</h2>
+      <p>In Angular web applications, all JavaScript, DOM updates, and style calculations run on the single browser main thread. React Native splits work across two primary threads:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Thread</th>
+            <th>Responsibilities</th>
+            <th>What Happens if Blocked?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>JavaScript Thread</strong></td>
+            <td>Business logic, React rendering, API calls, state updates.</td>
+            <td>Touch events lag, async data is delayed, but animations can still run smoothly on UI thread.</td>
+          </tr>
+          <tr>
+            <td><strong>UI (Native) Thread</strong></td>
+            <td>Native layout, rendering pixels, gesture handling, native drivers.</td>
+            <td>App stutters, drops frames below 60 FPS, feels "frozen".</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Essential Debugging Toolkit for React Native</h2>
+      <p>Moving beyond standard <code>console.log()</code>:</p>
+
+      <ul>
+        <li><strong>Expo Dev Menu (<kbd>Cmd</kbd>+<kbd>D</kbd> on iOS / <kbd>Cmd</kbd>+<kbd>M</kbd> on Android)</strong>: Fast reload, toggle element inspector, toggle performance monitor (FPS counter).</li>
+        <li><strong>Metro Bundler Terminal</strong>: Real-time bundle errors, compile-time warnings, stack traces with sourcemaps.</li>
+        <li><strong>React DevTools Profiler</strong>: Visualize component render durations and inspect flame graphs to spot components rendering unnecessarily.</li>
+        <li><strong>Chrome DevTools MCP / Remote Debugger</strong>: Inspect network requests, memory heap snapshots, and break on exceptions.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Eliminating Re-renders (`React.memo`, `useCallback`, `useMemo`)</h2>
+      <p>In Angular, <code>ChangeDetectionStrategy.OnPush</code> prevents re-checking unmodified components. In React Native, combine <code>React.memo</code> with memoized callback handlers:</p>
+
+      <pre><code>import React, { memo, useCallback, useState, useMemo } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+
+// 1. Memoized child component (Equivalent to Angular OnPush)
+const PostCard = memo(function PostCard({
+  post,
+  onLike,
+}: {
+  post: { id: string; title: string };
+  onLike: (id: string) => void;
+}) {
+  console.log('Rendering PostCard:', post.id);
+  return (
+    &lt;View style={styles.card}&gt;
+      &lt;Text style={styles.title}&gt;{post.title}&lt;/Text&gt;
+      &lt;TouchableOpacity onPress={() => onLike(post.id)}&gt;
+        &lt;Text style={styles.like}&gt;❤️ Like&lt;/Text&gt;
+      &lt;/TouchableOpacity&gt;
+    &lt;/View&gt;
+  );
+});
+
+export default function FeedContainer({ initialPosts }: { initialPosts: any[] }) {
+  const [posts, setPosts] = useState(initialPosts);
+
+  // 2. Stable callback reference (prevents re-rendering PostCard children)
+  const handleLike = useCallback((id: string) => {
+    setPosts((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, likes: (p.likes || 0) + 1 } : p))
+    );
+  }, []);
+
+  return (
+    &lt;View style={styles.container}&gt;
+      {posts.map((post) => (
+        &lt;PostCard key={post.id} post={post} onLike={handleLike} /&gt;
+      ))}
+    &lt;/View&gt;
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, padding: 16 },
+  card: { padding: 12, backgroundColor: '#fff', marginBottom: 8, borderRadius: 8 },
+  title: { fontSize: 16, fontWeight: 'bold' },
+  like: { color: '#FF2D55', marginTop: 8 }
+});</code></pre>
+    </section>
+
+    <section>
+      <h2>4. FlatList Performance Tuning</h2>
+      <p>For feeds with hundreds of images (like BeReal), tune these key props:</p>
+
+      <pre><code>&lt;FlatList
+  data={posts}
+  keyExtractor={(item) => item.id}
+  renderItem={renderItem}
+  initialNumToRender={5}     // Render only enough items to fill initial screen
+  maxToRenderPerBatch={5}    // Control batch size per scroll increment
+  windowSize={5}             // Reduce offscreen render buffer to conserve RAM
+  removeClippedSubviews={true} // Unmount views outside current viewport
+/&gt;</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0012-native-haptics-alerts-device-features.html">&larr; Previous Lesson: Lesson 0012</a> &bull; <a href="./0014-production-builds-eas-pipeline.html">Next: Lesson 0014 &rarr;</a></p>
+  </footer>
+</body>
+</html>

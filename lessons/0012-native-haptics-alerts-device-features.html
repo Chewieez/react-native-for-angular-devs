@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 0012: Native Haptics, Alerts & Device Features</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <header>
+    <h1>Lesson 0012: Native Haptics, Alerts & Device Features</h1>
+    <div class="subtitle">Platform-specific code (<code>Platform.OS</code> / <code>Platform.select</code>), native tactile feedback (<code>expo-haptics</code>), and system dialogs (<code>Alert.alert</code>)</div>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Web Alerts & Modals vs. Mobile Native System Dialogs</h2>
+      <p>In Angular web development, <code>window.alert()</code> is universally avoided because it freezes the browser tab, leading to custom HTML/CSS modal dialogs (Angular Material Dialog, SweetAlert). In React Native, <code>Alert.alert()</code> triggers asynchronous native system dialogs (UIAlertController on iOS, AlertDialog on Android):</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Concept</th>
+            <th>Angular / Web</th>
+            <th>React Native</th>
+            <th>Behavior</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Alert Dialog</strong></td>
+            <td>Custom HTML Modal or <code>MatDialog</code></td>
+            <td><code>Alert.alert('Title', 'Message', buttons)</code></td>
+            <td>Native OS dialog rendered on native layer. Doesn't freeze JS event loop.</td>
+          </tr>
+          <tr>
+            <td><strong>Tactile Feedback</strong></td>
+            <td><code>navigator.vibrate()</code> (poor support)</td>
+            <td><code>expo-haptics</code></td>
+            <td>Direct access to Apple Taptic Engine & Android Haptic Motors.</td>
+          </tr>
+          <tr>
+            <td><strong>Platform Logic</strong></td>
+            <td>User-Agent sniffing (fragile)</td>
+            <td><code>Platform.OS</code> / <code>Platform.select()</code></td>
+            <td>Compile-time & runtime first-class platform branching.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>2. Native Alert Dialogs (`Alert.alert`)</h2>
+      <p>Native alerts take button definitions with callback handlers (including destructive red styling on iOS):</p>
+
+      <pre><code>import { Alert } from 'react-native';
+
+export function confirmDeletePost(postId: string, onDelete: (id: string) => void) {
+  Alert.alert(
+    'Delete Post',
+    'Are you sure you want to permanently delete this BeReal post?',
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel', // iOS standard gray cancel button
+      },
+      {
+        text: 'Delete',
+        style: 'destructive', // iOS red text
+        onPress: () => onDelete(postId),
+      },
+    ],
+    { cancelable: true } // Android tap-outside-to-dismiss behavior
+  );
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>3. Adding Tactile Feedback with `expo-haptics`</h2>
+      <p>Tactile haptic feedback is one of the clearest differentiators between a web wrapper and a true native mobile app:</p>
+
+      <pre><code>import * as Haptics from 'expo-haptics';
+
+// 1. Button Press Impact
+export const triggerButtonHaptic = () => {
+  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+};
+
+// 2. Heavy Action (e.g. Taking photo / deleting item)
+export const triggerHeavyImpact = () => {
+  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+};
+
+// 3. Success / Failure Notifications
+export const triggerSuccessHaptic = () => {
+  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+};
+
+export const triggerErrorHaptic = () => {
+  Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+};
+
+// 4. Picker Wheel / Scroll Selection
+export const triggerSelectionHaptic = () => {
+  Haptics.selectionAsync();
+};</code></pre>
+    </section>
+
+    <section>
+      <h2>4. Platform-Specific Code Branching</h2>
+      <p>When iOS and Android require different layout values, shadows, or components, use <code>Platform.select</code> or file extension branching:</p>
+
+      <pre><code>import { Platform, StyleSheet, View } from 'react-native';
+
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
+    // Cross-platform Shadow Pattern:
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 4, // Android hardware elevation shadow
+      },
+      default: {
+        borderWidth: 1,
+        borderColor: '#ddd',
+      },
+    }),
+  },
+});
+
+// Platform-specific file extensions:
+// Button.ios.tsx   <- Loaded automatically on iOS
+// Button.android.tsx <- Loaded automatically on Android</code></pre>
+    </section>
+  </main>
+
+  <footer>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0011-native-camera-image-picker.html">&larr; Previous Lesson: Lesson 0011</a> &bull; <a href="./0013-advanced-debugging-performance-profiling.html">Next: Lesson 0013 &rarr;</a></p>
+  </footer>
+</body>
+</html>
