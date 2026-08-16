@@ -71,8 +71,10 @@
     <section>
       <h2>2. Side-by-Side Lifecycle Comparison: Subscribing to Data</h2>
 
-      <h3>Angular Component (`ngOnInit` & `ngOnDestroy`)</h3>
-      <pre><code>export class DataFeedComponent implements OnInit, OnDestroy {
+      <div class="code-comparison">
+        <div>
+          <h3>Angular Component (`ngOnInit` &amp; `ngOnDestroy`)</h3>
+          <pre><code>export class DataFeedComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
   data: DataItem[] = [];
 
@@ -88,13 +90,15 @@
     }
   }
 }</code></pre>
+        </div>
 
-      <h3>React Component (`useEffect` with Cleanup Return)</h3>
-      <pre><code>import { useState, useEffect } from 'react';
+        <div>
+          <h3>React Component (`useEffect` with Cleanup Return)</h3>
+          <pre><code>import { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 
 export function DataFeedScreen() {
-  const [data, setData] = useState<DataItem[]>([]);
+  const [data, setData] = useState&lt;DataItem[]&gt;([]);
 
   useEffect(() => {
     // 1. Setup Phase (Runs after mount)
@@ -102,11 +106,11 @@ export function DataFeedScreen() {
       setData(items);
     });
 
-    // 2. Cleanup Return Function (Runs before unmount or next effect)
+    // 2. Cleanup Return Function (Runs before unmount)
     return () => {
       subscription.unsubscribe();
     };
-  }, []); // Empty array [] means run setup once on mount & cleanup on unmount
+  }, []); // [] runs setup once on mount & cleanup on unmount
 
   return (
     &lt;View&gt;
@@ -114,15 +118,18 @@ export function DataFeedScreen() {
     &lt;/View&gt;
   );
 }</code></pre>
+        </div>
+      </div>
     </section>
 
     <section>
       <h2>3. The 3 Golden Rules of Hooks</h2>
       <div class="callout warning">
         <ol>
-          <li><strong>Only Call Hooks at the Top Level</strong>: Never call hooks inside loops, conditional statements (<code>if</code>), or nested functions. React relies on the call order of hooks to match state across re-renders.</li>
+          <li><strong>Only Call Hooks at the Top Level</strong>: Never call hooks inside loops, conditional statements (<code>if</code>), or nested functions. React relies on the execution order of hooks across re-renders to maintain state associations.</li>
           <li><strong>Only Call Hooks from React Functions</strong>: Call hooks only from React functional components or custom hooks. Do not call them from standard JS helper utilities.</li>
-          <li><strong>Strict Naming Convention</strong>: Custom hook names <strong>MUST</strong> start with <code>use</code> (e.g. <code>useAuth</code>, <code>useDebounce</code>, <code>useFetch</code>). This allows ESLint to enforce rules of hooks automatically.</li>
+          <li><strong>Strict Naming Convention</strong>: Custom hook names <strong>MUST</strong> start with <code>use</code> (e.g. <code>useAuth</code>, <code>useDebounce</code>, <code>useFetch</code>). This allows React linters to validate hook dependencies automatically.</li>
+          <li><strong>Cleanup vs. Angular `takeUntilDestroyed()`</strong>: Instead of managing separate `ngOnDestroy` lifecycle hooks or `takeUntilDestroyed()` RxJS operators, React unifies setup and teardown into a single function closure via <code>return () => cleanup()</code>.</li>
         </ol>
       </div>
     </section>
@@ -161,7 +168,7 @@ export function useDebounce<T>(value: T, delayMs: number = 300): T {
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0002-react-context-vs-angular-services.html">&larr; Previous Lesson</a> &bull; <a href="./0004-forms-and-inputs.html">Next: Lesson 0004 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0002-react-context-vs-angular-services.html">&larr; Previous Lesson</a> &bull; <a href="./0004-forms-and-inputs.html">Next: Lesson 0004 &rarr;</a></p>
   </footer>
 </body>
 </html>

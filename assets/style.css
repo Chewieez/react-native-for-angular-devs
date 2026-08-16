@@ -21,7 +21,7 @@ body {
   color: var(--text);
   font-family: var(--font-sans);
   line-height: 1.6;
-  max-width: 920px;
+  max-width: 1160px;
   margin: 0 auto;
   padding: 40px 24px;
   overflow-x: hidden;
@@ -154,12 +154,32 @@ pre code {
 /* --- Code Comparisons --- */
 .code-comparison {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 20px 0;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  margin: 24px 0;
+  width: 100%;
 }
 
-@media (max-width: 768px) {
+.code-comparison > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.code-comparison h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 1.15rem;
+}
+
+.code-comparison pre {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 860px) {
   .code-comparison {
     grid-template-columns: 1fr;
   }
@@ -177,7 +197,8 @@ a:hover {
 }
 
 /* --- Top Navigation --- */
-.top-nav {
+.top-nav,
+.lesson-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -187,25 +208,29 @@ a:hover {
   font-size: 0.95rem;
 }
 
-.top-nav a {
+.top-nav a,
+.lesson-nav a {
   color: var(--accent-blue);
   text-decoration: none;
   font-weight: 500;
 }
 
-.top-nav a:hover {
+.top-nav a:hover,
+.lesson-nav a:hover {
   text-decoration: underline;
   color: var(--accent);
 }
 
-.top-nav .nav-controls {
+.top-nav .nav-controls,
+.lesson-nav .nav-arrows {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
 .top-nav .nav-link.disabled,
-.top-nav .disabled {
+.top-nav .disabled,
+.lesson-nav .disabled {
   color: #999;
   cursor: default;
   text-decoration: none;

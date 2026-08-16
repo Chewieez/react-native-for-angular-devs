@@ -128,6 +128,7 @@ export function useProtectedRoute(user: User | null, isLoading: boolean) {
           <li><strong>No manual route declarations</strong>: Adding a new screen is as simple as creating <code>src/app/settings.tsx</code>.</li>
           <li><strong>Native Transitions</strong>: Using <code>&lt;Stack&gt;</code> gives you native iOS card slide transitions and Android fade/slide transitions out-of-the-box.</li>
           <li><strong>Deep Linking Built-In</strong>: Every file route in <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> is automatically deep-linkable across web and mobile schemes.</li>
+          <li><strong>Local vs. Global Search Params</strong>: Use <code>useLocalSearchParams()</code> to access query and route params scoped to the current screen (equivalent to Angular's <code>ActivatedRoute.snapshot.params</code>), and <code>useGlobalSearchParams()</code> when an outer layout needs to read params from a deeply nested route.</li>
         </ul>
       </div>
     </section>
@@ -142,7 +143,7 @@ export function useProtectedRoute(user: User | null, isLoading: boolean) {
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0006-flatlist-vs-scrollview.html">&larr; Previous Lesson</a> &bull; <a href="./0008-programmatic-navigation-modals.html">Next: Lesson 0008 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0006-flatlist-vs-scrollview.html">&larr; Previous Lesson</a> &bull; <a href="./0008-programmatic-navigation-modals.html">Next: Lesson 0008 &rarr;</a></p>
   </footer>
 </body>
 </html>

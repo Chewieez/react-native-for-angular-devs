@@ -151,6 +151,7 @@ export const useAuth = () => useContext(AuthContext);</code></pre>
           <li><strong>No Manual Interceptors</strong>: Supabase handles token rotation, authorization header attachment, and refresh triggers under the hood through the configured <code>storage</code> engine.</li>
           <li><strong>Always Guard Against Unhydrated State</strong>: Ensure root routing layouts (e.g. <code>src/app/_layout.tsx</code>) check <code>isLoading</code> before redirecting unauthenticated users to avoid flashing the login screen on app boot.</li>
           <li><strong>Async Storage is Promise-based</strong>: Whenever reading or writing directly with <code>AsyncStorage.getItem()</code> / <code>setItem()</code>, always use <code>await</code> or Promise chains.</li>
+          <li><strong>Environment Variables (<code>EXPO_PUBLIC_</code>)</strong>: Unlike Angular's <code>environment.ts</code> build replacement, Expo automatically embeds variables prefixed with <code>EXPO_PUBLIC_</code> (e.g. <code>process.env.EXPO_PUBLIC_SUPABASE_URL</code>) from your root <code>.env</code> file directly into the client bundle at build time.</li>
         </ul>
       </div>
     </section>
@@ -167,7 +168,7 @@ export const useAuth = () => useContext(AuthContext);</code></pre>
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0009-async-data-fetching.html">&larr; Previous Lesson: Lesson 0009</a> &bull; <a href="./0011-native-camera-image-picker.html">Next: Lesson 0011 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0009-async-data-fetching.html">&larr; Previous Lesson: Lesson 0009</a> &bull; <a href="./0011-native-camera-image-picker.html">Next: Lesson 0011 &rarr;</a></p>
   </footer>
 </body>
 </html>

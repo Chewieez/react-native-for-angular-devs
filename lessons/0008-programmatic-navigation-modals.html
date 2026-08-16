@@ -110,6 +110,9 @@ export default function RootLayout() {
       <div class="callout tip">
         <strong>Closing a Modal Programmatically:</strong>
         Inside <code>create-post-modal.tsx</code>, simply call <code>router.back()</code> after saving data to dismiss the modal and slide it back down natively!
+        <br/><br/>
+        <strong>Android Hardware Back Button &amp; Gestures:</strong>
+        Expo Router automatically intercepts Android's hardware back button and iOS edge swipe gestures to execute <code>router.back()</code>. For conditional back intercepts (e.g. unsaved form prompts), check <code>router.canGoBack()</code> or attach a listener with React Native's <code>BackHandler</code>.
       </div>
     </section>
 
@@ -122,7 +125,7 @@ export default function RootLayout() {
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0007-expo-router-architecture.html">&larr; Previous Lesson: Lesson 0007</a> &bull; <a href="./0009-async-data-fetching.html">Next: Lesson 0009 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0007-expo-router-architecture.html">&larr; Previous Lesson: Lesson 0007</a> &bull; <a href="./0009-async-data-fetching.html">Next: Lesson 0009 &rarr;</a></p>
   </footer>
 </body>
 </html>

@@ -71,8 +71,10 @@
     <section>
       <h2>2. Side-by-Side Code Comparison: User Profile Card</h2>
       
-      <h3>Angular Component (HTML + TypeScript)</h3>
-      <pre><code>// user-card.component.ts
+      <div class="code-comparison">
+        <div>
+          <h3>Angular Component (HTML + TypeScript)</h3>
+          <pre><code>// user-card.component.ts
 @Component({
   selector: 'app-user-card',
   template: `
@@ -91,9 +93,11 @@ export class UserCardComponent {
   @Input() avatarUrl: string = '';
   @Output() selected = new EventEmitter&lt;string&gt;();
 }</code></pre>
+        </div>
 
-      <h3>React Native & Expo Component (TSX + StyleSheet)</h3>
-      <pre><code>// UserCard.tsx
+        <div>
+          <h3>React Native &amp; Expo Component (TSX + StyleSheet)</h3>
+          <pre><code>// UserCard.tsx
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
 
 interface UserCardProps {
@@ -150,6 +154,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });</code></pre>
+        </div>
+      </div>
     </section>
 
     <section>
@@ -158,8 +164,9 @@ const styles = StyleSheet.create({
         <ol>
           <li><strong>No HTML Elements</strong>: Web tags like <code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;button&gt;</code>, and <code>&lt;p&gt;</code> do not exist on iOS or Android. Using them will crash your mobile app.</li>
           <li><strong>Text Wrapping Rule</strong>: Every visible text string <strong>MUST</strong> be enclosed within a <code>&lt;Text&gt;</code> component. Raw strings directly inside <code>&lt;View&gt;</code> throw a runtime exception.</li>
-          <li><strong>Flexbox Defaults to Column</strong>: Unlike web CSS where <code>flex-direction</code> defaults to <code>row</code>, React Native components stack vertically (<code>column</code>) by default.</li>
-          <li><strong>No CSS File Imports</strong>: Styling is written using JavaScript objects via <code>StyleSheet.create()</code>, compiled natively via Yoga layout engine.</li>
+          <li><strong>Unitless Measurement (Density Pixels)</strong>: Styles do not accept units like <code>px</code>, <code>rem</code>, or <code>vh</code>. Writing <code>width: 20</code> means 20 density-independent pixels (dp).</li>
+          <li><strong>StyleSheet vs SCSS</strong>: Style objects are plain JavaScript objects. There are no CSS cascading inheritance rules, element selectors, or pseudo-classes (like <code>:hover</code>).</li>
+          <li><strong>Modern Image Caching</strong>: While React Native provides <code>&lt;Image&gt;</code>, production Expo apps standardly use <a href="https://www.npmjs.com/package/expo-image" target="_blank" rel="noopener"><code>expo-image</code></a> for high-performance memory/disk caching, BlurHash placeholders, and WebP/AVIF support.</li>
         </ol>
       </div>
     </section>
@@ -195,7 +202,7 @@ const styles = StyleSheet.create({
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0002-react-context-vs-angular-services.html">Next: Lesson 0002 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0002-react-context-vs-angular-services.html">Next: Lesson 0002 &rarr;</a></p>
   </footer>
 </body>
 </html>

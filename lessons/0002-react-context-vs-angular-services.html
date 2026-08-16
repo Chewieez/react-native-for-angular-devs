@@ -66,8 +66,10 @@
     <section>
       <h2>2. Side-by-Side Code Comparison: Authentication System</h2>
 
-      <h3>Angular Service (`auth.service.ts`)</h3>
-      <pre><code>// auth.service.ts
+      <div class="code-comparison">
+        <div>
+          <h3>Angular Service (`auth.service.ts`)</h3>
+          <pre><code>// auth.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -87,9 +89,11 @@ export class AuthService {
     this.userSubject.next(null);
   }
 }</code></pre>
+        </div>
 
-      <h3>React Native Context + Custom Hook (`AuthContext.tsx`)</h3>
-      <pre><code>// src/context/AuthContext.tsx
+        <div>
+          <h3>React Native Context + Custom Hook (`AuthContext.tsx`)</h3>
+          <pre><code>// src/context/AuthContext.tsx
 import React, { createContext, useContext, useState } from 'react';
 
 export interface User { id: string; email: string; }
@@ -121,7 +125,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-// Custom Hook (Equivalent to injecting AuthService in Angular)
+// Custom Hook (Consumes Context)
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
@@ -129,11 +133,13 @@ export function useAuth() {
   }
   return context;
 }</code></pre>
+        </div>
+      </div>
     </section>
 
     <section>
       <h2>3. Root Application Wrapping in <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> (`src/app/_layout.tsx`)</h2>
-      <p>To make the Context available everywhere, wrap your root `<Stack>` inside `app/_layout.tsx`:</p>
+      <p>To make the Context available everywhere, wrap your root `&lt;Stack&gt;` inside `app/_layout.tsx`:</p>
 
       <pre><code>// src/app/_layout.tsx
 import { Stack } from 'expo-router';
@@ -152,14 +158,15 @@ export default function RootLayout() {
     </section>
 
     <section>
-      <h2>4. Re-rendering Mechanics: React Context vs. Angular Zone.js & Signals</h2>
+      <h2>4. Re-rendering Mechanics: React Context vs. Angular Zone.js &amp; Signals</h2>
       <p>Understanding how updates propagate is critical for senior front-end leads:</p>
       
       <div class="callout warning">
-        <strong>Context Re-render Rule</strong>:
-        When <code>setUser(user)</code> is called inside <code>AuthProvider</code>, React marks <code>AuthProvider</code> as dirty. React evaluates <code>AuthProvider</code> and passes the new <code>value={{ user, login, logout }}</code> reference down.
+        <strong>Context Re-render Rule vs. Angular Signals</strong>:
         <br/><br/>
-        Every component calling <code>useAuth()</code> will re-render automatically. To prevent unnecessary re-renders in large applications, separate rapidly changing state (e.g. active form input text) from global state (e.g. user authentication object).
+        In Angular, <strong>Signals</strong> update only the specific DOM nodes reading that signal value without re-rendering the whole component tree. In React, when <code>setUser(user)</code> is called inside <code>AuthProvider</code>, React marks <code>AuthProvider</code> as dirty and passes the new value reference down.
+        <br/><br/>
+        <strong>Every component calling <code>useAuth()</code> will re-render automatically.</strong> To prevent unnecessary sub-tree re-renders in large applications, separate rapidly changing state (e.g. text input strokes) from broad contextual state (e.g. user authentication and theme).
       </div>
     </section>
 
@@ -173,7 +180,7 @@ export default function RootLayout() {
   </main>
 
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Homepage</a> &bull; <a href="./0001-angular-to-react-native-mental-model.html">&larr; Previous Lesson</a> &bull; <a href="./0003-what-is-a-hook.html">Next: Lesson 0003 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0001-angular-to-react-native-mental-model.html">&larr; Previous Lesson</a> &bull; <a href="./0003-what-is-a-hook.html">Next: Lesson 0003 &rarr;</a></p>
   </footer>
 </body>
 </html>
