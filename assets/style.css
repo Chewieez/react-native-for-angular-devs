@@ -165,6 +165,54 @@ pre code {
   }
 }
 
+/* --- Links --- */
+a {
+  color: var(--accent-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--accent);
+}
+
+/* --- Top Navigation --- */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+}
+
+.top-nav a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.top-nav a:hover {
+  text-decoration: underline;
+  color: var(--accent);
+}
+
+.top-nav .nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.top-nav .nav-link.disabled,
+.top-nav .disabled {
+  color: #999;
+  cursor: default;
+  text-decoration: none;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 /* --- Footer --- */
 footer {
   margin-top: 48px;
