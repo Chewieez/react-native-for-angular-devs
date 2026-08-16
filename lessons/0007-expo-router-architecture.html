@@ -27,41 +27,41 @@
       <table>
         <thead>
           <tr>
-            <th>Angular Concept</th>
-            <th><a href="https://www.npmjs.com/package/expo-router">Expo Router</a> Equivalent</th>
-            <th>Key Architecture Nuance</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Expo Router)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>Routes</code> Array Config</td>
-            <td>File System Structure (<code>src/app/</code>)</td>
-            <td>File paths define routes (e.g. <code>app/login.tsx</code> &rarr; <code>/login</code>).</td>
+            <td><strong>Route Definition</strong></td>
+            <td><code>Routes</code> Array Config (<code>app.routes.ts</code>)</td>
+            <td>File System Structure (<code>src/app/</code> conventions)</td>
           </tr>
           <tr>
+            <td><strong>Nested Screen Outlet</strong></td>
             <td><code>&lt;router-outlet&gt;</code></td>
             <td><code>&lt;Stack /&gt;</code>, <code>&lt;Tabs /&gt;</code>, or <code>&lt;Slot /&gt;</code></td>
-            <td>Layout components define where and how nested child screens are rendered.</td>
           </tr>
           <tr>
-            <td>Parent Layout Component</td>
-            <td><code>_layout.tsx</code></td>
-            <td>Special layout file that wraps all sibling route components and child directories.</td>
+            <td><strong>Root / Parent Layout</strong></td>
+            <td>Parent Layout Component with template outlet</td>
+            <td><code>_layout.tsx</code> wrapper component</td>
           </tr>
           <tr>
-            <td>Group / Feature Module</td>
-            <td>Group Segment Folders <code>(group)</code></td>
-            <td>Folders wrapped in parentheses (e.g. <code>(auth)</code>, <code>(tabs)</code>) group routes without adding extra segments to the URL path.</td>
+            <td><strong>Route Grouping</strong></td>
+            <td>Feature Modules / Nested child route arrays</td>
+            <td>Group Segment Folders <code>(group)</code> (e.g. <code>(auth)</code>, <code>(tabs)</code>)</td>
           </tr>
           <tr>
-            <td>Route Parameter <code>:id</code></td>
-            <td>Dynamic File <code>[id].tsx</code></td>
-            <td>Bracketed filenames capture URL parameters, accessible via <code>useLocalSearchParams()</code>.</td>
+            <td><strong>Dynamic Route Params</strong></td>
+            <td>Route Parameter <code>path: 'user/:id'</code></td>
+            <td>Dynamic Bracket File <code>[id].tsx</code> (via <code>useLocalSearchParams()</code>)</td>
           </tr>
           <tr>
-            <td><code>CanActivate</code> Route Guard</td>
-            <td><code>useEffect</code> + <code>router.replace()</code></td>
-            <td>Declarative redirection executed inside Root Layout or custom Auth Hook.</td>
+            <td><strong>Route Guarding</strong></td>
+            <td><code>CanActivate</code> functional guard</td>
+            <td><code>useEffect</code> + <code>router.replace()</code> in Root Layout</td>
           </tr>
         </tbody>
       </table>
@@ -134,9 +134,9 @@ export function useProtectedRoute(user: User | null, isLoading: boolean) {
 
     <section>
       <h2>5. Official Documentation & Package References</h2>
-      <ul>
-        <li><a href="https://docs.expo.dev/router/introduction/">Expo Router Documentation</a>: Comprehensive guide to file-based routing and layouts.</li>
-        <li><a href="https://www.npmjs.com/package/expo-router">npm: expo-router</a>: File-based routing framework for React Native and Expo applications.</li>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/expo-router" target="_blank" rel="noopener"><strong>expo-router (npm)</strong></a> &bull; <a href="https://docs.expo.dev/router/introduction/" target="_blank" rel="noopener">Expo Router Documentation</a></li>
+        <li><a href="https://www.npmjs.com/package/@react-navigation/native" target="_blank" rel="noopener"><strong>@react-navigation/native (npm)</strong></a> &bull; <a href="https://reactnavigation.org" target="_blank" rel="noopener">React Navigation Documentation</a></li>
       </ul>
     </section>
   </main>

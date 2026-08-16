@@ -23,46 +23,46 @@
   <main>
     <section>
       <h2>1. The Core Architectural Paradigm Shift</h2>
-      <p>As a senior Angular engineer or team lead, you already understand component trees, state management, and separation of concerns. The shift to React Native and Expo requires mapping your existing knowledge to React's functional paradigm and mobile native layout engine.</p>
+      <p>As a senior Angular engineer or team lead, you already understand component trees, state management, and separation of concerns. The shift to <a href="https://www.npmjs.com/package/react-native" target="_blank" rel="noopener"><strong>React Native</strong></a> and <a href="https://www.npmjs.com/package/expo" target="_blank" rel="noopener"><strong>Expo</strong></a> requires mapping your existing knowledge to <a href="https://www.npmjs.com/package/react" target="_blank" rel="noopener"><strong>React</strong></a>'s functional paradigm and mobile native layout engine.</p>
 
       <table>
         <thead>
           <tr>
-            <th>Angular Architecture</th>
-            <th>React Native & Expo Equivalent</th>
-            <th>Deep Architectural Paradigm Difference</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>HTML Template + SCSS</strong></td>
-            <td><strong>Functional JSX + <code>StyleSheet.create</code></strong></td>
-            <td>No browser DOM (<code>div</code>, <code>span</code>, <code>p</code>). Components return native view nodes (<code>View</code>, <code>Text</code>, <code>Image</code>).</td>
+            <td><strong>Template &amp; UI Primitives</strong></td>
+            <td>HTML Template + SCSS (<code>div</code>, <code>span</code>, <code>p</code>)</td>
+            <td>Functional JSX + <code>StyleSheet.create</code> (<code>View</code>, <code>Text</code>, <code>Image</code>)</td>
           </tr>
           <tr>
-            <td><strong><code>@Input()</code> Decorator</strong></td>
-            <td><strong>Component Props (<code>props</code>)</strong></td>
-            <td>Props are read-only, immutable JavaScript objects passed down top-to-bottom.</td>
+            <td><strong>Input Properties</strong></td>
+            <td><code>@Input()</code> Decorator / <code>input()</code> signal</td>
+            <td>Component Props (<code>props</code>, read-only immutable objects)</td>
           </tr>
           <tr>
-            <td><strong><code>@Output() EventEmitter</code></strong></td>
-            <td><strong>Callback Function Props</strong></td>
-            <td>Child components trigger parent actions by calling callback functions passed as props (e.g. <code>onPress={handlePress}</code>).</td>
+            <td><strong>Event Emitting</strong></td>
+            <td><code>@Output() EventEmitter</code></td>
+            <td>Callback Function Props (e.g. <code>onPress={handlePress}</code>)</td>
           </tr>
           <tr>
-            <td><strong>Service (<code>providedIn: 'root'</code>)</strong></td>
-            <td><strong>React Context + Custom Hooks</strong></td>
-            <td>Global dependency injection without a framework container; data flows via <code>createContext()</code> and <code>useContext()</code>.</td>
+            <td><strong>Dependency Injection / Services</strong></td>
+            <td><code>@Injectable({ providedIn: 'root' })</code> Service</td>
+            <td>React Context (<code>createContext</code> / <code>useContext</code>) + Custom Hooks</td>
           </tr>
           <tr>
-            <td><strong><code>BehaviorSubject</code> / Signals</strong></td>
-            <td><strong><code>useState()</code> Hook</strong></td>
-            <td>Setter calls (<code>setState(val)</code>) queue a batched re-render — they are <em>requests</em>, not immediate synchronous updates.</td>
+            <td><strong>Local State</strong></td>
+            <td><code>BehaviorSubject</code> / <code>signal()</code></td>
+            <td><code>useState()</code> Hook (batched re-render requests)</td>
           </tr>
           <tr>
-            <td><strong>Lifecycle (<code>ngOnInit</code>, <code>ngOnDestroy</code>)</strong></td>
-            <td><strong><code>useEffect()</code> Hook</strong></td>
-            <td>Unified hook managing setup, dependency tracking, and cleanup returns.</td>
+            <td><strong>Lifecycle Management</strong></td>
+            <td><code>ngOnInit</code>, <code>ngOnDestroy</code></td>
+            <td><code>useEffect()</code> Hook (unified setup, dependencies &amp; cleanup)</td>
           </tr>
         </tbody>
       </table>
@@ -185,11 +185,11 @@ const styles = StyleSheet.create({
     </section>
 
     <section>
-      <h2>5. Official Documentation References (Context7 Verified)</h2>
-      <ul>
-        <li><a href="https://react.dev/learn/thinking-in-react">React Official Docs — Thinking in React</a>: Mental model for state ownership and component trees.</li>
-        <li><a href="https://reactnative.dev/docs/components-and-apis">React Native Core Components & APIs</a>: Official reference for <code>View</code>, <code>Text</code>, <code>Image</code>, <code>Pressable</code>, and <code>StyleSheet</code>.</li>
-        <li><a href="https://docs.expo.dev/workflow/debugging/">Expo Debugging Guide</a>: Official debugging practices for Metro bundler, Chrome DevTools, and Dev Menu.</li>
+      <h2>5. Official Documentation & Package References</h2>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/react" target="_blank" rel="noopener"><strong>react (npm)</strong></a> &bull; <a href="https://react.dev/learn/thinking-in-react" target="_blank" rel="noopener">Thinking in React</a></li>
+        <li><a href="https://www.npmjs.com/package/react-native" target="_blank" rel="noopener"><strong>react-native (npm)</strong></a> &bull; <a href="https://reactnative.dev/docs/components-and-apis" target="_blank" rel="noopener">Core Components &amp; APIs</a></li>
+        <li><a href="https://www.npmjs.com/package/expo" target="_blank" rel="noopener"><strong>expo (npm)</strong></a> &bull; <a href="https://docs.expo.dev/workflow/debugging/" target="_blank" rel="noopener">Expo Debugging Guide</a></li>
       </ul>
     </section>
   </main>

@@ -29,29 +29,25 @@
         <thead>
           <tr>
             <th>Concept</th>
-            <th>Angular / Web</th>
-            <th>React Native</th>
-            <th>Behavior</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Alert Dialog</strong></td>
             <td>Custom HTML Modal or <code>MatDialog</code></td>
-            <td><code>Alert.alert('Title', 'Message', buttons)</code></td>
-            <td>Native OS dialog rendered on native layer. Doesn't freeze JS event loop.</td>
+            <td><code>Alert.alert('Title', 'Message', buttons)</code> (Native OS dialog)</td>
           </tr>
           <tr>
             <td><strong>Tactile Feedback</strong></td>
-            <td><code>navigator.vibrate()</code> (poor support)</td>
-            <td><a href="https://www.npmjs.com/package/expo-haptics"><code>expo-haptics</code></a></td>
-            <td>Direct access to Apple Taptic Engine & Android Haptic Motors.</td>
+            <td><code>navigator.vibrate()</code> (poor web support)</td>
+            <td><a href="https://www.npmjs.com/package/expo-haptics"><code>expo-haptics</code></a> (Taptic Engine / Haptic Motors)</td>
           </tr>
           <tr>
             <td><strong>Platform Logic</strong></td>
             <td>User-Agent sniffing (fragile)</td>
-            <td><code>Platform.OS</code> / <code>Platform.select()</code></td>
-            <td>Compile-time & runtime first-class platform branching.</td>
+            <td><code>Platform.OS</code> / <code>Platform.select()</code> (First-class branching)</td>
           </tr>
         </tbody>
       </table>
@@ -151,10 +147,10 @@ const styles = StyleSheet.create({
 
     <section>
       <h2>5. Official Documentation & Package References</h2>
-      <ul>
-        <li><a href="https://reactnative.dev/docs/alert">React Native Official Docs — Alert</a>: Native alert dialog reference.</li>
-        <li><a href="https://docs.expo.dev/versions/latest/sdk/haptics/">Expo Haptics Guide</a>: Using tactile vibration feedback in Expo.</li>
-        <li><a href="https://www.npmjs.com/package/expo-haptics">npm: expo-haptics</a>: Taptic engine and haptic feedback module for Expo.</li>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/expo-haptics" target="_blank" rel="noopener"><strong>expo-haptics (npm)</strong></a> &bull; <a href="https://docs.expo.dev/versions/latest/sdk/haptics/" target="_blank" rel="noopener">Expo Haptics Guide</a></li>
+        <li><a href="https://www.npmjs.com/package/expo-status-bar" target="_blank" rel="noopener"><strong>expo-status-bar (npm)</strong></a> &bull; <a href="https://docs.expo.dev/versions/latest/sdk/status-bar/" target="_blank" rel="noopener">Expo StatusBar Guide</a></li>
+        <li><a href="https://www.npmjs.com/package/react-native" target="_blank" rel="noopener"><strong>react-native (npm)</strong></a> &bull; <a href="https://reactnative.dev/docs/alert" target="_blank" rel="noopener">Alert API Reference</a></li>
       </ul>
     </section>
   </main>

@@ -28,20 +28,25 @@
       <table>
         <thead>
           <tr>
-            <th>List Component</th>
-            <th>Rendering Mechanism Under the Hood</th>
-            <th>When to Use</th>
+            <th>Concept</th>
+            <th>ScrollView (Static List)</th>
+            <th>FlatList (Virtual List)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>ScrollView</code></td>
-            <td>Renders <strong>ALL children immediately</strong> upon mount. No native view recycling.</td>
-            <td>Small, fixed layouts (&lt; 20 items), such as settings forms or static detail screens.</td>
+            <td><strong>Rendering Engine</strong></td>
+            <td>Renders <strong>all children immediately</strong> upon mount. No native view recycling.</td>
+            <td><strong>Virtualizes items</strong>. Recycles and unmounts off-screen native views.</td>
           </tr>
           <tr>
-            <td><code>FlatList</code></td>
-            <td><strong>Virtualizes list items</strong>. Renders only items currently visible on screen plus a small buffer window. Recycles and unmounts off-screen native views.</td>
+            <td><strong>Memory Footprint</strong></td>
+            <td>O(N) unbounded linear memory growth. Can crash with large lists.</td>
+            <td>O(1) bounded memory window with constant frame rate.</td>
+          </tr>
+          <tr>
+            <td><strong>Ideal Use Case</strong></td>
+            <td>Small, fixed layouts (&lt; 20 items), settings forms or detail screens.</td>
             <td>Dynamic feeds, search results, chat messages, infinite scrolling lists.</td>
           </tr>
         </tbody>
@@ -53,21 +58,26 @@
       <table>
         <thead>
           <tr>
-            <th>Angular List Pattern</th>
-            <th>React Native Equivalent</th>
-            <th>Virtualization Detail</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
+            <td><strong>List Iteration &amp; Tracking</strong></td>
             <td><code>*ngFor="let item of items; trackBy: trackById"</code></td>
             <td><code>&lt;FlatList data={items} keyExtractor={item =&gt; item.id} /&gt;</code></td>
-            <td><code>keyExtractor</code> acts like Angular's <code>trackBy</code> function to uniquely identify list items across updates.</td>
           </tr>
           <tr>
-            <td><code>cdk-virtual-scroll-viewport</code></td>
-            <td><code>&lt;FlatList getItemLayout={...} /&gt;</code></td>
-            <td><code>getItemLayout</code> bypasses dynamic layout measurement calculations if item heights are fixed, boosting scroll performance.</td>
+            <td><strong>Virtual Scroll Viewport</strong></td>
+            <td><code>cdk-virtual-scroll-viewport</code> (Angular CDK)</td>
+            <td><code>&lt;FlatList windowSize={5} maxToRenderPerBatch={10} /&gt;</code></td>
+          </tr>
+          <tr>
+            <td><strong>Fixed Height Optimization</strong></td>
+            <td><code>[itemSize]="50"</code></td>
+            <td><code>getItemLayout={(data, index) =&gt; ({ length: 50, offset: 50 * index, index })}</code></td>
           </tr>
         </tbody>
       </table>
@@ -195,15 +205,16 @@ const styles = StyleSheet.create({
           <li><strong>getItemLayout</strong>: If your list items have fixed height (e.g. 60dp), define <code>getItemLayout={(data, index) => ({ length: 60, offset: 60 * index, index })}</code>. This allows FlatList to bypass dynamic layout measurement entirely!</li>
           <li><strong>Pure Component Items</strong>: Wrap item components in <code>React.memo()</code> or use stable <code>renderItem</code> callbacks to prevent re-rendering visible items during pagination.</li>
           <li><strong>initialNumToRender</strong>: Set this to match the exact number of items visible on screen initially (e.g. 8–10 items) for fast initial mount times.</li>
+          <li><strong>High-Performance Alternative</strong>: For heavy, complex lists, consider using <a href="https://www.npmjs.com/package/@shopify/flash-list" target="_blank" rel="noopener"><code>@shopify/flash-list</code></a>, a drop-in replacement that recycles native cells for 60–120 FPS performance.</li>
         </ol>
       </div>
     </section>
 
     <section>
-      <h2>5. Official Documentation References (Context7 Verified)</h2>
-      <ul>
-        <li><a href="https://reactnative.dev/docs/flatlist">React Native Official Docs — FlatList</a>: Complete API reference for FlatList.</li>
-        <li><a href="https://reactnative.dev/docs/optimizing-flatlist-configuration">React Native Official Docs — Optimizing FlatList Configuration</a>: Performance optimization guide for large lists.</li>
+      <h2>5. Official Documentation & Package References</h2>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/react-native" target="_blank" rel="noopener"><strong>react-native (npm)</strong></a> &bull; <a href="https://reactnative.dev/docs/flatlist" target="_blank" rel="noopener">FlatList API Reference</a></li>
+        <li><a href="https://www.npmjs.com/package/@shopify/flash-list" target="_blank" rel="noopener"><strong>@shopify/flash-list (npm)</strong></a> &bull; <a href="https://shopify.github.io/flash-list/" target="_blank" rel="noopener">Shopify FlashList High-Performance Virtualization</a></li>
       </ul>
     </section>
   </main>

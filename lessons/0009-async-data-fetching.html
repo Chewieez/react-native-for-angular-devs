@@ -28,31 +28,31 @@
       <table>
         <thead>
           <tr>
-            <th>Angular Pattern (RxJS)</th>
-            <th>React Native Pattern (Hooks)</th>
-            <th>Conceptual Difference</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>this.http.get&lt;Post[]&gt;(url)</code></td>
-            <td><code>const res = await fetch(url); await res.json();</code></td>
-            <td>RxJS Observables streams vs. Promise-based <code>async/await</code>.</td>
+            <td><strong>HTTP GET Request</strong></td>
+            <td><code>this.http.get&lt;Post[]&gt;(url)</code> (RxJS Observable)</td>
+            <td><code>const res = await fetch(url); await res.json();</code> (Promise async/await)</td>
           </tr>
           <tr>
+            <td><strong>Loading State in UI</strong></td>
             <td><code>&lt;div *ngIf="loading$ | async"&gt;</code></td>
-            <td><code>{loading && &lt;ActivityIndicator /&gt;}</code></td>
-            <td>Template async pipe vs. JavaScript conditional JSX short-circuiting.</td>
+            <td><code>{loading &amp;&amp; &lt;ActivityIndicator /&gt;}</code> (Native spinner)</td>
           </tr>
           <tr>
-            <td><code>catchError(err => of(fallback))</code></td>
+            <td><strong>Error Handling</strong></td>
+            <td><code>catchError(err =&gt; of(fallback))</code></td>
             <td><code>try { ... } catch (err) { setError(err.message); }</code></td>
-            <td>RxJS operator error pipe vs. standard JavaScript <code>try/catch</code> blocks.</td>
           </tr>
           <tr>
+            <td><strong>Response Caching</strong></td>
             <td><code>shareReplay(1)</code> / Signals</td>
-            <td>Custom Hook (e.g. <code>useFeedData()</code>) or TanStack Query</td>
-            <td>Manual RxJS caching vs. React state encapsulation or query cache hooks.</td>
+            <td>TanStack Query (<code>useQuery</code>) or Custom Hook cache</td>
           </tr>
         </tbody>
       </table>
@@ -193,10 +193,10 @@ const styles = StyleSheet.create({
 
     <section>
       <h2>6. Official Documentation & Package References</h2>
-      <ul>
-        <li><a href="https://reactnative.dev/docs/activityindicator">React Native Official Docs — ActivityIndicator</a>: Native progress spinner reference.</li>
-        <li><a href="https://tanstack.com/query/latest/docs/framework/react/overview">TanStack Query Documentation</a>: Powerful asynchronous state management for React Native.</li>
-        <li><a href="https://www.npmjs.com/package/@tanstack/react-query">npm: @tanstack/react-query</a>: Asynchronous state management and caching library.</li>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/@tanstack/react-query" target="_blank" rel="noopener"><strong>@tanstack/react-query (npm)</strong></a> &bull; <a href="https://tanstack.com/query/latest/docs/framework/react/overview" target="_blank" rel="noopener">TanStack Query Documentation</a></li>
+        <li><a href="https://www.npmjs.com/package/axios" target="_blank" rel="noopener"><strong>axios (npm)</strong></a> &bull; <a href="https://axios-http.com" target="_blank" rel="noopener">Axios HTTP Client Documentation</a></li>
+        <li><a href="https://www.npmjs.com/package/react-native" target="_blank" rel="noopener"><strong>react-native (npm)</strong></a> &bull; <a href="https://reactnative.dev/docs/activityindicator" target="_blank" rel="noopener">ActivityIndicator Reference</a></li>
       </ul>
     </section>
   </main>

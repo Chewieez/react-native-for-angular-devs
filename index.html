@@ -142,38 +142,46 @@
       <table class="curriculum-table">
         <thead>
           <tr>
-            <th>Angular Concept</th>
-            <th>React Native / Expo Equivalent</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><strong>HTML Template (<code>div</code>, <code>span</code>)</strong></td>
-            <td><strong>JSX (<code>&lt;View&gt;</code>, <code>&lt;Text&gt;</code>)</strong></td>
+            <td><strong>UI / Templates</strong></td>
+            <td>HTML Template (<code>div</code>, <code>span</code>, <code>p</code>)</td>
+            <td>Functional JSX (<code>&lt;View&gt;</code>, <code>&lt;Text&gt;</code>, <code>&lt;Image&gt;</code>)</td>
           </tr>
           <tr>
-            <td><strong><code>@Input()</code></strong></td>
-            <td><strong><code>props</code></strong></td>
+            <td><strong>Component Inputs</strong></td>
+            <td><code>@Input()</code> / <code>input()</code> signal</td>
+            <td>Component Props (<code>props</code>)</td>
           </tr>
           <tr>
-            <td><strong><code>@Output() EventEmitter</code></strong></td>
-            <td><strong>Callback Props (<code>onPress={handlePress}</code>)</strong></td>
+            <td><strong>Event Emitting</strong></td>
+            <td><code>@Output() EventEmitter</code></td>
+            <td>Callback Props (<code>onPress={handlePress}</code>)</td>
           </tr>
           <tr>
-            <td><strong><code>@Injectable()</code> Service</strong></td>
-            <td><strong>React Context (<code>createContext</code>) + Custom Hook</strong></td>
+            <td><strong>Services &amp; DI</strong></td>
+            <td><code>@Injectable()</code> Service</td>
+            <td>React Context (<code>createContext</code>) + Custom Hook</td>
           </tr>
           <tr>
-            <td><strong><code>BehaviorSubject</code> / Signals</strong></td>
-            <td><strong><code>useState()</code> Hook</strong></td>
+            <td><strong>Local State</strong></td>
+            <td><code>BehaviorSubject</code> / Signals</td>
+            <td><code>useState()</code> Hook</td>
           </tr>
           <tr>
-            <td><strong><code>[(ngModel)]</code> / Reactive Forms</strong></td>
-            <td><strong>Controlled Components (<code>value</code> + <code>onChangeText</code>)</strong></td>
+            <td><strong>Forms &amp; Inputs</strong></td>
+            <td><code>[(ngModel)]</code> / Reactive Forms</td>
+            <td>Controlled Components (<code>value</code> + <code>onChangeText</code>)</td>
           </tr>
           <tr>
-            <td><strong><code>CanActivate</code> Guard</strong></td>
-            <td><strong><code>useEffect</code> + <code>router.replace()</code> in Expo Router</strong></td>
+            <td><strong>Route Guard</strong></td>
+            <td><code>CanActivate</code> Guard</td>
+            <td><code>useEffect</code> + <code>router.replace()</code> in Expo Router</td>
           </tr>
         </tbody>
       </table>

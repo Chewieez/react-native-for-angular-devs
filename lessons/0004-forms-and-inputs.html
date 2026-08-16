@@ -28,31 +28,31 @@
       <table>
         <thead>
           <tr>
-            <th>Angular Pattern</th>
-            <th>React Native Controlled Component</th>
-            <th>Key Technical Difference</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
+            <td><strong>Two-Way Data Binding</strong></td>
             <td><code>[(ngModel)]="email"</code></td>
-            <td><code>value={email} onChangeText={setEmail}</code></td>
-            <td>React splits binding into an explicit value prop and an <code>onChangeText</code> callback.</td>
+            <td><code>value={email} onChangeText={setEmail}</code> (Controlled Component)</td>
           </tr>
           <tr>
-            <td><code>formControlName="email"</code></td>
-            <td>Local <code>useState</code> hooks</td>
-            <td>No built-in HTML form module. Component state directly controls the input string.</td>
+            <td><strong>Form Model / State</strong></td>
+            <td><code>formControlName="email"</code> / <code>FormGroup</code></td>
+            <td>Local <code>useState</code> hooks / <a href="https://www.npmjs.com/package/react-hook-form" target="_blank" rel="noopener"><code>react-hook-form</code></a> + <a href="https://www.npmjs.com/package/zod" target="_blank" rel="noopener"><code>zod</code></a></td>
           </tr>
           <tr>
-            <td><code>(ngSubmit)="onLogin()"</code></td>
-            <td><code>&lt;Pressable onPress={handleLogin}&gt;</code></td>
-            <td>No HTML <code>&lt;form&gt;</code> element on native mobile. Buttons handle tap events directly via <code>onPress</code>.</td>
+            <td><strong>Form Submission</strong></td>
+            <td><code>(ngSubmit)="onLogin()"</code> on <code>&lt;form&gt;</code></td>
+            <td><code>&lt;Pressable onPress={handleLogin}&gt;</code> (No native <code>&lt;form&gt;</code> element)</td>
           </tr>
           <tr>
-            <td><code>(input)="onInput($event)"</code></td>
-            <td><code>onChangeText={(text) => ...}</code></td>
-            <td><code>onChangeText</code> passes the raw string parameter directly (no <code>$event.target.value</code> wrapping!).</td>
+            <td><strong>Input Event Payload</strong></td>
+            <td><code>(input)="onInput($event)"</code> (<code>$event.target.value</code>)</td>
+            <td><code>onChangeText={(text) =&gt; ...}</code> (Direct raw string payload)</td>
           </tr>
         </tbody>
       </table>
@@ -214,10 +214,11 @@ const styles = StyleSheet.create({
     </section>
 
     <section>
-      <h2>5. Official Documentation References (Context7 Verified)</h2>
-      <ul>
-        <li><a href="https://reactnative.dev/docs/textinput">React Native Official Docs — TextInput</a>: Complete API reference for text inputs.</li>
-        <li><a href="https://reactnative.dev/docs/keyboardavoidingview">React Native Official Docs — KeyboardAvoidingView</a>: Guide for adjusting view bounds when soft keyboards appear.</li>
+      <h2>5. Official Documentation & Package References</h2>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/react-native" target="_blank" rel="noopener"><strong>react-native (npm)</strong></a> &bull; <a href="https://reactnative.dev/docs/textinput" target="_blank" rel="noopener">TextInput API Reference</a></li>
+        <li><a href="https://www.npmjs.com/package/react-hook-form" target="_blank" rel="noopener"><strong>react-hook-form (npm)</strong></a> &bull; <a href="https://react-hook-form.com" target="_blank" rel="noopener">Official Documentation</a></li>
+        <li><a href="https://www.npmjs.com/package/zod" target="_blank" rel="noopener"><strong>zod (npm)</strong></a> &bull; <a href="https://zod.dev" target="_blank" rel="noopener">Official Schema Validation Documentation</a></li>
       </ul>
     </section>
   </main>

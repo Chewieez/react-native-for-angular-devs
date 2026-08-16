@@ -23,46 +23,46 @@
   <main>
     <section>
       <h2>1. What Exactly is a React Hook?</h2>
-      <p>A <strong>Hook</strong> is a plain JavaScript function (always prefixed with <code>use</code>, such as <code>useState</code> or <code>useEffect</code>) that lets functional components attach to React engine capabilities like state memory, lifecycle synchronization, context subscription, and memoization.</p>
+      <p>A <strong>Hook</strong> is a plain JavaScript function (always prefixed with <code>use</code>, such as <code>useState</code> or <code>useEffect</code>) that lets functional components attach to <a href="https://www.npmjs.com/package/react" target="_blank" rel="noopener"><strong>React</strong></a> engine capabilities like state memory, lifecycle synchronization, context subscription, and memoization.</p>
 
       <table>
         <thead>
           <tr>
-            <th>Angular Concept (Class Component)</th>
-            <th>React Built-in Hook Equivalent</th>
-            <th>Functionality & Use Case</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Class property (<code>this.count = 0</code>)</td>
-            <td><code>const [count, setCount] = useState(0)</code></td>
-            <td>Local component state. Setter queues a batched re-render (not immediate).</td>
+            <td><strong>Local Component State</strong></td>
+            <td>Class property (<code>this.count = 0</code>) / Signals</td>
+            <td><code>const [count, setCount] = useState(0)</code> (Batched updates)</td>
           </tr>
           <tr>
+            <td><strong>Lifecycle &amp; Side Effects</strong></td>
             <td><code>ngOnInit</code> + <code>ngOnDestroy</code></td>
-            <td><code>useEffect(() => { ... return () => cleanup; }, [])</code></td>
-            <td>External side-effects (timers, subscriptions, API calls).</td>
+            <td><code>useEffect(() =&gt; { ... return () =&gt; cleanup; }, [])</code></td>
           </tr>
           <tr>
-            <td><code>constructor(private svc: Svc)</code></td>
-            <td><code>useContext(MyContext)</code></td>
-            <td>Reads Context values provided by parent component tree.</td>
+            <td><strong>Service / Context Access</strong></td>
+            <td><code>constructor(private svc: Svc)</code> / <code>inject()</code></td>
+            <td><code>useContext(MyContext)</code> (Reads nearest Provider value)</td>
           </tr>
           <tr>
-            <td>Instance property / DOM ElementRef</td>
-            <td><code>useRef(initialValue)</code></td>
-            <td>Holds persistent mutable value across renders without triggering a re-render.</td>
+            <td><strong>Mutable Instance Ref</strong></td>
+            <td><code>@ViewChild('myInput')</code> / <code>ElementRef</code></td>
+            <td><code>useRef(initialValue)</code> (Persistent mutable ref without re-renders)</td>
           </tr>
           <tr>
-            <td>Angular Pipe / Getter memoization</td>
-            <td><code>useMemo(() => compute(), [deps])</code></td>
-            <td>Caches expensive calculations across renders.</td>
+            <td><strong>Memoized Computation</strong></td>
+            <td><code>computed(() =&gt; expensive())</code> / Pure Pipe</td>
+            <td><code>useMemo(() =&gt; compute(), [deps])</code> (Caches expensive values)</td>
           </tr>
           <tr>
-            <td>Cached event listener method</td>
-            <td><code>useCallback(() => {}, [deps])</code></td>
-            <td>Caches function instance reference to optimize child component re-renders.</td>
+            <td><strong>Memoized Function Callback</strong></td>
+            <td>Class method reference</td>
+            <td><code>useCallback(() =&gt; {}, [deps])</code> (Preserves function identity)</td>
           </tr>
         </tbody>
       </table>
@@ -151,11 +151,11 @@ export function useDebounce<T>(value: T, delayMs: number = 300): T {
     </section>
 
     <section>
-      <h2>5. Official Documentation References (Context7 Verified)</h2>
-      <ul>
-        <li><a href="https://react.dev/reference/react/hooks">React Official Docs — Built-in React Hooks</a>: Complete catalog of all 16 built-in React hooks.</li>
-        <li><a href="https://react.dev/learn/reusing-logic-with-custom-hooks">React Official Docs — Reusing Logic with Custom Hooks</a>: Best practices for abstracting custom hooks.</li>
-        <li><a href="https://react.dev/reference/rules/rules-of-hooks">React Official Docs — Rules of Hooks</a>: Official specifications for hook call order and ESLint enforcement.</li>
+      <h2>5. Official Documentation & Package References</h2>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/react" target="_blank" rel="noopener"><strong>react (npm)</strong></a> &bull; <a href="https://react.dev/reference/react/hooks" target="_blank" rel="noopener">Built-in React Hooks Catalog</a></li>
+        <li><a href="https://www.npmjs.com/package/@types/react" target="_blank" rel="noopener"><strong>@types/react (npm)</strong></a> &bull; <a href="https://react.dev/learn/reusing-logic-with-custom-hooks" target="_blank" rel="noopener">Reusing Logic with Custom Hooks</a></li>
+        <li><a href="https://react.dev/reference/rules/rules-of-hooks" target="_blank" rel="noopener"><strong>Rules of Hooks Specification</strong></a> &bull; Official specifications for call order and ESLint enforcement</li>
       </ul>
     </section>
   </main>

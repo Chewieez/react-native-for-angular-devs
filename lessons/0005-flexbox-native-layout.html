@@ -35,42 +35,36 @@
       <table>
         <thead>
           <tr>
-            <th>Property</th>
-            <th>Web CSS Default</th>
-            <th>React Native Yoga Default</th>
-            <th>Native Execution Detail</th>
+            <th>Concept</th>
+            <th>Angular (Web CSS)</th>
+            <th>React Native (Yoga Engine)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>flexDirection</code></td>
-            <td><code>row</code></td>
-            <td><code>column</code></td>
-            <td>Children stack vertically by default. Use <code>'row'</code> to align side-by-side.</td>
+            <td><strong>Flex Direction</strong></td>
+            <td><code>row</code> (Horizontal flow default)</td>
+            <td><code>column</code> (Vertical stack default)</td>
           </tr>
           <tr>
-            <td><code>alignItems</code></td>
-            <td><code>stretch</code></td>
-            <td><code>stretch</code></td>
-            <td>Cross-axis alignment. Set to <code>'center'</code> or <code>'flex-start'</code> as needed.</td>
+            <td><strong>Cross-Axis Alignment</strong></td>
+            <td><code>align-items: stretch</code></td>
+            <td><code>alignItems: 'stretch'</code></td>
           </tr>
           <tr>
-            <td><code>justifyContent</code></td>
-            <td><code>flex-start</code></td>
-            <td><code>flex-start</code></td>
-            <td>Primary-axis alignment (<code>'center'</code>, <code>'space-between'</code>, <code>'space-around'</code>).</td>
+            <td><strong>Main-Axis Alignment</strong></td>
+            <td><code>justify-content: flex-start</code></td>
+            <td><code>justifyContent: 'flex-start'</code></td>
           </tr>
           <tr>
-            <td><code>position</code></td>
-            <td><code>static</code></td>
-            <td><code>relative</code></td>
-            <td><code>'relative'</code> (default), <code>'absolute'</code>, and <code>'static'</code> (added in RN 0.70+). No <code>fixed</code> or <code>sticky</code>.</td>
+            <td><strong>Positioning Model</strong></td>
+            <td><code>position: static</code> (default)</td>
+            <td><code>position: 'relative'</code> (no <code>fixed</code> or <code>sticky</code>)</td>
           </tr>
           <tr>
-            <td><code>flexShrink</code></td>
-            <td><code>1</code></td>
-            <td><code>0</code></td>
-            <td>Elements won't shrink below their content size by default; overflow may occur instead of shrinking.</td>
+            <td><strong>Flex Shrink Default</strong></td>
+            <td><code>flex-shrink: 1</code> (Shrinks to fit container)</td>
+            <td><code>flexShrink: 0</code> (Won't shrink below content size)</td>
           </tr>
         </tbody>
       </table>
@@ -190,12 +184,10 @@ const styles = StyleSheet.create({
     </section>
 
     <section>
-      <h2>5. Official Documentation References (Context7 Verified)</h2>
-      <ul>
-        <li><a href="https://reactnative.dev/docs/flexbox">React Native Official Docs — Layout with Flexbox</a>: Complete guide to Flexbox properties.</li>
-        <li><a href="https://reactnative.dev/docs/layout-props">React Native Official Docs — Layout Props</a>: Reference for `flexDirection`, `justifyContent`, `alignItems`, and `gap`.</li>
-        <li><a href="https://reactnative.dev/docs/platform-specific-code">React Native Official Docs — Platform Specific Code</a>: Platform module and filename extension guide.</li>
-        <li><a href="https://www.npmjs.com/package/react-native-safe-area-context">npm: react-native-safe-area-context</a>: Safe area insets provider and flexible safe area views.</li>
+      <h2>5. Official Documentation & Package References</h2>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/react-native" target="_blank" rel="noopener"><strong>react-native (npm)</strong></a> &bull; <a href="https://reactnative.dev/docs/flexbox" target="_blank" rel="noopener">Layout with Flexbox</a></li>
+        <li><a href="https://www.npmjs.com/package/react-native-safe-area-context" target="_blank" rel="noopener"><strong>react-native-safe-area-context (npm)</strong></a> &bull; <a href="https://github.com/th3rdwave/react-native-safe-area-context" target="_blank" rel="noopener">Safe Area Insets Documentation</a></li>
       </ul>
     </section>
   </main>

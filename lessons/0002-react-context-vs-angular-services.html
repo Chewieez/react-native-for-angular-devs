@@ -28,36 +28,36 @@
       <table>
         <thead>
           <tr>
-            <th>Angular Pattern</th>
-            <th>React Native & Expo Equivalent</th>
-            <th>Execution & Architecture Under the Hood</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
+            <td><strong>Global Service Container</strong></td>
             <td><code>@Injectable({ providedIn: 'root' })</code></td>
-            <td><code>const AuthContext = createContext(...)</code></td>
-            <td>Creates a memory container for shared state accessible across component sub-trees.</td>
+            <td><code>const AuthContext = createContext(...)</code> (Context container)</td>
           </tr>
           <tr>
+            <td><strong>Root Dependency Provider</strong></td>
             <td><code>app.config.ts</code> root providers</td>
-            <td><code>&lt;AuthProvider&gt;{children}&lt;/AuthProvider&gt;</code></td>
-            <td>Wraps the root layout in <code>src/app/_layout.tsx</code> so all child screens inherit auth state.</td>
+            <td><code>&lt;AuthProvider&gt;{children}&lt;/AuthProvider&gt;</code> in <code>_layout.tsx</code></td>
           </tr>
           <tr>
-            <td><code>private user$ = new BehaviorSubject(null);</code></td>
-            <td><code>const [user, setUser] = useState&lt;User | null&gt;(null);</code></td>
-            <td>State hook inside Provider holding the current user profile object.</td>
+            <td><strong>Shared Reactive State</strong></td>
+            <td><code>private user$ = new BehaviorSubject(null);</code> / Signals</td>
+            <td><code>const [user, setUser] = useState&lt;User | null&gt;(null);</code> in Provider</td>
           </tr>
           <tr>
-            <td><code>constructor(private auth: AuthService)</code></td>
-            <td><code>const { user, login } = useAuth();</code></td>
-            <td>Custom Hook consuming Context via <code>useContext(AuthContext)</code>.</td>
+            <td><strong>Injecting / Consuming</strong></td>
+            <td><code>constructor(private auth: AuthService)</code> / <code>inject()</code></td>
+            <td><code>const { user, login } = useAuth();</code> (Custom Hook via <code>useContext</code>)</td>
           </tr>
           <tr>
-            <td><code>CanActivate</code> Route Guard</td>
-            <td><code>useEffect(() => { router.replace(...) }, [user])</code></td>
-            <td>Declarative route redirection based on reactive state changes.</td>
+            <td><strong>Route Guarding</strong></td>
+            <td><code>CanActivate</code> functional guard</td>
+            <td><code>useEffect(() =&gt; { router.replace(...) }, [user])</code></td>
           </tr>
         </tbody>
       </table>
@@ -164,12 +164,10 @@ export default function RootLayout() {
     </section>
 
     <section>
-      <h2>5. Official Documentation References (Context7 Verified)</h2>
-      <ul>
-        <li><a href="https://react.dev/reference/react/createContext">React Official Docs — createContext</a>: Full API reference and provider scoping rules.</li>
-        <li><a href="https://react.dev/reference/react/useContext">React Official Docs — useContext</a>: How custom hooks read context values.</li>
-        <li><a href="https://docs.expo.dev/router/layouts/">Expo Router Layouts Documentation</a>: Setting up root layouts and global state providers in Expo.</li>
-        <li><a href="https://www.npmjs.com/package/expo-router">npm: expo-router</a>: File-based routing library for Expo and React Native applications.</li>
+      <h2>5. Official Documentation & Package References</h2>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/react" target="_blank" rel="noopener"><strong>react (npm)</strong></a> &bull; <a href="https://react.dev/reference/react/createContext" target="_blank" rel="noopener">React Docs (createContext &amp; useContext)</a></li>
+        <li><a href="https://www.npmjs.com/package/expo-router" target="_blank" rel="noopener"><strong>expo-router (npm)</strong></a> &bull; <a href="https://docs.expo.dev/router/layouts/" target="_blank" rel="noopener">Expo Router Layouts Documentation</a></li>
       </ul>
     </section>
   </main>

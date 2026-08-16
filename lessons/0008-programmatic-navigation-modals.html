@@ -27,31 +27,31 @@
       <table>
         <thead>
           <tr>
-            <th>Angular Method</th>
-            <th><a href="https://www.npmjs.com/package/expo-router">Expo Router</a> Hook Equivalent</th>
-            <th>Behavior & Stack Impact</th>
+            <th>Concept</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Expo Router)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
+            <td><strong>Push Screen onto Stack</strong></td>
             <td><code>this.router.navigate(['/feed'])</code></td>
-            <td><code>router.push('/feed')</code></td>
-            <td>Pushes a new screen onto the navigation stack. Enables back button.</td>
+            <td><code>router.push('/feed')</code> (Enables native back transition)</td>
           </tr>
           <tr>
+            <td><strong>Replace Current Screen</strong></td>
             <td><code>this.router.navigate(['/login'], { replaceUrl: true })</code></td>
-            <td><code>router.replace('/(auth)/login')</code></td>
-            <td>Replaces current screen in stack. Disables back navigation to previous screen (ideal for login/logout).</td>
+            <td><code>router.replace('/(auth)/login')</code> (Disables back navigation)</td>
           </tr>
           <tr>
+            <td><strong>Navigate Back</strong></td>
             <td><code>this.location.back()</code></td>
-            <td><code>router.back()</code></td>
-            <td>Pops top screen off stack and returns to previous route.</td>
+            <td><code>router.back()</code> (Pops top screen off stack)</td>
           </tr>
           <tr>
+            <td><strong>Declarative Link</strong></td>
             <td><code>&lt;a [routerLink]="['/profile']"&gt;</code></td>
             <td><code>&lt;Link href="/profile"&gt;</code></td>
-            <td>Declarative JSX navigation element.</td>
           </tr>
         </tbody>
       </table>
@@ -115,9 +115,8 @@ export default function RootLayout() {
 
     <section>
       <h2>4. Official Documentation & Package References</h2>
-      <ul>
-        <li><a href="https://docs.expo.dev/router/navigating-pages/">Expo Router: Navigating Pages</a>: Programmatic navigation with `useRouter` and `Link`.</li>
-        <li><a href="https://www.npmjs.com/package/expo-router">npm: expo-router</a>: Expo Router package details and installation.</li>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/expo-router" target="_blank" rel="noopener"><strong>expo-router (npm)</strong></a> &bull; <a href="https://docs.expo.dev/router/navigating-pages/" target="_blank" rel="noopener">Expo Router: Navigating Pages</a></li>
       </ul>
     </section>
   </main>

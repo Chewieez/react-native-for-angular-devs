@@ -29,29 +29,25 @@
         <thead>
           <tr>
             <th>Concept</th>
-            <th>Angular / Web</th>
-            <th>Expo / React Native</th>
-            <th>Native Mobile Reality</th>
+            <th>Angular (Web)</th>
+            <th>React Native (Mobile)</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><strong>Photo Library</strong></td>
             <td><code>&lt;input type="file" accept="image/*"&gt;</code></td>
-            <td><code>ImagePicker.launchImageLibraryAsync()</code></td>
-            <td>Launches iOS UIImagePickerController / Android Photo Picker.</td>
+            <td><code>ImagePicker.launchImageLibraryAsync()</code> (Native Photo Picker)</td>
           </tr>
           <tr>
             <td><strong>Camera Viewfinder</strong></td>
             <td><code>&lt;video&gt;</code> + WebRTC streams</td>
-            <td><code>&lt;CameraView /&gt;</code> from <a href="https://www.npmjs.com/package/expo-camera"><code>expo-camera</code></a></td>
-            <td>Direct native AVFoundation (iOS) / CameraX (Android) hardware bindings.</td>
+            <td><code>&lt;CameraView /&gt;</code> from <a href="https://www.npmjs.com/package/expo-camera"><code>expo-camera</code></a> (Native AVFoundation / CameraX)</td>
           </tr>
           <tr>
             <td><strong>Permissions</strong></td>
             <td>Browser popup on call</td>
-            <td><code>useCameraPermissions()</code> hook</td>
-            <td>Explicit iOS Info.plist / Android Manifest permission declarations + runtime hooks.</td>
+            <td><code>useCameraPermissions()</code> hook + <code>app.json</code> native config</td>
           </tr>
         </tbody>
       </table>
@@ -183,12 +179,12 @@ export async function uploadPostImage(localUri: string, userId: string): Promise
 
     <section>
       <h2>5. Official Documentation & Package References</h2>
-      <ul>
-        <li><a href="https://www.npmjs.com/package/expo-camera">npm: expo-camera</a>: Native camera viewfinder component and barcode scanner.</li>
-        <li><a href="https://www.npmjs.com/package/expo-image-picker">npm: expo-image-picker</a>: System photo library and native image picker dialog.</li>
-        <li><a href="https://www.npmjs.com/package/expo-file-system">npm: expo-file-system</a>: Access to local file system for binary reads and caching.</li>
-        <li><a href="https://www.npmjs.com/package/base64-arraybuffer">npm: base64-arraybuffer</a>: Base64 to ArrayBuffer encoder and decoder for binary network uploads.</li>
-        <li><a href="https://www.npmjs.com/package/@supabase/supabase-js">npm: @supabase/supabase-js</a>: Supabase storage and database client.</li>
+            <ul>
+        <li><a href="https://www.npmjs.com/package/expo-camera" target="_blank" rel="noopener"><strong>expo-camera (npm)</strong></a> &bull; <a href="https://docs.expo.dev/versions/latest/sdk/camera/" target="_blank" rel="noopener">Expo Camera Documentation</a></li>
+        <li><a href="https://www.npmjs.com/package/expo-image-picker" target="_blank" rel="noopener"><strong>expo-image-picker (npm)</strong></a> &bull; <a href="https://docs.expo.dev/versions/latest/sdk/imagepicker/" target="_blank" rel="noopener">Expo ImagePicker Documentation</a></li>
+        <li><a href="https://www.npmjs.com/package/expo-file-system" target="_blank" rel="noopener"><strong>expo-file-system (npm)</strong></a> &bull; <a href="https://docs.expo.dev/versions/latest/sdk/filesystem/" target="_blank" rel="noopener">Expo FileSystem Documentation</a></li>
+        <li><a href="https://www.npmjs.com/package/base64-arraybuffer" target="_blank" rel="noopener"><strong>base64-arraybuffer (npm)</strong></a> &bull; <a href="https://github.com/niklasvh/base64-arraybuffer" target="_blank" rel="noopener">Binary ArrayBuffer Utility</a></li>
+        <li><a href="https://www.npmjs.com/package/@supabase/supabase-js" target="_blank" rel="noopener"><strong>@supabase/supabase-js (npm)</strong></a> &bull; <a href="https://supabase.com/docs" target="_blank" rel="noopener">Supabase Client</a></li>
       </ul>
     </section>
   </main>
