@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson 0015: Push Notifications & Deep Linking Architecture</title>
+  <title>Lesson 0009: Push Notifications & Deep Linking Architecture</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <nav class="top-nav">
-    <a href="../index.html" class="nav-home">&larr; Course Overview</a>
-    <div class="nav-controls">
-      <a href="./0014-production-builds-eas-pipeline.html" class="nav-link">&larr; Previous</a>
-      <a href="./0016-fluid-gestures-reanimated.html" class="nav-link">Next &rarr;</a>
+  <header>
+    <nav class="lesson-nav">
+      <a href="../index.html" class="nav-home">&larr; Course Overview</a>
+      <div class="nav-arrows">
+        <a href="./0008-programmatic-navigation-modals.html" class="nav-prev">&larr; Previous</a>
+        <a href="./0010-async-data-fetching.html" class="nav-next">Next &rarr;</a>
+      </div>
+    </nav>
+    <div class="pillar-badge">
+      <span class="pillar-icon">🧭</span> Pillar 3: Navigation, Modals &amp; Deep Linking
     </div>
-  </nav>
-
-<header>
-    <h1>Lesson 0015: Push Notifications & Deep Linking Architecture</h1>
-    <div class="subtitle">APNs/FCM push tokens (<a href="https://www.npmjs.com/package/expo-notifications"><code>expo-notifications</code></a>), notification handling in background/foreground, and auto-routing with <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> deep links</div>
+    <h1>Lesson 0009: Push Notifications &amp; Deep Linking Architecture</h1>
+    <div class="subtitle">Translating Web Push and routing triggers to expo-notifications, APNs/FCM tokens, and Expo Router universal links</div>
   </header>
 
   <main>
@@ -175,9 +177,8 @@ export function useNotificationObserver() {
       </ul>
     </section>
   </main>
-
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0014-production-builds-eas-pipeline.html">&larr; Previous Lesson: Lesson 0014</a> &bull; <a href="./0016-fluid-gestures-reanimated.html">Next: Lesson 0016 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0008-programmatic-navigation-modals.html">&larr; Previous</a> &bull; <a href="./0010-async-data-fetching.html">Next &rarr;</a></p>
   </footer>
 </body>
 </html>

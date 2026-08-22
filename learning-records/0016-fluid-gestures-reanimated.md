@@ -1,4 +1,4 @@
-# Learning Record 0009: Fluid Gestures & UI-Thread Animations
+# Learning Record 0016: 60/120 FPS Native Gestures & Animations
 
 ## Date: 2026-08-14
 

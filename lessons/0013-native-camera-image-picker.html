@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson 0011: Native Camera & Image Picker</title>
+  <title>Lesson 0013: Native Camera & Image Picker</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <nav class="top-nav">
-    <a href="../index.html" class="nav-home">&larr; Course Overview</a>
-    <div class="nav-controls">
-      <a href="./0010-backend-integration-persistent-storage.html" class="nav-link">&larr; Previous</a>
-      <a href="./0012-native-haptics-alerts-device-features.html" class="nav-link">Next &rarr;</a>
+  <header>
+    <nav class="lesson-nav">
+      <a href="../index.html" class="nav-home">&larr; Course Overview</a>
+      <div class="nav-arrows">
+        <a href="./0012-offline-sync-optimistic-ui.html" class="nav-prev">&larr; Previous</a>
+        <a href="./0014-native-haptics-alerts-device-features.html" class="nav-next">Next &rarr;</a>
+      </div>
+    </nav>
+    <div class="pillar-badge">
+      <span class="pillar-icon">🛡️</span> Pillar 5: Device Hardware, Animations &amp; Production
     </div>
-  </nav>
-
-<header>
-    <h1>Lesson 0011: Native Camera & Image Picker</h1>
-    <div class="subtitle">Hardware permissions, viewfinder camera views (<a href="https://www.npmjs.com/package/expo-camera"><code>expo-camera</code></a>), photo library selection (<a href="https://www.npmjs.com/package/expo-image-picker"><code>expo-image-picker</code></a>), and mobile binary uploads</div>
+    <h1>Lesson 0013: Native Camera &amp; Image Picker</h1>
+    <div class="subtitle">Translating HTML5 file inputs and MediaDevices to expo-camera (CameraView), expo-image-picker, and device permission hooks</div>
   </header>
 
   <main>
@@ -188,9 +190,8 @@ export async function uploadPostImage(localUri: string, userId: string): Promise
       </ul>
     </section>
   </main>
-
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0010-backend-integration-persistent-storage.html">&larr; Previous Lesson: Lesson 0010</a> &bull; <a href="./0012-native-haptics-alerts-device-features.html">Next: Lesson 0012 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0012-offline-sync-optimistic-ui.html">&larr; Previous</a> &bull; <a href="./0014-native-haptics-alerts-device-features.html">Next &rarr;</a></p>
   </footer>
 </body>
 </html>

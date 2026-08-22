@@ -25,112 +25,146 @@
           </tr>
         </thead>
         <tbody>
+          <!-- Pillar 1 -->
+          <tr style="background: rgba(97, 218, 251, 0.08);">
+            <td colspan="4" style="font-weight: 700; color: var(--accent-color); padding-top: 14px; padding-bottom: 10px;">
+              🏛️ PILLAR 1: Core Paradigms, Native UI &amp; Layout (Foundations)
+            </td>
+          </tr>
           <tr>
             <td><strong>0001</strong></td>
-            <td><a href="./lessons/0001-angular-to-react-native-mental-model.html">Angular Lead to React Native Mental Model</a></td>
+            <td><a href="./lessons/0001-angular-to-react-native-mental-model.html">Angular Lead to React Native &amp; Expo Mental Model</a></td>
             <td>Concept translation matrix, <code>View</code>/<code>Text</code>/<code>Image</code> primitives, Expo Dev Menu (<code>Cmd+D</code>), Metro shortcuts, Chrome DevTools.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
             <td><strong>0002</strong></td>
-            <td><a href="./lessons/0002-react-context-vs-angular-services.html">React Context vs. Angular Services</a></td>
-            <td><code>createContext</code>, <code>&lt;Provider&gt;</code>, <code>useContext</code>, state re-rendering mechanics vs Zone.js/Signals, Expo Router route guarding.</td>
-            <td>✅ Active</td>
-          </tr>
-          <tr>
-            <td><strong>0003</strong></td>
-            <td><a href="./lessons/0003-what-is-a-hook.html">What is a React Hook?</a></td>
-            <td>Why hooks exist, <code>useState</code>, <code>useEffect</code>, <code>useContext</code>, <code>useRef</code>, custom hooks (<code>useAuth</code>), Golden Rules of Hooks.</td>
-            <td>✅ Active</td>
-          </tr>
-          <tr>
-            <td><strong>0004</strong></td>
-            <td><a href="./lessons/0004-forms-and-inputs.html">Forms & Controlled Inputs</a></td>
-            <td>Controlled components vs. <code>[(ngModel)]</code>, <code>TextInput</code> props (<code>onChangeText</code>, <code>value</code>), keyboard handling.</td>
-            <td>✅ Active</td>
-          </tr>
-          <tr>
-            <td><strong>0005</strong></td>
-            <td><a href="./lessons/0005-flexbox-native-layout.html">Native Flexbox & Layout Masterclass</a></td>
+            <td><a href="./lessons/0002-flexbox-native-layout.html">Native Flexbox &amp; Layout Masterclass</a></td>
             <td><code>flexDirection: 'column'</code> default, unitless dp dimensions, <code>flex: 1</code> vs web CSS, <code>SafeAreaView</code>.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
-            <td><strong>0006</strong></td>
-            <td><a href="./lessons/0006-flatlist-vs-scrollview.html">FlatList vs. ScrollView & Virtualization</a></td>
-            <td>Memory management on mobile, list virtualization, <code>FlatList</code> vs <code>ScrollView</code>, key extractors.</td>
+            <td><strong>0003</strong></td>
+            <td><a href="./lessons/0003-flatlist-vs-scrollview.html">FlatList vs. ScrollView &amp; Virtualization</a></td>
+            <td>Memory management on mobile, list virtualization, <code>FlatList</code> vs <code>ScrollView</code>, key extractors, cell recycling.</td>
+            <td>✅ Active</td>
+          </tr>
+
+          <!-- Pillar 2 -->
+          <tr style="background: rgba(97, 218, 251, 0.08);">
+            <td colspan="4" style="font-weight: 700; color: var(--accent-color); padding-top: 14px; padding-bottom: 10px;">
+              ⚡ PILLAR 2: Reactivity, Hooks, Forms &amp; Context
+            </td>
+          </tr>
+          <tr>
+            <td><strong>0004</strong></td>
+            <td><a href="./lessons/0004-what-is-a-hook.html">What is a React Hook?</a></td>
+            <td>Why hooks exist, <code>useState</code>, <code>useEffect</code>, <code>useContext</code>, <code>useRef</code>, custom hooks (<code>useAuth</code>), Golden Rules of Hooks.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
+            <td><strong>0005</strong></td>
+            <td><a href="./lessons/0005-forms-and-inputs.html">Forms &amp; Controlled Inputs</a></td>
+            <td>Controlled components vs. <code>[(ngModel)]</code>, <code>TextInput</code> props (<code>onChangeText</code>, <code>value</code>), keyboard handling.</td>
+            <td>✅ Active</td>
+          </tr>
+          <tr>
+            <td><strong>0006</strong></td>
+            <td><a href="./lessons/0006-react-context-vs-angular-services.html">React Context vs. Angular Services</a></td>
+            <td><code>createContext</code>, <code>&lt;Provider&gt;</code>, <code>useContext</code>, state re-rendering mechanics vs Zone.js/Signals, Expo Router route guarding.</td>
+            <td>✅ Active</td>
+          </tr>
+
+          <!-- Pillar 3 -->
+          <tr style="background: rgba(97, 218, 251, 0.08);">
+            <td colspan="4" style="font-weight: 700; color: var(--accent-color); padding-top: 14px; padding-bottom: 10px;">
+              🧭 PILLAR 3: Navigation, Modals &amp; Deep Linking
+            </td>
+          </tr>
+          <tr>
             <td><strong>0007</strong></td>
-            <td><a href="./lessons/0007-expo-router-architecture.html">Expo Router Architecture & File-Based Routing</a></td>
-            <td>File-based routing, <code>(tabs)</code>, <code>(auth)</code>, <code>Stack</code>, <code>Slot</code>, & <code>_layout.tsx</code> vs Angular <code>RouterModule</code>.</td>
+            <td><a href="./lessons/0007-expo-router-architecture.html">Expo Router Architecture &amp; File-Based Routing</a></td>
+            <td>File-based routing, <code>(tabs)</code>, <code>(auth)</code>, <code>Stack</code>, <code>Slot</code>, &amp; <code>_layout.tsx</code> vs Angular <code>RouterModule</code>.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
             <td><strong>0008</strong></td>
-            <td><a href="./lessons/0008-programmatic-navigation-modals.html">Programmatic Navigation & Modals</a></td>
-            <td><code>router.push</code>, <code>router.replace</code>, <code>router.back</code>, modal presentation, route parameters.</td>
+            <td><a href="./lessons/0008-programmatic-navigation-modals.html">Programmatic Navigation &amp; Modals</a></td>
+            <td><code>router.push</code>, <code>router.replace</code>, <code>router.back</code>, modal presentation, route parameters (<code>useLocalSearchParams</code>).</td>
             <td>✅ Active</td>
           </tr>
           <tr>
             <td><strong>0009</strong></td>
-            <td><a href="./lessons/0009-async-data-fetching.html">Async Data Fetching & Loading States</a></td>
+            <td><a href="./lessons/0009-push-notifications-deep-linking.html">Push Notifications &amp; Deep Linking Architecture</a></td>
+            <td>APNs/FCM push tokens (<code>expo-notifications</code>), notification handling, auto-routing via Expo Router deep links.</td>
+            <td>✅ Active</td>
+          </tr>
+
+          <!-- Pillar 4 -->
+          <tr style="background: rgba(97, 218, 251, 0.08);">
+            <td colspan="4" style="font-weight: 700; color: var(--accent-color); padding-top: 14px; padding-bottom: 10px;">
+              🌐 PILLAR 4: Data Pipelines, Storage &amp; Offline Architecture
+            </td>
+          </tr>
+          <tr>
+            <td><strong>0010</strong></td>
+            <td><a href="./lessons/0010-async-data-fetching.html">Async Data Fetching &amp; Loading States</a></td>
             <td><code>async/await</code>, <code>ActivityIndicator</code>, Error Boundaries vs Angular <code>HttpClient</code>/RxJS.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
-            <td><strong>0010</strong></td>
-            <td><a href="./lessons/0010-backend-integration-persistent-storage.html">Backend Integration & Persistent Storage</a></td>
+            <td><strong>0011</strong></td>
+            <td><a href="./lessons/0011-backend-integration-persistent-storage.html">Backend Integration &amp; Persistent Storage</a></td>
             <td>Supabase/Firebase integration, local storage with <code>AsyncStorage</code> / <code>MMKV</code> key-value persistence.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
-            <td><strong>0011</strong></td>
-            <td><a href="./lessons/0011-native-camera-image-picker.html">Native Camera & Image Picker</a></td>
+            <td><strong>0012</strong></td>
+            <td><a href="./lessons/0012-offline-sync-optimistic-ui.html">Offline-First Architecture &amp; Optimistic UI</a></td>
+            <td>TanStack Query caching, fast disk persistence (<code>MMKV</code>), instant 0ms optimistic mutations.</td>
+            <td>✅ Active</td>
+          </tr>
+
+          <!-- Pillar 5 -->
+          <tr style="background: rgba(97, 218, 251, 0.08);">
+            <td colspan="4" style="font-weight: 700; color: var(--accent-color); padding-top: 14px; padding-bottom: 10px;">
+              🛡️ PILLAR 5: Device Hardware, Animations &amp; Production
+            </td>
+          </tr>
+          <tr>
+            <td><strong>0013</strong></td>
+            <td><a href="./lessons/0013-native-camera-image-picker.html">Native Camera &amp; Image Picker</a></td>
             <td>Camera access (<code>expo-camera</code>), photo library picker (<code>expo-image-picker</code>), device permissions.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
-            <td><strong>0012</strong></td>
-            <td><a href="./lessons/0012-native-haptics-alerts-device-features.html">Native Haptics, Alerts & Device Features</a></td>
+            <td><strong>0014</strong></td>
+            <td><a href="./lessons/0014-native-haptics-alerts-device-features.html">Native Haptics, Alerts &amp; Device Features</a></td>
             <td><code>expo-haptics</code> feedback, <code>Alert.alert</code> dialogs, toast notifications, platform-specific code (<code>Platform.OS</code>).</td>
             <td>✅ Active</td>
           </tr>
           <tr>
-            <td><strong>0013</strong></td>
-            <td><a href="./lessons/0013-advanced-debugging-performance-profiling.html">Advanced Debugging & Performance Profiling</a></td>
-            <td>React DevTools, Flipper, network tab profiling, memory leak detection, JS thread performance.</td>
-            <td>✅ Active</td>
-          </tr>
-          <tr>
-            <td><strong>0014</strong></td>
-            <td><a href="./lessons/0014-production-builds-eas-pipeline.html">Production Builds & EAS Pipeline</a></td>
-            <td>Expo Managed vs Prebuild, <code>eas build</code>, App Store / TestFlight readiness, release channels.</td>
-            <td>✅ Active</td>
-          </tr>
-          <tr>
             <td><strong>0015</strong></td>
-            <td><a href="./lessons/0015-push-notifications-deep-linking.html">Push Notifications & Deep Linking Architecture</a></td>
-            <td>APNs/FCM push tokens (<code>expo-notifications</code>), notification handling, auto-routing via Expo Router deep links.</td>
+            <td><a href="./lessons/0015-hardware-biometrics-secure-storage.html">Hardware Biometrics &amp; Encrypted Storage</a></td>
+            <td>iOS Keychain &amp; Android KeyStore (<code>expo-secure-store</code>), FaceID / TouchID (<code>expo-local-authentication</code>).</td>
             <td>✅ Active</td>
           </tr>
           <tr>
             <td><strong>0016</strong></td>
-            <td><a href="./lessons/0016-fluid-gestures-reanimated.html">60/120 FPS Native Gestures & Animations</a></td>
+            <td><a href="./lessons/0016-fluid-gestures-reanimated.html">60/120 FPS Native Gestures &amp; Animations</a></td>
             <td>UI-thread Worklets (<code>react-native-reanimated</code>), pinch/pan gestures (<code>react-native-gesture-handler</code>), spring physics.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
             <td><strong>0017</strong></td>
-            <td><a href="./lessons/0017-hardware-biometrics-secure-storage.html">Hardware Biometrics & Encrypted Storage</a></td>
-            <td>iOS Keychain & Android KeyStore (<code>expo-secure-store</code>), FaceID / TouchID (<code>expo-local-authentication</code>).</td>
+            <td><a href="./lessons/0017-advanced-debugging-performance-profiling.html">Advanced Debugging &amp; Performance Profiling</a></td>
+            <td>React DevTools, Flipper, network tab profiling, memory leak detection, JS thread performance.</td>
             <td>✅ Active</td>
           </tr>
           <tr>
             <td><strong>0018</strong></td>
-            <td><a href="./lessons/0018-offline-sync-optimistic-ui.html">Offline-First Architecture & Optimistic UI</a></td>
-            <td>TanStack Query caching, fast disk persistence (<code>MMKV</code>), instant 0ms optimistic mutations.</td>
+            <td><a href="./lessons/0018-production-builds-eas-pipeline.html">Production Builds &amp; EAS Pipeline</a></td>
+            <td>Expo Managed vs Prebuild, <code>eas build</code>, App Store / TestFlight readiness, release channels.</td>
             <td>✅ Active</td>
           </tr>
         </tbody>

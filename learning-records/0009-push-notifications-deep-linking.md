@@ -1,6 +1,6 @@
-# Learning Record 0008: Push Notifications & Deep Linking Architecture
+# Learning Record 0009: Push Notifications & Deep Linking Architecture
 
-## Date: 2026-08-14
+## Date: 2026-08-12
 
 ## Key Insight
 1. **APNs & FCM Pipeline**: Native push notifications flow through Apple and Google push services via `expo-notifications`, requiring device token registration with `getExpoPushTokenAsync()`.

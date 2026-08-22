@@ -1,4 +1,4 @@
-# Learning Record 0007: Production Builds & EAS Pipeline
+# Learning Record 0018: Production Builds & EAS Pipeline
 
 ## Date: 2026-08-14
 

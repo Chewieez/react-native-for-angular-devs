@@ -6,17 +6,19 @@
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <nav class="top-nav">
-    <a href="../index.html" class="nav-home">&larr; Course Overview</a>
-    <div class="nav-controls">
-      <a href="./0006-flatlist-vs-scrollview.html" class="nav-link">&larr; Previous</a>
-      <a href="./0008-programmatic-navigation-modals.html" class="nav-link">Next &rarr;</a>
+  <header>
+    <nav class="lesson-nav">
+      <a href="../index.html" class="nav-home">&larr; Course Overview</a>
+      <div class="nav-arrows">
+        <a href="./0006-react-context-vs-angular-services.html" class="nav-prev">&larr; Previous</a>
+        <a href="./0008-programmatic-navigation-modals.html" class="nav-next">Next &rarr;</a>
+      </div>
+    </nav>
+    <div class="pillar-badge">
+      <span class="pillar-icon">🧭</span> Pillar 3: Navigation, Modals &amp; Deep Linking
     </div>
-  </nav>
-
-<header>
-    <h1>Lesson 0007: <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> Architecture & File-Based Routing</h1>
-    <div class="subtitle">Translating Angular <code>RouterModule</code> & Route Guards to <a href="https://www.npmjs.com/package/expo-router">Expo Router</a> Managed File-Based Architecture</div>
+    <h1>Lesson 0007: Expo Router Architecture &amp; File-Based Routing</h1>
+    <div class="subtitle">Translating Angular RouterModule, &lt;router-outlet&gt;, and CanActivate guards to Expo Router app/ layout trees</div>
   </header>
 
   <main>
@@ -141,9 +143,8 @@ export function useProtectedRoute(user: User | null, isLoading: boolean) {
       </ul>
     </section>
   </main>
-
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0006-flatlist-vs-scrollview.html">&larr; Previous Lesson</a> &bull; <a href="./0008-programmatic-navigation-modals.html">Next: Lesson 0008 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0006-react-context-vs-angular-services.html">&larr; Previous</a> &bull; <a href="./0008-programmatic-navigation-modals.html">Next &rarr;</a></p>
   </footer>
 </body>
 </html>

@@ -3,21 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lesson 0018: Offline-First Architecture & Optimistic UI</title>
+  <title>Lesson 0012: Offline-First Architecture & Optimistic UI</title>
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <nav class="top-nav">
-    <a href="../index.html" class="nav-home">&larr; Course Overview</a>
-    <div class="nav-controls">
-      <a href="./0017-hardware-biometrics-secure-storage.html" class="nav-link">&larr; Previous</a>
-      <span class="nav-link disabled" aria-disabled="true">Next &rarr;</span>
+  <header>
+    <nav class="lesson-nav">
+      <a href="../index.html" class="nav-home">&larr; Course Overview</a>
+      <div class="nav-arrows">
+        <a href="./0011-backend-integration-persistent-storage.html" class="nav-prev">&larr; Previous</a>
+        <a href="./0013-native-camera-image-picker.html" class="nav-next">Next &rarr;</a>
+      </div>
+    </nav>
+    <div class="pillar-badge">
+      <span class="pillar-icon">🌐</span> Pillar 4: Data Pipelines, Storage &amp; Offline Architecture
     </div>
-  </nav>
-
-<header>
-    <h1>Lesson 0018: Offline-First Architecture & Optimistic UI</h1>
-    <div class="subtitle"><a href="https://www.npmjs.com/package/@tanstack/react-query">TanStack React Query</a> caching, local persistence with <a href="https://www.npmjs.com/package/react-native-mmkv"><code>react-native-mmkv</code></a>, and Angular PWA vs. Native offline comparisons</div>
+    <h1>Lesson 0012: Offline-First Architecture &amp; Optimistic UI</h1>
+    <div class="subtitle">Translating Service Workers and manual rollbacks to TanStack Query disk persisters, NetInfo, and 0ms optimistic updates</div>
   </header>
 
   <main>
@@ -185,9 +187,8 @@ export const clientPersister = createSyncStoragePersister({
       </ul>
     </section>
   </main>
-
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0017-hardware-biometrics-secure-storage.html">&larr; Previous Lesson: Lesson 0017</a> &bull; <strong>Mastery Track Complete 🚀</strong></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0011-backend-integration-persistent-storage.html">&larr; Previous</a> &bull; <a href="./0013-native-camera-image-picker.html">Next &rarr;</a></p>
   </footer>
 </body>
 </html>

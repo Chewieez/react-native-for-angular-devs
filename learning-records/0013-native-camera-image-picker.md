@@ -1,4 +1,4 @@
-# Learning Record 0004: Native Camera & Image Picker
+# Learning Record 0013: Native Camera & Image Picker
 
 ## Date: 2026-08-14
 

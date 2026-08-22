@@ -6,17 +6,19 @@
   <link rel="stylesheet" href="../assets/style.css">
 </head>
 <body>
-    <nav class="top-nav">
-    <a href="../index.html" class="nav-home">&larr; Course Overview</a>
-    <div class="nav-controls">
-      <a href="./0007-expo-router-architecture.html" class="nav-link">&larr; Previous</a>
-      <a href="./0009-async-data-fetching.html" class="nav-link">Next &rarr;</a>
+  <header>
+    <nav class="lesson-nav">
+      <a href="../index.html" class="nav-home">&larr; Course Overview</a>
+      <div class="nav-arrows">
+        <a href="./0007-expo-router-architecture.html" class="nav-prev">&larr; Previous</a>
+        <a href="./0009-push-notifications-deep-linking.html" class="nav-next">Next &rarr;</a>
+      </div>
+    </nav>
+    <div class="pillar-badge">
+      <span class="pillar-icon">🧭</span> Pillar 3: Navigation, Modals &amp; Deep Linking
     </div>
-  </nav>
-
-<header>
-    <h1>Lesson 0008: Programmatic Navigation & Modals</h1>
-    <div class="subtitle">Navigating screens with <code>useRouter()</code>, route parameters (<code>useLocalSearchParams</code>), and native modal presentations</div>
+    <h1>Lesson 0008: Programmatic Navigation &amp; Modals</h1>
+    <div class="subtitle">Translating Router.navigate(), dialog services, and route params to router.push(), sheet modals, and useLocalSearchParams</div>
   </header>
 
   <main>
@@ -123,9 +125,8 @@ export default function RootLayout() {
       </ul>
     </section>
   </main>
-
   <footer>
-    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0007-expo-router-architecture.html">&larr; Previous Lesson: Lesson 0007</a> &bull; <a href="./0009-async-data-fetching.html">Next: Lesson 0009 &rarr;</a></p>
+    <p>React Native Learning Workspace &bull; <a href="../index.html">Course Overview</a> &bull; <a href="./0007-expo-router-architecture.html">&larr; Previous</a> &bull; <a href="./0009-push-notifications-deep-linking.html">Next &rarr;</a></p>
   </footer>
 </body>
 </html>

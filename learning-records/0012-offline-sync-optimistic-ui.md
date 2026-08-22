@@ -1,9 +1,9 @@
-# Learning Record 0011: Offline-First Architecture & Optimistic UI
+# Learning Record 0012: Offline-First Architecture & Optimistic UI
 
-## Date: 2026-08-14
+## Date: 2026-08-13
 
 ## Key Insight
-1. **Angular PWA vs. Native Mobile**:
+1. **Angular PWA vs Native Mobile**:
    - **App Shell**: PWAs rely on Service Worker caching of HTML/JS; Native compiles JS bundles directly into the binary (`.ipa`/`.aab`) with zero cold-boot network overhead.
    - **Storage Engine**: PWA `IndexedDB` is susceptible to 7-day Safari cache eviction; native `MMKV` is permanent, non-evictable, and ~30x faster via C++ memory-mapped buffers.
    - **Background Sync**: Native `NetInfo` + background queues work reliably across iOS and Android without browser sandbox limits.

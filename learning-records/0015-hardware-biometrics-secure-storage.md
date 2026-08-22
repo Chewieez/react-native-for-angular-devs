@@ -1,4 +1,4 @@
-# Learning Record 0010: Hardware Biometrics & Encrypted Storage
+# Learning Record 0015: Hardware Biometrics & Encrypted Storage
 
 ## Date: 2026-08-14
 

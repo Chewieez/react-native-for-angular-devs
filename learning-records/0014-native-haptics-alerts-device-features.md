@@ -1,4 +1,4 @@
-# Learning Record 0005: Native Haptics, Alerts & Device Features
+# Learning Record 0014: Native Haptics, Alerts & Device Features
 
 ## Date: 2026-08-14
 
