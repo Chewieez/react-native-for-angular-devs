@@ -149,39 +149,139 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>UI / Templates</strong></td>
-            <td>HTML Template (<code>div</code>, <code>span</code>, <code>p</code>)</td>
-            <td>Functional JSX (<code>&lt;View&gt;</code>, <code>&lt;Text&gt;</code>, <code>&lt;Image&gt;</code>)</td>
+            <td><strong>UI &amp; Component Primitives</strong></td>
+            <td>HTML Template (<code>&lt;div&gt;</code>, <code>&lt;span&gt;</code>, <code>&lt;p&gt;</code>, <code>&lt;img&gt;</code>)</td>
+            <td>Functional JSX (<code>&lt;View&gt;</code>, <code>&lt;Text&gt;</code>, <code>&lt;Image&gt;</code> / <a href="https://www.npmjs.com/package/expo-image" target="_blank" rel="noopener"><code>expo-image</code></a>)</td>
           </tr>
           <tr>
             <td><strong>Component Inputs</strong></td>
-            <td><code>@Input()</code> / <code>input()</code> signal</td>
-            <td>Component Props (<code>props</code>)</td>
+            <td><code>@Input() name: string</code> / <code>input()</code> signal</td>
+            <td>Component Props: <code>props.name</code> / <code>{ name }: Props</code></td>
           </tr>
           <tr>
-            <td><strong>Event Emitting</strong></td>
-            <td><code>@Output() EventEmitter</code></td>
-            <td>Callback Props (<code>onPress={handlePress}</code>)</td>
+            <td><strong>Event Emission</strong></td>
+            <td><code>@Output() changed = new EventEmitter()</code></td>
+            <td>Callback Props (<code>onPress={handlePress}</code>, <code>onChanged(val)</code>)</td>
           </tr>
           <tr>
-            <td><strong>Services &amp; DI</strong></td>
-            <td><code>@Injectable()</code> Service</td>
-            <td>React Context (<code>createContext</code>) + Custom Hook</td>
+            <td><strong>Conditionals</strong></td>
+            <td><code>*ngIf="condition"</code> / <code>@if (condition)</code></td>
+            <td><code>{condition &amp;&amp; &lt;Component /&gt;}</code> / Ternary (<code>condition ? &lt;A /&gt; : &lt;B /&gt;</code>)</td>
           </tr>
           <tr>
-            <td><strong>Local State</strong></td>
-            <td><code>BehaviorSubject</code> / Signals</td>
-            <td><code>useState()</code> Hook</td>
+            <td><strong>Loops &amp; Lists</strong></td>
+            <td><code>*ngFor="let item of items; trackBy: id"</code> / <code>@for</code></td>
+            <td><code>&lt;FlatList data={items} keyExtractor={item =&gt; item.id} /&gt;</code></td>
+          </tr>
+          <tr>
+            <td><strong>Content Projection / Slots</strong></td>
+            <td><code>&lt;ng-content&gt;</code> / <code>&lt;ng-content select="..."&gt;</code></td>
+            <td><code>props.children</code> / Named JSX slot props (<code>header={...}</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Local &amp; Shared State</strong></td>
+            <td>Angular Signals (<code>signal()</code>) / <code>BehaviorSubject</code></td>
+            <td><code>useState()</code> Hook / React Context / Zustand</td>
+          </tr>
+          <tr>
+            <td><strong>Computed / Derived State</strong></td>
+            <td><code>computed(() =&gt; ...)</code></td>
+            <td><code>useMemo(() =&gt; ..., [deps])</code></td>
+          </tr>
+          <tr>
+            <td><strong>Lifecycle &amp; Cleanup</strong></td>
+            <td><code>ngOnInit</code>, <code>ngOnDestroy</code> / <code>takeUntilDestroyed()</code></td>
+            <td><code>useEffect(() =&gt; { return () =&gt; cleanup(); }, [deps])</code></td>
+          </tr>
+          <tr>
+            <td><strong>Root Services &amp; DI</strong></td>
+            <td><code>@Injectable({ providedIn: 'root' })</code></td>
+            <td>React Context (<code>createContext</code>) + Custom Hook (<code>useAuth()</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Native Layout Engine</strong></td>
+            <td>Web CSS Box Model (SCSS, <code>px</code>, <code>rem</code>, <code>flex-direction: row</code>)</td>
+            <td>Yoga Flexbox Engine (Unitless dp, <code>flex-direction: column</code> default)</td>
+          </tr>
+          <tr>
+            <td><strong>Screen Insets &amp; Notches</strong></td>
+            <td>Viewport Units (<code>100dvh</code>) / Safe Area CSS env()</td>
+            <td><a href="https://www.npmjs.com/package/react-native-safe-area-context" target="_blank" rel="noopener"><code>SafeAreaView</code></a> (<code>react-native-safe-area-context</code>)</td>
           </tr>
           <tr>
             <td><strong>Forms &amp; Inputs</strong></td>
-            <td><code>[(ngModel)]</code> / Reactive Forms</td>
-            <td>Controlled Components (<code>value</code> + <code>onChangeText</code>)</td>
+            <td><code>ReactiveFormsModule</code> (<code>FormGroup</code>, <code>FormControl</code>)</td>
+            <td>Controlled Inputs (<code>value</code> + <code>onChangeText</code>) / <a href="https://www.npmjs.com/package/react-hook-form" target="_blank" rel="noopener"><code>react-hook-form</code></a> + <a href="https://www.npmjs.com/package/zod" target="_blank" rel="noopener"><code>zod</code></a></td>
           </tr>
           <tr>
-            <td><strong>Route Guard</strong></td>
-            <td><code>CanActivate</code> Guard</td>
-            <td><code>useEffect</code> + <code>router.replace()</code> in Expo Router</td>
+            <td><strong>List Virtualization</strong></td>
+            <td><code>*cdkVirtualFor</code> (Angular CDK)</td>
+            <td><code>&lt;FlatList&gt;</code> / <a href="https://www.npmjs.com/package/@shopify/flash-list" target="_blank" rel="noopener"><code>@shopify/flash-list</code></a> (Recycled Native Cells)</td>
+          </tr>
+          <tr>
+            <td><strong>Routing Architecture</strong></td>
+            <td><code>RouterModule</code> + <code>&lt;router-outlet&gt;</code></td>
+            <td><a href="https://www.npmjs.com/package/expo-router" target="_blank" rel="noopener"><code>Expo Router</code></a> (File-based routes in <code>app/</code> + <code>_layout.tsx</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Route Guards &amp; Redirects</strong></td>
+            <td><code>CanActivateFn</code> / <code>CanDeactivateFn</code></td>
+            <td>Root Layout <code>useEffect()</code> + <code>router.replace()</code> redirect logic</td>
+          </tr>
+          <tr>
+            <td><strong>HTTP &amp; Server State</strong></td>
+            <td><code>HttpClient</code> + RxJS Observables</td>
+            <td><code>fetch()</code> / Axios + <a href="https://www.npmjs.com/package/@tanstack/react-query" target="_blank" rel="noopener"><code>@tanstack/react-query</code></a> (<code>useQuery</code>, <code>useMutation</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Persistent Storage</strong></td>
+            <td><code>localStorage</code> / <code>IndexedDB</code></td>
+            <td><a href="https://www.npmjs.com/package/react-native-mmkv" target="_blank" rel="noopener"><code>react-native-mmkv</code></a> (JSI sync disk storage) / SQLite</td>
+          </tr>
+          <tr>
+            <td><strong>Secure Hardware Secrets</strong></td>
+            <td>HTTP-Only Secure Cookies / Web Crypto</td>
+            <td><a href="https://www.npmjs.com/package/expo-secure-store" target="_blank" rel="noopener"><code>expo-secure-store</code></a> (iOS Keychain &amp; Android KeyStore Enclave)</td>
+          </tr>
+          <tr>
+            <td><strong>Biometric Authentication</strong></td>
+            <td>WebAuthn API</td>
+            <td><a href="https://www.npmjs.com/package/expo-local-authentication" target="_blank" rel="noopener"><code>expo-local-authentication</code></a> (FaceID, TouchID, Fingerprint)</td>
+          </tr>
+          <tr>
+            <td><strong>Device Hardware &amp; Media</strong></td>
+            <td>HTML5 <code>&lt;input type="file"&gt;</code> / MediaDevices</td>
+            <td><a href="https://www.npmjs.com/package/expo-camera" target="_blank" rel="noopener"><code>expo-camera</code></a> (<code>CameraView</code>) + <a href="https://www.npmjs.com/package/expo-image-picker" target="_blank" rel="noopener"><code>expo-image-picker</code></a></td>
+          </tr>
+          <tr>
+            <td><strong>Haptics &amp; Alerts</strong></td>
+            <td><code>window.alert()</code> (Blocking) / Web Vibration API</td>
+            <td><code>Alert.alert()</code> (Native OS Dialog) + <a href="https://www.npmjs.com/package/expo-haptics" target="_blank" rel="noopener"><code>expo-haptics</code></a> (Taptic Engine)</td>
+          </tr>
+          <tr>
+            <td><strong>Gestures &amp; Animations</strong></td>
+            <td><code>@angular/animations</code> / CSS transitions</td>
+            <td><a href="https://www.npmjs.com/package/react-native-reanimated" target="_blank" rel="noopener"><code>Reanimated 3</code></a> (UI Worklets) + <a href="https://www.npmjs.com/package/react-native-gesture-handler" target="_blank" rel="noopener"><code>GestureDetector</code></a></td>
+          </tr>
+          <tr>
+            <td><strong>Push &amp; Deep Linking</strong></td>
+            <td>Web Push API / Service Workers</td>
+            <td><a href="https://www.npmjs.com/package/expo-notifications" target="_blank" rel="noopener"><code>expo-notifications</code></a> (APNs / FCM) + Expo Router Universal Links</td>
+          </tr>
+          <tr>
+            <td><strong>Offline-First &amp; Sync</strong></td>
+            <td><code>@angular/pwa</code> Service Worker caching</td>
+            <td>TanStack Query Sync Persister + NetInfo + Optimistic Rollbacks</td>
+          </tr>
+          <tr>
+            <td><strong>Compilation &amp; Builds</strong></td>
+            <td><code>ng build</code> &rarr; Static Web Assets (<code>dist/</code>)</td>
+            <td><a href="https://www.npmjs.com/package/eas-cli" target="_blank" rel="noopener"><code>EAS Build</code></a> &rarr; Native Signed Binaries (<code>.ipa</code> / <code>.aab</code>)</td>
+          </tr>
+          <tr>
+            <td><strong>Performance Tuning</strong></td>
+            <td><code>ChangeDetectionStrategy.OnPush</code> / Zone.js</td>
+            <td><code>React.memo()</code> / <code>useCallback</code> / Hermes JS + TurboModules</td>
           </tr>
         </tbody>
       </table>
